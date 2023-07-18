@@ -1,0 +1,9 @@
+@use '$lib/css/breakpoints' as breakpoints;
+
+:global(html) {
+    font-size: 16px;
+
+    @include breakpoints.largeAndUp {
+        font-size: 18px;
+    }
+}
