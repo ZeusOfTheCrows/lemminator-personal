@@ -8,6 +8,10 @@
 </header>
 <slot />
 
+<svelte:head>
+	<title>Lemminator</title>
+</svelte:head>
+
 <style lang="scss">
 	@use '$lib/css/resets';
 	@use '$lib/css/globals';
