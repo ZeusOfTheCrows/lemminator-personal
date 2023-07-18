@@ -31,6 +31,7 @@
 		.main {
 			flex-grow: 1;
 			background: colors.$bgAccent;
+			border: solid 1px colors.$subtleBorder;
 		}
 
 		.communityMeta {
