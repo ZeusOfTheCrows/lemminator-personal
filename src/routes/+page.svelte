@@ -18,23 +18,29 @@
 	.rootLayout {
 		display: flex;
 		flex-direction: row;
+		background: colors.$bgAccent;
+		align-items: start;
 
 		> * {
 			padding: 1rem;
 		}
 
 		.communities {
+			position: sticky;
+			top: 0;
 			flex-basis: 300px;
 			flex-shrink: 0;
 		}
 
 		.main {
 			flex-grow: 1;
-			background: colors.$bgAccent;
-			border: solid 1px colors.$subtleBorder;
+			border-left: solid 1px colors.$subtleBorder;
+			border-right: solid 1px colors.$subtleBorder;
 		}
 
 		.communityMeta {
+			position: sticky;
+			top: 0;
 			flex-basis: 300px;
 			flex-shrink: 0;
 		}
