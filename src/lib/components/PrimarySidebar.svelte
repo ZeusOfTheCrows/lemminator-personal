@@ -44,7 +44,9 @@
 				text-decoration: none;
 
 				&:global(.highlightedRoute) {
-					background: colors.$subtleBorder;
+					border: solid 1px desaturate(darken(colors.$bgAccent, 3%), 20%);
+					border-left: none;
+					box-shadow: inset -1px -1px 20px colors.$subtleBorder;
 					border-top-right-radius: 10px;
 					border-bottom-right-radius: 10px;
 				}
