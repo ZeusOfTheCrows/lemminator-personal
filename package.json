@@ -33,6 +33,7 @@
 	"dependencies": {
 		"lemmy-js-client": "^0.18.3-rc.2",
 		"moment": "^2.29.4",
-		"sass": "^1.63.6"
+		"sass": "^1.63.6",
+		"snarkdown": "^2.0.0"
 	}
 }

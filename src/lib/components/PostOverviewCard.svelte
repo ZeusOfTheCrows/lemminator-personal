@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { formatRelativeTime } from '$lib/js/client';
 	import type { PostView } from 'lemmy-js-client';
+	import ElevatedBox from './ElevatedBox.svelte';
 
 	export let postView: PostView;
 
@@ -11,42 +12,44 @@
 </script>
 
 <div class="postOverviewCard">
-	<div class="postOverviewCard__updown">
-		<div class="postOverviewCard__up">⮝</div>
-		<div class="postOverviewCard__score">{postView.counts.score}</div>
-		<div class="postOverviewCard__down">⮟</div>
-	</div>
-	<div class="postOverviewCard__main">
-		<div>
-			<div class="postOverviewCard__metaLine">
-				<div class="postOverviewCard__community">
-					{#if postView.community.icon}
-						<img
-							src={postView.community.icon}
-							alt={postView.community.title}
-							class="postOverviewCard__communityIcon"
-						/>
-					{/if}
-					{postView.community.name}
-				</div>
-				&middot;
-				<div class="postOverviewCard__user">
-					{postView.creator.name}
-				</div>
-				&middot;
-				<div class="postOverviewCard__relativeTime">
-					{formatRelativeTime(postView.post.published)}
-				</div>
-			</div>
-			<div class="postOverviewCard__name">{postView.post.name}</div>
+	<ElevatedBox stacking="horizontal">
+		<div class="postOverviewCard__updown">
+			<div class="postOverviewCard__up">⮝</div>
+			<div class="postOverviewCard__score">{postView.counts.score}</div>
+			<div class="postOverviewCard__down">⮟</div>
 		</div>
-		{#if isImageLink(postView.post.url)}
-			<img class="postOverviewCard__image" src={postView.post.url} alt={postView.post.name} />
-		{/if}
-		<ul class="postOverviewCard__actionLine">
-			<li>{postView.counts.comments} comments</li>
-		</ul>
-	</div>
+		<div class="postOverviewCard__main">
+			<div>
+				<div class="postOverviewCard__metaLine">
+					<div class="postOverviewCard__community">
+						{#if postView.community.icon}
+							<img
+								src={postView.community.icon}
+								alt={postView.community.title}
+								class="postOverviewCard__communityIcon"
+							/>
+						{/if}
+						{postView.community.name}
+					</div>
+					&middot;
+					<div class="postOverviewCard__user">
+						{postView.creator.name}
+					</div>
+					&middot;
+					<div class="postOverviewCard__relativeTime">
+						{formatRelativeTime(postView.post.published)}
+					</div>
+				</div>
+				<div class="postOverviewCard__name">{postView.post.name}</div>
+			</div>
+			{#if isImageLink(postView.post.url)}
+				<img class="postOverviewCard__image" src={postView.post.url} alt={postView.post.name} />
+			{/if}
+			<ul class="postOverviewCard__actionLine">
+				<li>{postView.counts.comments} comments</li>
+			</ul>
+		</div>
+	</ElevatedBox>
 </div>
 
 <style lang="scss">
@@ -57,8 +60,6 @@
 		border-radius: 10px;
 		overflow: hidden;
 		box-shadow: 2px 2px 5px colors.$boxShadow;
-		display: flex;
-		flex-direction: row;
 
 		.postOverviewCard__updown {
 			background: colors.$bgAccent2;

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import MainNavigation from '$lib/components/MainNavigation.svelte';
 	import PostList from '$lib/components/PostList.svelte';
+	import SecondaryNavigation from '$lib/components/SecondaryNavigation.svelte';
 </script>
 
 <div class="rootLayout">
@@ -10,7 +11,9 @@
 	<main class="main">
 		<PostList />
 	</main>
-	<aside class="communityMeta">sidebar 2</aside>
+	<aside class="communityMeta">
+		<SecondaryNavigation />
+	</aside>
 </div>
 
 <style lang="scss">
