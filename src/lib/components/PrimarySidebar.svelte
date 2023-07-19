@@ -21,8 +21,6 @@
 				</a>
 			</li>
 		{/each}
-	{:catch communitiesResponse}
-		Error loading communities
 	{/await}
 </ul>
 

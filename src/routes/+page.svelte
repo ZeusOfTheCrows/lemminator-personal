@@ -5,13 +5,13 @@
 </script>
 
 <div class="rootLayout">
-	<aside class="communities">
+	<aside class="primarySidebar">
 		<PrimarySidebar />
 	</aside>
 	<main class="main">
 		<PostList />
 	</main>
-	<aside class="communityMeta">
+	<aside class="secondarySidebar">
 		<SecondarySidebar />
 	</aside>
 </div>
@@ -26,8 +26,9 @@
 		flex-direction: row;
 		background: colors.$bgAccent;
 		align-items: start;
+		min-height: 100%;
 
-		.communities {
+		.primarySidebar {
 			padding: 1rem 0;
 			position: sticky;
 			top: 0;
@@ -38,12 +39,13 @@
 
 		.main {
 			padding: 1rem;
+			align-self: stretch;
 			flex-grow: 1;
 			border-left: solid 1px colors.$subtleBorder;
 			border-right: solid 1px colors.$subtleBorder;
 		}
 
-		.communityMeta {
+		.secondarySidebar {
 			padding: 1rem;
 			position: sticky;
 			top: 0;

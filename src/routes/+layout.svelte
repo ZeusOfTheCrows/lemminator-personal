@@ -17,13 +17,15 @@
 	}
 </script>
 
-<div bind:this={root}>
+<div class="root" bind:this={root}>
 	<header class="header">
 		<div class="header__logo">Lemminator</div>
 		<div class="header__search">Search</div>
 		<div class="header__menu">Menu</div>
 	</header>
-	<slot />
+	<div class="page">
+		<slot />
+	</div>
 </div>
 
 <svelte:head>
@@ -34,6 +36,12 @@
 	@use '$lib/css/resets';
 	@use '$lib/css/globals';
 	@use '$lib/css/colors';
+
+	.root {
+		display: flex;
+		flex-direction: column;
+		height: 100vh;
+	}
 
 	header {
 		padding: 1rem;
@@ -53,5 +61,11 @@
 		.header__menu {
 			text-align: right;
 		}
+	}
+
+	.page {
+		flex-grow: 1;
+		flex-shrink: 1;
+		overflow: scroll;
 	}
 </style>
