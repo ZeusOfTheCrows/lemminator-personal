@@ -1,12 +1,30 @@
 <script lang="ts">
+	import { page } from '$app/stores';
+
+	let root: HTMLElement;
+	let path: string;
+	$: {
+		path = $page.url.pathname;
+		if (root) {
+			root.querySelectorAll('a.highlightableRoute').forEach((element) => {
+				if (element.attributes.getNamedItem('href')?.value == path) {
+					element.classList.add('highlightedRoute');
+				} else {
+					element.classList.remove('highlightedRoute');
+				}
+			});
+		}
+	}
 </script>
 
-<header class="header">
-	<div class="header__logo">Lemminator</div>
-	<div class="header__search">Search</div>
-	<div class="header__menu">Menu</div>
-</header>
-<slot />
+<div bind:this={root}>
+	<header class="header">
+		<div class="header__logo">Lemminator</div>
+		<div class="header__search">Search</div>
+		<div class="header__menu">Menu</div>
+	</header>
+	<slot />
+</div>
 
 <svelte:head>
 	<title>Lemminator</title>
