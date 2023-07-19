@@ -1,18 +1,18 @@
 <script lang="ts">
-	import MainNavigation from '$lib/components/MainNavigation.svelte';
+	import PrimarySidebar from '$lib/components/PrimarySidebar.svelte';
 	import PostList from '$lib/components/PostList.svelte';
-	import SecondaryNavigation from '$lib/components/SecondaryNavigation.svelte';
+	import SecondarySidebar from '$lib/components/SecondarySidebar.svelte';
 </script>
 
 <div class="rootLayout">
 	<aside class="communities">
-		<MainNavigation />
+		<PrimarySidebar />
 	</aside>
 	<main class="main">
 		<PostList />
 	</main>
 	<aside class="communityMeta">
-		<SecondaryNavigation />
+		<SecondarySidebar />
 	</aside>
 </div>
 
