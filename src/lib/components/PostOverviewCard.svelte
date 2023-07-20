@@ -58,11 +58,9 @@
 	.postOverviewCard {
 		background: white;
 		border-radius: 10px;
-		overflow: hidden;
-		box-shadow: 2px 2px 5px colors.$boxShadow;
 
 		.postOverviewCard__updown {
-			background: colors.$bgAccent2;
+			background: colors.$gradient12;
 			padding: 1rem;
 			display: flex;
 			flex-basis: 3.5rem;

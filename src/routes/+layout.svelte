@@ -38,6 +38,7 @@
 	@use '$lib/css/colors';
 
 	.root {
+		background: colors.$globalBg;
 		display: flex;
 		flex-direction: column;
 		height: 100vh;

@@ -22,7 +22,8 @@
 		background: white;
 		border-radius: 10px;
 		overflow: hidden;
-		box-shadow: 2px 2px 5px colors.$boxShadow;
+		border: solid 1px colors.$subtleBorder;
+		box-shadow: 1px 1px 5px colors.$boxShadow;
 
 		&.elevatedBox--horizontal {
 			flex-direction: row;
@@ -36,7 +37,7 @@
 			padding: 0.75rem 1rem;
 			font-size: 0.8rem;
 			color: colors.$deemphColor;
-			background: colors.$bgAccent2;
+			background: colors.$gradient12;
 		}
 	}
 </style>

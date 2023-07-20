@@ -24,7 +24,6 @@
 	.rootLayout {
 		display: flex;
 		flex-direction: row;
-		background: colors.$bgAccent;
 		align-items: start;
 		min-height: 100%;
 
