@@ -107,6 +107,7 @@
 		.postOverviewCard__name {
 			font-size: 1.2rem;
 			font-weight: bold;
+			line-height: 1.4rem;
 		}
 
 		.postOverviewCard__image {
