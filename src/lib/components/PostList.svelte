@@ -27,7 +27,7 @@
 		{#each postsResponse.posts as postView}
 			<!-- Can be revisited when an NSFW toggle has been implemented -->
 			{#if postView.post.nsfw === false}
-				<PostOverviewCard {postView} />
+				<PostOverviewCard {postView} showCommunity={!communityName} />
 			{/if}
 		{/each}
 	</div>

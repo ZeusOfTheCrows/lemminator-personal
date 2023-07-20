@@ -5,6 +5,7 @@
 
 	// null = shimmer
 	export let postView: PostView | null;
+	export let showCommunity: boolean = true;
 
 	function isImageLink(link: string | undefined): boolean {
 		if (!link) return false;
@@ -23,18 +24,27 @@
 			<div class="postOverviewCard__main">
 				<div>
 					<div class="postOverviewCard__metaLine">
-						<div class="postOverviewCard__community">
-							{#if postView.community.icon}
+						{#if showCommunity}
+							<div class="postOverviewCard__community">
+								{#if postView.community.icon}
+									<img
+										src={postView.community.icon}
+										alt={postView.community.title}
+										class="postOverviewCard__entityIcon"
+									/>
+								{/if}
+								{postView.community.name}
+							</div>
+							&middot;
+						{/if}
+						<div class="postOverviewCard__user">
+							{#if !showCommunity}
 								<img
 									src={postView.community.icon}
 									alt={postView.community.title}
-									class="postOverviewCard__communityIcon"
+									class="postOverviewCard__entityIcon"
 								/>
 							{/if}
-							{postView.community.name}
-						</div>
-						&middot;
-						<div class="postOverviewCard__user">
 							{postView.creator.name}
 						</div>
 						&middot;
@@ -119,17 +129,18 @@
 			align-items: center;
 			gap: 0.2rem;
 
-			.postOverviewCard__community {
+			.postOverviewCard__community,
+			.postOverviewCard__user {
 				gap: 0.3rem;
 				display: flex;
 				flex-direction: row;
 				align-items: center;
+			}
 
-				.postOverviewCard__communityIcon {
-					width: 20px;
-					height: 20px;
-					border-radius: 100%;
-				}
+			.postOverviewCard__entityIcon {
+				width: 20px;
+				height: 20px;
+				border-radius: 100%;
 			}
 		}
 
