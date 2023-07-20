@@ -1,10 +1,17 @@
 <script lang="ts">
 	import { getClient } from '$lib/js/client';
+	import { createEventDispatcher } from 'svelte';
 
-	let client = getClient();
+	const dispatch = createEventDispatcher();
+	const client = getClient();
 	let communitiesResponse = client.listCommunities({
 		sort: 'TopDay'
 	});
+	$: {
+		communitiesResponse.then(() => {
+			dispatch('communitiesResponseLoaded');
+		});
+	}
 </script>
 
 <ul class="mainNavigation">
@@ -15,7 +22,7 @@
 	{:then communitiesResponse}
 		{#each communitiesResponse.communities as community}
 			<li class="communityItem">
-				<a href="/c/{community.community.name}" class="communityItem highlightableRoute">
+				<a href={`/c/${community.community.name}`} class="communityItem highlightableRoute">
 					<img src={community.community.icon} alt="" class="communityItem__icon" />
 					{community.community.title}
 				</a>
@@ -40,11 +47,12 @@
 				width: 100%;
 				height: 100%;
 				text-decoration: none;
+				border: solid 1px transparent;
+				border-left: none;
 
 				&:global(.highlightedRoute) {
-					border: solid 1px colors.$subtleBorder;
+					border-color: colors.$subtleBorder;
 					background: colors.$gradient12;
-					border-left: none;
 					border-top-right-radius: 10px;
 					border-bottom-right-radius: 10px;
 				}

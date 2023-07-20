@@ -1,20 +1,29 @@
 <script lang="ts">
+	import { afterNavigate } from '$app/navigation';
 	import { page } from '$app/stores';
+	import PrimarySidebar from '$lib/components/PrimarySidebar.svelte';
 
 	let root: HTMLElement;
-	let path: string;
-	$: {
-		path = $page.url.pathname;
-		if (root) {
-			root.querySelectorAll('a.highlightableRoute').forEach((element) => {
-				if (element.attributes.getNamedItem('href')?.value == path) {
-					element.classList.add('highlightedRoute');
-				} else {
-					element.classList.remove('highlightedRoute');
-				}
-			});
-		}
+
+	function updateHighlightedRouteStyling() {
+		// Stupid workaround: we have to wait for the DOM to settle in case this callback
+		// got triggered due to a data load event. The timeout moves us to the back of the event
+		// handling queue.
+		setTimeout(() => {
+			let path = $page.url.pathname;
+			if (root) {
+				root.querySelectorAll('a.highlightableRoute').forEach((element) => {
+					if (element.attributes.getNamedItem('href')?.value == path) {
+						element.classList.add('highlightedRoute');
+					} else {
+						element.classList.remove('highlightedRoute');
+					}
+				});
+			}
+		}, 1);
 	}
+
+	afterNavigate(updateHighlightedRouteStyling);
 </script>
 
 <div class="root" bind:this={root}>
@@ -24,6 +33,9 @@
 		<div class="header__menu">Menu</div>
 	</header>
 	<div class="page">
+		<aside class="primarySidebar">
+			<PrimarySidebar on:communitiesResponseLoaded={updateHighlightedRouteStyling} />
+		</aside>
 		<slot />
 	</div>
 </div>
@@ -68,5 +80,18 @@
 		flex-grow: 1;
 		flex-shrink: 1;
 		overflow: scroll;
+		display: flex;
+		flex-direction: row;
+		align-items: start;
+		min-height: 100%;
+
+		.primarySidebar {
+			padding: 1rem 0;
+			position: sticky;
+			top: 0;
+			max-width: 300px;
+			flex-basis: 300px;
+			flex-shrink: 0;
+		}
 	}
 </style>

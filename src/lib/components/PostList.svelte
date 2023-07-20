@@ -1,9 +1,16 @@
 <script lang="ts">
 	import { getClient } from '$lib/js/client';
+	import type { GetPostsResponse } from 'lemmy-js-client';
 	import PostOverviewCard from './PostOverviewCard.svelte';
 
 	let client = getClient();
-	let postsResponse = client.getPosts();
+	export let communityName: string | null = null;
+	let postsResponse: Promise<GetPostsResponse> = new Promise(() => {});
+	$: {
+		postsResponse = client.getPosts({
+			community_name: communityName ?? undefined
+		});
+	}
 </script>
 
 {#await postsResponse}
