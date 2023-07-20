@@ -14,9 +14,16 @@
 </script>
 
 {#await postsResponse}
-	Loading posts
+	<div class="postList">
+		<PostOverviewCard postView={null} />
+		<PostOverviewCard postView={null} />
+		<PostOverviewCard postView={null} />
+		<PostOverviewCard postView={null} />
+		<PostOverviewCard postView={null} />
+		<PostOverviewCard postView={null} />
+	</div>
 {:then postsResponse}
-	<div class="loadedPostList">
+	<div class="postList">
 		{#each postsResponse.posts as postView}
 			<!-- Can be revisited when an NSFW toggle has been implemented -->
 			{#if postView.post.nsfw === false}
@@ -32,7 +39,7 @@
 	@use '$lib/css/resets';
 	@use '$lib/css/globals';
 
-	.loadedPostList {
+	.postList {
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;

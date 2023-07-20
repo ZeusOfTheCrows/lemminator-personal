@@ -3,7 +3,8 @@
 	import type { PostView } from 'lemmy-js-client';
 	import ElevatedBox from './ElevatedBox.svelte';
 
-	export let postView: PostView;
+	// null = shimmer
+	export let postView: PostView | null;
 
 	function isImageLink(link: string | undefined): boolean {
 		if (!link) return false;
@@ -13,42 +14,47 @@
 
 <div class="postOverviewCard">
 	<ElevatedBox stacking="horizontal">
-		<div class="postOverviewCard__updown">
-			<div class="postOverviewCard__up">⮝</div>
-			<div class="postOverviewCard__score">{postView.counts.score}</div>
-			<div class="postOverviewCard__down">⮟</div>
-		</div>
-		<div class="postOverviewCard__main">
-			<div>
-				<div class="postOverviewCard__metaLine">
-					<div class="postOverviewCard__community">
-						{#if postView.community.icon}
-							<img
-								src={postView.community.icon}
-								alt={postView.community.title}
-								class="postOverviewCard__communityIcon"
-							/>
-						{/if}
-						{postView.community.name}
-					</div>
-					&middot;
-					<div class="postOverviewCard__user">
-						{postView.creator.name}
-					</div>
-					&middot;
-					<div class="postOverviewCard__relativeTime">
-						{formatRelativeTime(postView.post.published)}
-					</div>
-				</div>
-				<div class="postOverviewCard__name">{postView.post.name}</div>
+		{#if postView}
+			<div class="postOverviewCard__updown">
+				<div class="postOverviewCard__up">⮝</div>
+				<div class="postOverviewCard__score">{postView.counts.score}</div>
+				<div class="postOverviewCard__down">⮟</div>
 			</div>
-			{#if isImageLink(postView.post.url)}
-				<img class="postOverviewCard__image" src={postView.post.url} alt={postView.post.name} />
-			{/if}
-			<ul class="postOverviewCard__actionLine">
-				<li>{postView.counts.comments} comments</li>
-			</ul>
-		</div>
+			<div class="postOverviewCard__main">
+				<div>
+					<div class="postOverviewCard__metaLine">
+						<div class="postOverviewCard__community">
+							{#if postView.community.icon}
+								<img
+									src={postView.community.icon}
+									alt={postView.community.title}
+									class="postOverviewCard__communityIcon"
+								/>
+							{/if}
+							{postView.community.name}
+						</div>
+						&middot;
+						<div class="postOverviewCard__user">
+							{postView.creator.name}
+						</div>
+						&middot;
+						<div class="postOverviewCard__relativeTime">
+							{formatRelativeTime(postView.post.published)}
+						</div>
+					</div>
+					<div class="postOverviewCard__name">{postView.post.name}</div>
+				</div>
+				{#if isImageLink(postView.post.url)}
+					<img class="postOverviewCard__image" src={postView.post.url} alt={postView.post.name} />
+				{/if}
+				<ul class="postOverviewCard__actionLine">
+					<li>{postView.counts.comments} comments</li>
+				</ul>
+			</div>
+		{:else}
+			<div class="postOverviewCard__updown">&nbsp;</div>
+			<div class="postOverviewCard__main postOverviewCard__main--shimmer">&nbsp;</div>
+		{/if}
 	</ElevatedBox>
 </div>
 
@@ -79,6 +85,29 @@
 			display: flex;
 			flex-direction: column;
 			gap: 1rem;
+
+			&.postOverviewCard__main--shimmer {
+				animation: shimmer 2s infinite linear;
+				background: linear-gradient(
+					to right,
+					colors.$color1 4%,
+					colors.$color2 25%,
+					colors.$color1 36%
+				);
+				background-size: 1000px 100%;
+				width: 100%;
+				height: 6rem;
+				margin: 1rem;
+
+				@keyframes shimmer {
+					0% {
+						background-position: -1000px 0;
+					}
+					100% {
+						background-position: 1000px 0;
+					}
+				}
+			}
 		}
 
 		.postOverviewCard__metaLine {
