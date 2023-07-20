@@ -83,7 +83,6 @@
 		display: flex;
 		flex-direction: row;
 		align-items: start;
-		min-height: 100%;
 
 		.primarySidebar {
 			padding: 1rem 0;
