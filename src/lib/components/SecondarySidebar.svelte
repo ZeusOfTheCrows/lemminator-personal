@@ -13,7 +13,7 @@
 	{:then site}
 		{#if site.site_view.site.description}
 			<ElevatedBox title={`About ${site.site_view.site.name}`} stacking="vertical">
-				<p class="secondaryNavigation__siteDescriptor">
+				<p class="secondaryNavigation__runningText">
 					{@html snarkdown(site.site_view.site.description)}
 				</p>
 			</ElevatedBox>
@@ -31,10 +31,6 @@
 			padding: 1rem;
 			font-size: 0.9rem;
 			line-height: 1.1rem;
-		}
-
-		.secondaryNavigation__siteDescriptor {
-			@extend .secondaryNavigation__runningText;
 		}
 	}
 </style>
