@@ -142,6 +142,10 @@
 				height: 20px;
 				border-radius: 100%;
 				object-fit: cover;
+
+				// Fallbacks for load failures
+				font-size: 0; // We have alt text for screen readers, regular users don't need it
+				background: colors.$color1;
 			}
 		}
 
