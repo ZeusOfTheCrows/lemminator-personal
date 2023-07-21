@@ -10,6 +10,6 @@
 		<PostList communityName={$page.params.communityName} />
 	</svelte:fragment>
 	<svelte:fragment slot="secondarySidebar">
-		<SecondarySidebar />
+		<SecondarySidebar communityName={$page.params.communityName} />
 	</svelte:fragment>
 </PageHolder>

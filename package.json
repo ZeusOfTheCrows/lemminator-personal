@@ -31,7 +31,14 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@types/dompurify": "^3.0.2",
+		"dompurify": "^3.0.5",
 		"lemmy-js-client": "^0.18.3-rc.2",
+		"markdown-it": "^13.0.1",
+		"markdown-it-container": "^3.0.0",
+		"markdown-it-footnote": "^3.0.3",
+		"markdown-it-sub": "^1.0.0",
+		"markdown-it-sup": "^1.0.0",
 		"moment": "^2.29.4",
 		"sass": "^1.63.6",
 		"snarkdown": "^2.0.0"

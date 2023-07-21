@@ -1,27 +1,58 @@
-<script>
-	import snarkdown from 'snarkdown';
+<script lang="ts">
 	import { getClient } from '$lib/js/client';
 	import ElevatedBox from './ElevatedBox.svelte';
+	import type { GetCommunityResponse, GetSiteResponse } from 'lemmy-js-client';
+	import { renderEnhancedMarkdown } from '$lib/js/markdown';
 
 	let client = getClient();
-	let site = client.getSite();
+	let siteResponse: Promise<GetSiteResponse> = new Promise(() => {});
+	let communityResponse: Promise<GetCommunityResponse> = new Promise(() => {});
+
+	// Community context, if applicable
+	export let communityName: string | null = null;
+
+	$: {
+		if (communityName) {
+			communityResponse = client.getCommunity({
+				name: communityName
+			});
+		} else {
+			siteResponse = client.getSite();
+		}
+	}
 </script>
 
 <div class="secondaryNavigation">
-	{#await site}
-		…
-	{:then site}
-		{#if site.site_view.site.description}
-			<ElevatedBox title={`About ${site.site_view.site.name}`} stacking="vertical">
-				<p class="secondaryNavigation__runningText">
-					{@html snarkdown(site.site_view.site.description)}
-				</p>
+	{#if communityName}
+		{#await communityResponse}
+			…
+		{:then communityResponse}
+			<ElevatedBox title={communityResponse.community_view.community.name} stacking="vertical">
+				<div class="secondaryNavigation__runningText">
+					{@html renderEnhancedMarkdown(
+						communityResponse.community_view.community.description ?? ''
+					)}
+				</div>
 			</ElevatedBox>
-		{/if}
-	{/await}
+		{/await}
+	{:else}
+		{#await siteResponse}
+			…
+		{:then siteResponse}
+			{#if siteResponse.site_view.site.description}
+				<ElevatedBox title={`About ${siteResponse.site_view.site.name}`} stacking="vertical">
+					<p class="secondaryNavigation__runningText">
+						{@html renderEnhancedMarkdown(siteResponse.site_view.site.description)}
+					</p>
+				</ElevatedBox>
+			{/if}
+		{/await}
+	{/if}
 </div>
 
 <style lang="scss">
+	@use '$lib/css/colors';
+
 	.secondaryNavigation {
 		display: flex;
 		flex-direction: column;
@@ -31,6 +62,23 @@
 			padding: 1rem;
 			font-size: 0.9rem;
 			line-height: 1.1rem;
+
+			:global(h1),
+			:global(h2),
+			:global(h3),
+			:global(h4),
+			:global(h5),
+			:global(p) {
+				margin-bottom: 0.5rem;
+
+				&:last-child {
+					margin-bottom: 0;
+				}
+			}
+
+			:global(hr) {
+				border: solid 1px colors.$subtleBorder;
+			}
 		}
 	}
 </style>
