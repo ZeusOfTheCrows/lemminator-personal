@@ -76,6 +76,10 @@
 				}
 			}
 
+			:global(li) {
+				padding-bottom: 0.2rem;
+			}
+
 			:global(hr) {
 				border: solid 1px colors.$subtleBorder;
 			}
