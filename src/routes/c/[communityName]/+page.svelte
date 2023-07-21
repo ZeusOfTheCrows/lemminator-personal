@@ -27,6 +27,16 @@
 	}
 </script>
 
+<svelte:head>
+	{#await siteResponse then siteResponse}
+		{#await communityResponse then communityResponse}
+			<title>
+				{communityResponse.community_view.community.title} - {siteResponse.site_view.site.name}
+			</title>
+		{/await}
+	{/await}
+</svelte:head>
+
 {#await communityResponse then communityResponse}
 	<PageHolder>
 		<svelte:fragment slot="main">

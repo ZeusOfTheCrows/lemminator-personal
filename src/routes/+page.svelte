@@ -12,6 +12,12 @@
 	}
 </script>
 
+<svelte:head>
+	{#await siteResponse then siteResponse}
+		<title>Frontpage - {siteResponse.site_view.site.name}</title>
+	{/await}
+</svelte:head>
+
 <PageHolder>
 	<svelte:fragment slot="main">
 		<PostList />
