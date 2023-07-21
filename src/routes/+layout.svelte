@@ -3,6 +3,9 @@
 	import { page } from '$app/stores';
 	import PrimarySidebar from '$lib/components/PrimarySidebar.svelte';
 	import TransparentButton from '$lib/components/TransparentButton.svelte';
+	import logoOnLight from '$lib/img/logoOnLight.png';
+	import logoOnLightSvg from '$lib/img/logoOnLight.svg';
+	import logoOnDarkSvg from '$lib/img/logoOnDark.svg';
 
 	let root: HTMLElement;
 
@@ -32,6 +35,12 @@
 	let primarySidebarModal: HTMLDialogElement;
 </script>
 
+<svelte:head>
+	<title>Lemminator</title>
+	<link rel="icon" href={logoOnLightSvg} media="(prefers-color-scheme: light)" />
+	<link rel="icon" href={logoOnDarkSvg} media="(prefers-color-scheme: dark)" />
+</svelte:head>
+
 <div class="root" bind:this={root}>
 	<header class="header">
 		<div class="header__logoMenuToggle">
@@ -40,7 +49,10 @@
 					<span class="material-icons">menu</span>
 				</TransparentButton>
 			</div>
-			Lemminator
+			<a href="/">
+				<img src={logoOnLight} alt="Logo" class="header__logo" />
+				Lemminator
+			</a>
 		</div>
 		<div class="header__search">Search</div>
 		<div class="header__menu">Menu</div>
@@ -64,10 +76,6 @@
 	</div>
 </div>
 
-<svelte:head>
-	<title>Lemminator</title>
-</svelte:head>
-
 <style lang="scss">
 	@use '$lib/css/resets';
 	@use '$lib/css/globals';
@@ -83,7 +91,7 @@
 	}
 
 	header {
-		padding: 1rem;
+		padding: 0.5rem 1rem;
 		display: flex;
 		flex-shrink: 0;
 		align-items: center;
@@ -92,16 +100,29 @@
 		.header__logoMenuToggle {
 			display: flex;
 			align-items: center;
-			flex-basis: 300px;
+			flex-basis: 275px;
 			gap: 0.5rem;
+
+			.header__menuToggle {
+				font-size: 0.8rem;
+
+				@include breakpoints.desktopAndUp {
+					display: none;
+				}
+			}
+
+			a {
+				display: flex;
+				align-items: center;
+				text-decoration: none;
+				gap: 0.5rem;
+				font-size: 1.1rem;
+				font-weight: bold;
+			}
 		}
 
-		.header__menuToggle {
-			font-size: 0.8rem;
-
-			@include breakpoints.desktopAndUp {
-				display: none;
-			}
+		.header__logo {
+			width: 3rem;
 		}
 
 		.header__search {
