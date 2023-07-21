@@ -47,7 +47,7 @@
 							{/if}
 							{postView.creator.name}
 						</div>
-						&middot;
+						<div class="postOverviewCard__relativeTimePresep">&middot;</div>
 						<div class="postOverviewCard__relativeTime">
 							{formatRelativeTime(postView.post.published)}
 						</div>
@@ -70,6 +70,7 @@
 
 <style lang="scss">
 	@use '$lib/css/colors';
+	@use '$lib/css/breakpoints';
 
 	.postOverviewCard {
 		background: white;
@@ -79,11 +80,15 @@
 			background: colors.$gradient12;
 			padding: 1rem;
 			display: flex;
-			flex-basis: 4rem;
+			flex-basis: 3.5rem;
 			flex-shrink: 0;
 			flex-direction: column;
 			align-items: center;
 			font-size: 1.2rem;
+
+			@include breakpoints.mediumAndUp {
+				flex-basis: 4rem;
+			}
 
 			.postOverviewCard__score {
 				font-size: 0.75rem;
@@ -135,6 +140,15 @@
 				display: flex;
 				flex-direction: row;
 				align-items: center;
+			}
+
+			.postOverviewCard__relativeTimePresep,
+			.postOverviewCard__relativeTime {
+				display: none;
+
+				@include breakpoints.mediumAndUp {
+					display: block;
+				}
 			}
 
 			.postOverviewCard__entityIcon {
