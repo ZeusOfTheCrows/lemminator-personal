@@ -38,10 +38,10 @@
 							&middot;
 						{/if}
 						<div class="postOverviewCard__user">
-							{#if !showCommunity}
+							{#if !showCommunity && postView.creator.avatar}
 								<img
-									src={postView.community.icon}
-									alt={postView.community.title}
+									src={postView.creator.avatar}
+									alt="Avatar"
 									class="postOverviewCard__entityIcon"
 								/>
 							{/if}
