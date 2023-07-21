@@ -6,6 +6,8 @@
 	import logoOnLight from '$lib/img/logoOnLight.png';
 	import logoOnLightSvg from '$lib/img/logoOnLight.svg';
 	import logoOnDarkSvg from '$lib/img/logoOnDark.svg';
+	import type { GetSiteResponse } from 'lemmy-js-client';
+	import { getClient } from '$lib/js/client';
 
 	let root: HTMLElement;
 
@@ -33,6 +35,12 @@
 	});
 
 	let primarySidebarModal: HTMLDialogElement;
+
+	let client = getClient();
+	let siteResponse: Promise<GetSiteResponse> = new Promise(() => {});
+	$: {
+		siteResponse = client.getSite();
+	}
 </script>
 
 <svelte:head>
@@ -50,8 +58,10 @@
 				</TransparentButton>
 			</div>
 			<a href="/">
-				<img src={logoOnLight} alt="Logo" class="header__logo" />
-				Lemminator
+				<img src={logoOnLight} alt="Lemminator logo" class="header__logo" />
+				{#await siteResponse then siteResponse}
+					{siteResponse.site_view.site.name}
+				{/await}
 			</a>
 		</div>
 		<div class="header__search">Search</div>
@@ -63,7 +73,9 @@
 		</aside>
 		<dialog class="primarySidebarModal" bind:this={primarySidebarModal}>
 			<div class="primarySidebarModal__top">
-				<div>Lemminator</div>
+				{#await siteResponse then siteResponse}
+					<div>{siteResponse.site_view.site.name}</div>
+				{/await}
 				<TransparentButton on:click={() => primarySidebarModal.close()} title="Close navigation">
 					<span class="material-icons">menu_open</span>
 				</TransparentButton>
@@ -193,6 +205,7 @@
 				justify-content: space-between;
 				padding: 0.5rem 1rem 0.5rem 1rem;
 				border-bottom: solid 1px colors.$subtleBorder;
+				font-weight: bold;
 			}
 
 			.primarySidebarModal__body {
