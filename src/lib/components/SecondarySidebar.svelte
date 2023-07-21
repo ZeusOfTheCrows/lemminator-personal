@@ -6,7 +6,7 @@
 	import LoadingSpinner from './LoadingSpinner.svelte';
 
 	let client = getClient();
-	let siteResponse: Promise<GetSiteResponse> = new Promise(() => {});
+	export let siteResponse: Promise<GetSiteResponse> = new Promise(() => {});
 	let communityResponse: Promise<GetCommunityResponse> = new Promise(() => {});
 
 	// Community context, if applicable
@@ -17,8 +17,6 @@
 			communityResponse = client.getCommunity({
 				name: communityName
 			});
-		} else {
-			siteResponse = client.getSite();
 		}
 	}
 </script>
