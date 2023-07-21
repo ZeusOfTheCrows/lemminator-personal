@@ -3,6 +3,7 @@
 	import ElevatedBox from './ElevatedBox.svelte';
 	import type { GetCommunityResponse, GetSiteResponse } from 'lemmy-js-client';
 	import { renderEnhancedMarkdown } from '$lib/js/markdown';
+	import LoadingSpinner from './LoadingSpinner.svelte';
 
 	let client = getClient();
 	let siteResponse: Promise<GetSiteResponse> = new Promise(() => {});
@@ -25,7 +26,7 @@
 <div class="secondaryNavigation">
 	{#if communityName}
 		{#await communityResponse}
-			…
+			<LoadingSpinner minHeight="4rem" />
 		{:then communityResponse}
 			<ElevatedBox title={communityResponse.community_view.community.name} stacking="vertical">
 				<div class="secondaryNavigation__runningText">

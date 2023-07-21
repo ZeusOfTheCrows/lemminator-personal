@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { getClient } from '$lib/js/client';
 	import { createEventDispatcher } from 'svelte';
+	import LoadingSpinner from './LoadingSpinner.svelte';
 
 	const dispatch = createEventDispatcher();
 	const client = getClient();
@@ -18,7 +19,7 @@
 	<li><a href="/" class="highlightableRoute">Frontpage</a></li>
 	<li><a href="/subscriptions" class="highlightableRoute">Subscriptions</a></li>
 	{#await communitiesResponse}
-		Loading communities
+		<LoadingSpinner minHeight="4rem" />
 	{:then communitiesResponse}
 		{#each communitiesResponse.communities as community}
 			<li class="communityItem">
