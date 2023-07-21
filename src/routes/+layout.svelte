@@ -8,6 +8,7 @@
 	import logoOnDarkSvg from '$lib/img/logoOnDark.svg';
 	import type { GetSiteResponse } from 'lemmy-js-client';
 	import { getClient } from '$lib/js/client';
+	import SearchBox from '$lib/components/SearchBox.svelte';
 
 	let root: HTMLElement;
 
@@ -64,7 +65,11 @@
 				{/await}
 			</a>
 		</div>
-		<div class="header__search">Search</div>
+		<div class="header__search">
+			<div class="header__searchBox">
+				<SearchBox />
+			</div>
+		</div>
 		<div class="header__menu">Menu</div>
 	</header>
 	<div class="page">
@@ -103,16 +108,19 @@
 	}
 
 	header {
+		$gap: 1rem;
 		padding: 0.5rem 1rem;
 		display: flex;
 		flex-shrink: 0;
+		gap: $gap;
 		align-items: center;
+		justify-content: space-between;
 		border-bottom: solid 1px colors.$subtleBorder;
 
 		.header__logoMenuToggle {
 			display: flex;
 			align-items: center;
-			flex-basis: 275px;
+			flex-basis: calc(275px - $gap);
 			gap: 0.5rem;
 
 			.header__menuToggle {
@@ -138,7 +146,16 @@
 		}
 
 		.header__search {
-			flex-grow: 1;
+			display: none;
+
+			@include breakpoints.largeAndUp {
+				display: block;
+				flex-grow: 1;
+
+				.header__searchBox {
+					max-width: 20rem;
+				}
+			}
 		}
 
 		.header__menu {
