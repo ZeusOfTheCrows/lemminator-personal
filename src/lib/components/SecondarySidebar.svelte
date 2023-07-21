@@ -81,6 +81,10 @@
 				padding-bottom: 0.2rem;
 			}
 
+			:global(img) {
+				max-width: 100%;
+			}
+
 			:global(hr) {
 				border: solid 1px colors.$subtleBorder;
 			}
