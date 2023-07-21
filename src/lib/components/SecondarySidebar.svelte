@@ -28,7 +28,7 @@
 		{#await communityResponse}
 			<LoadingSpinner minHeight="4rem" />
 		{:then communityResponse}
-			<ElevatedBox title={communityResponse.community_view.community.name} stacking="vertical">
+			<ElevatedBox title="About community" stacking="vertical">
 				<div class="secondaryNavigation__runningText">
 					{@html renderEnhancedMarkdown(
 						communityResponse.community_view.community.description ?? ''
@@ -61,7 +61,7 @@
 
 		.secondaryNavigation__runningText {
 			padding: 1rem;
-			font-size: 0.9rem;
+			font-size: 0.85rem;
 			line-height: 1.1rem;
 
 			:global(h1),
