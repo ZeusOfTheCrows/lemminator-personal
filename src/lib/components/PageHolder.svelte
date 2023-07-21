@@ -31,7 +31,8 @@
 			padding: 1rem;
 			position: sticky;
 			top: 0;
-			flex-basis: 300px;
+			width: 300px;
+			flex-grow: 0;
 			flex-shrink: 0;
 		}
 	}
