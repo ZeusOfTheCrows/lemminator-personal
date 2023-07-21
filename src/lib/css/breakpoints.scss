@@ -15,3 +15,9 @@
         @content;
     }
 }
+
+@mixin maxAndUp {
+    @media (min-width: 1130px) {
+        @content;
+    }
+}

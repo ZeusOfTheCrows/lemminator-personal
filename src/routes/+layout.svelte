@@ -2,6 +2,7 @@
 	import { afterNavigate } from '$app/navigation';
 	import { page } from '$app/stores';
 	import PrimarySidebar from '$lib/components/PrimarySidebar.svelte';
+	import TransparentButton from '$lib/components/TransparentButton.svelte';
 
 	let root: HTMLElement;
 
@@ -23,12 +24,24 @@
 		}, 1);
 	}
 
-	afterNavigate(updateHighlightedRouteStyling);
+	afterNavigate(() => {
+		updateHighlightedRouteStyling();
+		primarySidebarModal.close();
+	});
+
+	let primarySidebarModal: HTMLDialogElement;
 </script>
 
 <div class="root" bind:this={root}>
 	<header class="header">
-		<div class="header__logo">Lemminator</div>
+		<div class="header__logoMenuToggle">
+			<div class="header__menuToggle">
+				<TransparentButton on:click={() => primarySidebarModal.showModal()} title="Open navigation">
+					<span class="material-icons">menu</span>
+				</TransparentButton>
+			</div>
+			Lemminator
+		</div>
 		<div class="header__search">Search</div>
 		<div class="header__menu">Menu</div>
 	</header>
@@ -36,6 +49,17 @@
 		<aside class="primarySidebar">
 			<PrimarySidebar on:communitiesResponseLoaded={updateHighlightedRouteStyling} />
 		</aside>
+		<dialog class="primarySidebarModal" bind:this={primarySidebarModal}>
+			<div class="primarySidebarModal__top">
+				<div>Lemminator</div>
+				<TransparentButton on:click={() => primarySidebarModal.close()} title="Close navigation">
+					<span class="material-icons">menu_open</span>
+				</TransparentButton>
+			</div>
+			<div class="primarySidebarModal__body">
+				<PrimarySidebar on:communitiesResponseLoaded={updateHighlightedRouteStyling} />
+			</div>
+		</dialog>
 		<slot />
 	</div>
 </div>
@@ -48,6 +72,8 @@
 	@use '$lib/css/resets';
 	@use '$lib/css/globals';
 	@use '$lib/css/colors';
+	@use '$lib/css/breakpoints';
+	@use 'material-icons/iconfont/material-icons.css';
 
 	.root {
 		background: colors.$globalBg;
@@ -60,11 +86,23 @@
 		padding: 1rem;
 		display: flex;
 		flex-shrink: 0;
+		align-items: center;
+		// border-bottom: solid 1px colors.$subtleBorder;
+		box-shadow: 0 0 10px rgba(colors.$themedShadow, 0.2);
 
-		.header__logo {
+		.header__logoMenuToggle {
 			display: flex;
 			align-items: center;
 			flex-basis: 300px;
+			gap: 0.5rem;
+		}
+
+		.header__menuToggle {
+			font-size: 0.8rem;
+
+			@include breakpoints.desktopAndUp {
+				display: none;
+			}
 		}
 
 		.header__search {
@@ -85,12 +123,64 @@
 		align-items: start;
 
 		.primarySidebar {
+			display: none;
 			padding: 1rem 0;
-			position: sticky;
-			top: 0;
-			max-width: 300px;
-			flex-basis: 300px;
+			max-width: 275px;
+			flex-basis: 275px;
 			flex-shrink: 0;
+
+			@include breakpoints.desktopAndUp {
+				display: block;
+				position: sticky;
+				top: 0;
+			}
+		}
+
+		.primarySidebarModal {
+			border: solid 1px colors.$subtleBorder;
+			transition: box-shadow 0.5s ease-in;
+
+			&[open] {
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+				position: absolute;
+				animation: dim 0.1s ease-in forwards;
+				top: 0;
+				left: 0;
+				width: 100vw;
+				height: 100vh;
+				min-height: 100vh; // <dialog> quirk because reasons
+				max-width: 300px;
+				padding: 0;
+				margin: 0;
+
+				@keyframes dim {
+					0% {
+						box-shadow: 0 0 0 100vmax rgba(colors.$themedShadow, 0);
+						transform: translateX(-100%);
+					}
+					100% {
+						box-shadow: 0 0 0 100vmax rgba(colors.$themedShadow, 0.4);
+						transform: translateX(0%);
+					}
+				}
+			}
+
+			.primarySidebarModal__top {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding: 0.5rem 1rem 0.5rem 1rem;
+				border-bottom: solid 1px colors.$subtleBorder;
+			}
+
+			.primarySidebarModal__body {
+				flex-grow: 1;
+				flex-shrink: 1;
+				overflow: scroll;
+				padding-bottom: 0.5rem;
+			}
 		}
 	}
 </style>

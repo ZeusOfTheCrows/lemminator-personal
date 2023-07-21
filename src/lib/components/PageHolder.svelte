@@ -13,6 +13,7 @@
 	@use '$lib/css/resets';
 	@use '$lib/css/globals';
 	@use '$lib/css/colors';
+	@use '$lib/css/breakpoints';
 
 	.main {
 		padding: 1rem;
@@ -23,10 +24,15 @@
 	}
 
 	.secondarySidebar {
-		padding: 1rem;
-		position: sticky;
-		top: 0;
-		flex-basis: 300px;
-		flex-shrink: 0;
+		display: none;
+
+		@include breakpoints.maxAndUp {
+			display: block;
+			padding: 1rem;
+			position: sticky;
+			top: 0;
+			flex-basis: 300px;
+			flex-shrink: 0;
+		}
 	}
 </style>
