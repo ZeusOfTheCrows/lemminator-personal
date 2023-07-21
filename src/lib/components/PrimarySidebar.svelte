@@ -71,6 +71,7 @@
 
 		.communityItem__icon {
 			width: 20px;
+			object-fit: cover;
 			aspect-ratio: 1 / 1;
 			border-radius: 100%;
 		}

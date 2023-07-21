@@ -141,6 +141,7 @@
 				width: 20px;
 				height: 20px;
 				border-radius: 100%;
+				object-fit: cover;
 			}
 		}
 
