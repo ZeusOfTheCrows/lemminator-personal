@@ -81,7 +81,7 @@
 	@use '$lib/css/globals';
 	@use '$lib/css/colors';
 	@use '$lib/css/breakpoints';
-	@use 'material-icons/iconfont/material-icons.css';
+	@use 'material-icons/iconfont/filled.css';
 
 	.root {
 		background: colors.$globalBg;
