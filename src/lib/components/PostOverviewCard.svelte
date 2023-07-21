@@ -100,9 +100,9 @@
 				animation: shimmer 2s infinite linear;
 				background: linear-gradient(
 					to right,
-					colors.$color1 4%,
+					rgba(colors.$color1, 0.1) 4%,
 					colors.$color2 25%,
-					colors.$color1 36%
+					rgba(colors.$color1, 0.1) 36%
 				);
 				background-size: 1000px 100%;
 				width: 100%;
