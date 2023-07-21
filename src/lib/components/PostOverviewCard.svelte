@@ -79,14 +79,14 @@
 			background: colors.$gradient12;
 			padding: 1rem;
 			display: flex;
-			flex-basis: 3.5rem;
+			flex-basis: 4rem;
 			flex-shrink: 0;
 			flex-direction: column;
 			align-items: center;
 			font-size: 1.2rem;
 
 			.postOverviewCard__score {
-				font-size: 0.9rem;
+				font-size: 0.75rem;
 			}
 		}
 
