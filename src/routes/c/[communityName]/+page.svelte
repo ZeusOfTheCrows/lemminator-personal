@@ -13,6 +13,14 @@
 			name: $page.params.communityName
 		});
 	}
+
+	function makeBannerImageVar(url: string | undefined): string | undefined {
+		if (url) {
+			return `url(${url})`;
+		} else {
+			return;
+		}
+	}
 </script>
 
 {#await communityResponse then communityResponse}
@@ -21,7 +29,7 @@
 			<div
 				class="communityBanner"
 				class:communityBanner--hasImage={!!communityResponse.community_view.community.banner}
-				style:--bannerImage={`url(${communityResponse.community_view.community.banner})`}
+				style:--bannerImage={makeBannerImageVar(communityResponse.community_view.community.banner)}
 			>
 				<div class="communityBanner__info">
 					{#if communityResponse.community_view.community.icon}
@@ -50,7 +58,7 @@
 	.communityBanner {
 		$gradient: linear-gradient(to top, colors.$themedShadow, rgba(colors.$themedShadow, 0));
 		height: 10rem;
-		background-image: $gradient, colors.$gradient12;
+		background: $gradient, url('$lib/img/fills/fill1.svg'), #0e0035;
 		background-size: cover;
 		background-position: center;
 		border-radius: 10px;
