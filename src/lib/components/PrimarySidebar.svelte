@@ -6,6 +6,7 @@
 	const dispatch = createEventDispatcher();
 	const client = getClient();
 	let communitiesResponse = client.listCommunities({
+		type_: 'Local',
 		sort: 'TopDay'
 	});
 	$: {
