@@ -2,6 +2,9 @@ $globalBg: #fdfbfd;
 $color1: hsl(259, 50%, 94%);
 $color2: hsl(272, 67%, 97%);
 $deemphColor: #444;
+$maxContrastBgFill: white;
+$maxContrastShadow: black;
+$themedShadow: rgb(22, 2, 27);
 
 $gradient12: linear-gradient(10deg, $color1, $color2);
 
