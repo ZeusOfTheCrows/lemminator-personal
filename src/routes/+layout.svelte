@@ -87,8 +87,7 @@
 		display: flex;
 		flex-shrink: 0;
 		align-items: center;
-		// border-bottom: solid 1px colors.$subtleBorder;
-		box-shadow: 0 0 10px rgba(colors.$themedShadow, 0.2);
+		border-bottom: solid 1px colors.$subtleBorder;
 
 		.header__logoMenuToggle {
 			display: flex;
