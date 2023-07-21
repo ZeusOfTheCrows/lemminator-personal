@@ -36,7 +36,7 @@
 		{/await}
 	{:else}
 		{#await siteResponse}
-			…
+			<LoadingSpinner minHeight="4rem" />
 		{:then siteResponse}
 			{#if siteResponse.site_view.site.description}
 				<ElevatedBox title={`About ${siteResponse.site_view.site.name}`} stacking="vertical">
