@@ -33,7 +33,9 @@
 		border-radius: 10px;
 
 		&:hover {
-			background: colors.$color2;
+			@include colors.themify() {
+				background: colors.themed('color2;');
+			}
 		}
 
 		&.transparentButton--smallRound {

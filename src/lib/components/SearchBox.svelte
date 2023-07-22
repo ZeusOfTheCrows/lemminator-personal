@@ -17,9 +17,12 @@
 		padding: 0.3rem;
 		font-size: 0.9rem;
 		border-radius: 10px;
-		border: solid 1px rgba(colors.$maxContrastOnTheme, 0.3);
-		outline: solid 2px colors.$color1;
-		background: colors.$maxContrastTheme;
+		@include colors.themify() {
+			border: solid 1px rgba(colors.themed('maxContrastOnTheme'), 0.3);
+			outline: solid 2px colors.themed('color1');
+			background: colors.themed('maxContrastTheme');
+			color: colors.themed('maxContrastOnTheme');
+		}
 		display: flex;
 		align-items: center;
 
@@ -28,6 +31,8 @@
 			flex-grow: 1;
 			border: none;
 			outline: none;
+			background: transparent;
+			color: inherit;
 		}
 	}
 </style>

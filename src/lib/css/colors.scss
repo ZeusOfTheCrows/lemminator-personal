@@ -1,11 +1,57 @@
-$color1: hsl(259, 50%, 94%);
-$color2: hsl(272, 67%, 97%);
-$deemphColor: #444;
-$maxContrastTheme: white;
-$maxContrastOnTheme: black;
-$themedShadow: rgb(22, 2, 27);
+$lightColor1: hsl(259, 50%, 94%);
+$lightColor2: hsl(272, 67%, 97%);
+$darkColor1: hsl(261, 94%, 6%);
+$darkColor2: hsl(274, 89%, 11%);
 
-$gradient12: linear-gradient(10deg, $color1, $color2);
+$themes: (
+    lightTheme: (color1: $lightColor1,
+        color2: $lightColor2,
+        deemphColor: #444,
+        maxContrastTheme: white,
+        maxContrastOnTheme: black,
+        themedShadow: rgb(22, 2, 27),
 
-$boxShadow: rgba(15, 0, 17, 0.03);
-$subtleBorder: rgba(0, 0, 0, 0.03);
+        gradient12: linear-gradient(10deg, $lightColor1, $lightColor2),
+
+        boxShadow: rgba(15, 0, 17, 0.03),
+        subtleBorder: rgba(0, 0, 0, 0.03),
+    ),
+    darkTheme: (color1: $darkColor1,
+        color2: $darkColor2,
+        deemphColor: #dadada,
+        maxContrastTheme: black,
+        maxContrastOnTheme: rgb(243, 243, 243),
+        themedShadow: rgb(214, 163, 250),
+
+        gradient12: linear-gradient(10deg, $darkColor1, $darkColor2),
+
+        boxShadow: rgba(252, 232, 255, 0.1),
+        subtleBorder: rgba(255, 255, 255, 0.03),
+    ),
+);
+
+@mixin themify() {
+
+    @each $theme,
+    $map in $themes {
+        // $theme: darkTheme, lightTheme
+        // $map: ('text-color': ..., 'bg-color': ...)
+
+        // make the $map globally accessible, so that theme-get() can access it
+        $theme-map: $map !global;
+
+        // make a class for each theme using interpolation -> #{}
+        // use & for making the theme class ancestor of the class
+        // from which you use @include theme() {...}
+        :global(.#{$theme}) & {
+            @content; // the content inside @include theme() {...}
+        }
+    }
+
+    // no use of the variable $theme-map now
+    $theme-map: null !global;
+}
+
+@function themed($key) {
+    @return map-get($theme-map, $key);
+}

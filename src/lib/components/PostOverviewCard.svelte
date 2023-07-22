@@ -84,13 +84,14 @@
 	@use 'material-icons/iconfont/filled.css';
 
 	.postOverviewCard {
-		background: white;
 		border-radius: 10px;
 		transition: opacity 0.1s;
 		scroll-margin: 1rem; // Top padding of main content
 
 		.postOverviewCard__updown {
-			background: rgba(colors.$color2, 0.6);
+			@include colors.themify() {
+				background: rgba(colors.themed('color2'), 0.6);
+			}
 			padding: 0.3rem 0.5rem;
 			display: flex;
 			flex-basis: 3.5rem;
@@ -117,12 +118,14 @@
 
 			&.postOverviewCard__main--shimmer {
 				animation: shimmer 2s infinite linear;
-				background: linear-gradient(
-					to right,
-					rgba(colors.$color1, 0.1) 4%,
-					colors.$color2 25%,
-					rgba(colors.$color1, 0.1) 36%
-				);
+				@include colors.themify() {
+					background: linear-gradient(
+						to right,
+						rgba(colors.themed('color1'), 0.1) 4%,
+						colors.themed('color2 25%'),
+						rgba(colors.themed('color1'), 0.1) 36%
+					);
+				}
 				background-size: 1000px 100%;
 				width: 100%;
 				height: 6rem;
@@ -140,7 +143,9 @@
 		}
 
 		.postOverviewCard__metaLine {
-			color: colors.$deemphColor;
+			@include colors.themify() {
+				color: colors.themed('deemphColor');
+			}
 			font-size: 0.75rem;
 			padding-bottom: 0.3rem;
 			display: flex;
@@ -173,7 +178,9 @@
 
 				// Fallbacks for load failures
 				font-size: 0; // We have alt text for screen readers, regular users don't need it
-				background: colors.$color1;
+				@include colors.themify() {
+					background: colors.themed('color1');
+				}
 			}
 		}
 
@@ -185,7 +192,9 @@
 
 		.postOverviewCard__image {
 			max-width: 100%;
-			border: solid 1px colors.$subtleBorder;
+			@include colors.themify() {
+				border: solid 1px colors.themed('subtleBorder');
+			}
 			border-radius: 10px;
 			aspect-ratio: 16 / 9;
 			object-fit: cover;
@@ -198,7 +207,9 @@
 		}
 
 		&.postOverviewCard--active {
-			outline: solid 1px rgba(colors.$maxContrastOnTheme, 0.2);
+			@include colors.themify() {
+				outline: solid 1px rgba(colors.themed('maxContrastOnTheme'), 0.2);
+			}
 		}
 
 		&.postOverviewCard--inactive {

@@ -15,7 +15,9 @@
 		justify-content: center;
 
 		.loadingSpinner__token {
-			background: colors.$color1;
+			@include colors.themify() {
+				background: colors.themed('color1');
+			}
 			border-radius: 100%;
 			min-width: 2rem;
 			aspect-ratio: 1 / 1;
@@ -39,7 +41,9 @@
 			&::after {
 				display: block;
 				content: '';
-				background: darken(colors.$color1, 10%);
+				@include colors.themify() {
+					background: darken(colors.themed('color1'), 10%);
+				}
 				width: 20%;
 				border-radius: 100%;
 				aspect-ratio: 1 / 1;

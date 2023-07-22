@@ -4,6 +4,7 @@
 	import PrimarySidebar from '$lib/components/PrimarySidebar.svelte';
 	import TransparentButton from '$lib/components/TransparentButton.svelte';
 	import logoOnLight from '$lib/img/logoOnLight.png';
+	import logoOnDark from '$lib/img/logoOnDark.png';
 	import logoOnLightSvg from '$lib/img/logoOnLight.svg';
 	import logoOnDarkSvg from '$lib/img/logoOnDark.svg';
 	import type { GetSiteResponse } from 'lemmy-js-client';
@@ -42,6 +43,7 @@
 	$: {
 		siteResponse = client.getSite();
 	}
+	let theme = 'dark';
 </script>
 
 <svelte:head>
@@ -50,48 +52,62 @@
 	<link rel="icon" href={logoOnDarkSvg} media="(prefers-color-scheme: dark)" />
 </svelte:head>
 
-<div class="root" bind:this={root}>
-	<header class="header">
-		<div class="header__logoMenuToggle">
-			<div class="header__menuToggle">
-				<TransparentButton on:click={() => primarySidebarModal.showModal()} title="Open navigation">
-					<span class="material-icons">menu</span>
-				</TransparentButton>
+<div class:lightTheme={theme === 'light'} class:darkTheme={theme === 'dark'}>
+	<div class="root" bind:this={root}>
+		<header class="header">
+			<div class="header__logoMenuToggle">
+				<div class="header__menuToggle">
+					<TransparentButton
+						on:click={() => primarySidebarModal.showModal()}
+						title="Open navigation"
+					>
+						<span class="material-icons">menu</span>
+					</TransparentButton>
+				</div>
+				<a href="/">
+					{#if theme === 'light'}
+						<img src={logoOnLight} alt="Lemminator logo" class="header__logo" />
+					{:else if theme === 'dark'}
+						<img src={logoOnDark} alt="Lemminator logo" class="header__logo" />
+					{/if}
+					{#await siteResponse then siteResponse}
+						{siteResponse.site_view.site.name}
+					{/await}
+				</a>
 			</div>
-			<a href="/">
-				<img src={logoOnLight} alt="Lemminator logo" class="header__logo" />
-				{#await siteResponse then siteResponse}
-					{siteResponse.site_view.site.name}
-				{/await}
-			</a>
-		</div>
-		<div class="header__search">
-			<div class="header__searchBox">
-				<SearchBox />
+			<div class="header__search">
+				<div class="header__searchBox">
+					<SearchBox />
+				</div>
 			</div>
-		</div>
-		<div class="header__menu">
-			<TransparentButton icon="person" />
-		</div>
-	</header>
-	<div class="page">
-		<aside class="primarySidebar">
-			<PrimarySidebar on:communitiesResponseLoaded={updateHighlightedRouteStyling} />
-		</aside>
-		<dialog class="primarySidebarModal" bind:this={primarySidebarModal}>
-			<div class="primarySidebarModal__top">
-				{#await siteResponse then siteResponse}
-					<div>{siteResponse.site_view.site.name}</div>
-				{/await}
-				<TransparentButton on:click={() => primarySidebarModal.close()} title="Close navigation">
-					<span class="material-icons">menu_open</span>
-				</TransparentButton>
+			<div class="header__menu">
+				<TransparentButton
+					title="Toggle dark mode"
+					icon="dark_mode"
+					on:click={() => (theme = theme === 'light' ? 'dark' : 'light')}
+				/>
+				<TransparentButton icon="person" />
 			</div>
-			<div class="primarySidebarModal__body">
+		</header>
+		<div class="page">
+			<aside class="primarySidebar">
 				<PrimarySidebar on:communitiesResponseLoaded={updateHighlightedRouteStyling} />
-			</div>
-		</dialog>
-		<slot />
+			</aside>
+			<dialog class="primarySidebarModal" bind:this={primarySidebarModal}>
+				<div class="primarySidebarModal__top">
+					{#await siteResponse then siteResponse}
+						<div>{siteResponse.site_view.site.name}</div>
+					{/await}
+					<TransparentButton on:click={() => primarySidebarModal.close()} title="Close navigation">
+						<span class="material-icons">menu_open</span>
+					</TransparentButton>
+				</div>
+				<div class="primarySidebarModal__body">
+					<PrimarySidebar on:communitiesResponseLoaded={updateHighlightedRouteStyling} />
+				</div>
+			</dialog>
+			<slot />
+		</div>
 	</div>
 </div>
 
@@ -103,7 +119,10 @@
 	@use 'material-icons/iconfont/filled.css';
 
 	.root {
-		background: colors.$maxContrastTheme;
+		@include colors.themify() {
+			background: colors.themed('maxContrastTheme');
+			color: colors.themed('maxContrastOnTheme');
+		}
 		display: flex;
 		flex-direction: column;
 		height: 100vh;
@@ -117,8 +136,10 @@
 		gap: $gap;
 		align-items: center;
 		justify-content: space-between;
-		border-bottom: solid 1px colors.$subtleBorder;
-		box-shadow: 0 0 10px colors.$color2;
+		@include colors.themify() {
+			border-bottom: solid 1px colors.themed('subtleBorder');
+			box-shadow: 0 0 10px colors.themed('color2');
+		}
 		z-index: 1; // Prevent box-shadow from painting underneath cards
 
 		.header__logoMenuToggle {
@@ -163,7 +184,11 @@
 		}
 
 		.header__menu {
-			text-align: right;
+			display: flex;
+			flex-direction: row;
+			gap: 0.5rem;
+			align-items: right;
+			justify-content: center;
 		}
 	}
 
@@ -174,7 +199,13 @@
 		display: flex;
 		flex-direction: row;
 		align-items: start;
-		background: linear-gradient(to bottom, rgba(colors.$color2, 0.5), colors.$maxContrastTheme 50%);
+		@include colors.themify() {
+			background: linear-gradient(
+				to bottom,
+				rgba(colors.themed('color2'), 0.5),
+				colors.themed('maxContrastTheme') 50%
+			);
+		}
 
 		.primarySidebar {
 			display: none;
@@ -191,7 +222,9 @@
 		}
 
 		.primarySidebarModal {
-			border: solid 1px colors.$subtleBorder;
+			@include colors.themify() {
+				border: solid 1px colors.themed('subtleBorder');
+			}
 			transition: box-shadow 0.5s ease-in;
 
 			&[open] {
@@ -209,14 +242,19 @@
 				padding: 0;
 				margin: 0;
 
-				@keyframes dim {
-					0% {
-						box-shadow: 0 0 0 100vmax rgba(colors.$themedShadow, 0);
-						transform: translateX(-100%);
-					}
-					100% {
-						box-shadow: 0 0 0 100vmax rgba(colors.$themedShadow, 0.4);
-						transform: translateX(0%);
+				@include colors.themify() {
+					background: colors.themed('maxContrastTheme');
+					color: colors.themed('maxContrastOnTheme');
+
+					@keyframes dim {
+						0% {
+							box-shadow: 0 0 0 100vmax rgba(colors.themed('themedShadow'), 0);
+							transform: translateX(-100%);
+						}
+						100% {
+							box-shadow: 0 0 0 100vmax rgba(colors.themed('themedShadow'), 0.4);
+							transform: translateX(0%);
+						}
 					}
 				}
 			}
@@ -226,7 +264,9 @@
 				align-items: center;
 				justify-content: space-between;
 				padding: 0.5rem 1rem 0.5rem 1rem;
-				border-bottom: solid 1px colors.$subtleBorder;
+				@include colors.themify() {
+					border-bottom: solid 1px colors.themed('subtleBorder');
+				}
 				font-weight: bold;
 			}
 

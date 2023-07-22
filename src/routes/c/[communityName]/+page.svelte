@@ -70,9 +70,7 @@
 	@use '$lib/css/colors';
 
 	.communityBanner {
-		$gradient: linear-gradient(to top, colors.$themedShadow, rgba(colors.$themedShadow, 0));
 		height: 10rem;
-		background: $gradient, url('$lib/img/fills/fill1.svg'), #0e0035;
 		background-size: cover;
 		background-position: center;
 		border-radius: 10px;
@@ -83,8 +81,18 @@
 		padding-bottom: 1rem;
 		margin-bottom: 1rem;
 
-		&.communityBanner--hasImage {
-			background: $gradient, var(--bannerImage);
+		@include colors.themify() {
+			$gradient: linear-gradient(
+				to top,
+				colors.themed('themedShadow'),
+				rgba(colors.themed('themedShadow'), 0)
+			);
+
+			background: $gradient, url('$lib/img/fills/fill1.svg'), #0e0035;
+
+			&.communityBanner--hasImage {
+				background: $gradient, var(--bannerImage);
+			}
 		}
 
 		.communityBanner__info {
@@ -99,14 +107,19 @@
 				aspect-ratio: 1 / 1;
 				object-fit: cover;
 				padding: 0.3rem;
-				background: colors.$maxContrastTheme;
+				@include colors.themify() {
+					background: colors.themed('maxContrastTheme');
+				}
 			}
 
 			.communityBanner__title {
-				color: colors.$maxContrastTheme;
+				@include colors.themify() {
+					color: colors.themed('maxContrastTheme');
+					text-shadow: 0 0 20px colors.themed('themedShadow'),
+						0 0 10px colors.themed('themedShadow');
+				}
 				font-size: 1.25rem;
 				font-weight: bold;
-				text-shadow: 0 0 20px colors.$maxContrastOnTheme, 0 0 10px colors.$maxContrastOnTheme;
 			}
 		}
 	}

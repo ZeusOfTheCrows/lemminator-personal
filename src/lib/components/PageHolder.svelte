@@ -19,8 +19,10 @@
 		padding: 1rem;
 		align-self: stretch;
 		flex-grow: 1;
-		border-left: solid 1px colors.$subtleBorder;
-		border-right: solid 1px colors.$subtleBorder;
+		@include colors.themify() {
+			border-left: solid 1px colors.themed('subtleBorder');
+			border-right: solid 1px colors.themed('subtleBorder');
+		}
 	}
 
 	.secondarySidebar {

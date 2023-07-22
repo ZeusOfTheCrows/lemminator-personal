@@ -118,7 +118,9 @@
 			}
 
 			:global(hr) {
-				border: solid 1px colors.$subtleBorder;
+				@include colors.themify() {
+					border: solid 1px colors.themed('subtleBorder');
+				}
 			}
 		}
 
@@ -134,7 +136,9 @@
 	.statistic {
 		.statistic__metric {
 			font-size: 0.8rem;
-			color: colors.$deemphColor;
+			@include colors.themify() {
+				color: colors.themed('deemphColor');
+			}
 			margin-bottom: 0.1rem;
 		}
 
