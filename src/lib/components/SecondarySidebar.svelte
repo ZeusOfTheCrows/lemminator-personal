@@ -4,6 +4,7 @@
 	import type { GetCommunityResponse, GetSiteResponse } from 'lemmy-js-client';
 	import { renderEnhancedMarkdown } from '$lib/js/markdown';
 	import LoadingSpinner from './LoadingSpinner.svelte';
+	import { formatApproxInteger } from '$lib/js/format';
 
 	let client = getClient();
 	export let siteResponse: Promise<GetSiteResponse> = new Promise(() => {});
@@ -38,13 +39,13 @@
 					<div class="statistic">
 						<div class="statistic__metric">Subscribers</div>
 						<div class="statistic__value">
-							{communityResponse.community_view.counts.subscribers}
+							{formatApproxInteger(communityResponse.community_view.counts.subscribers)}
 						</div>
 					</div>
 					<div class="statistic">
 						<div class="statistic__metric">Users today</div>
 						<div class="statistic__value">
-							{communityResponse.community_view.counts.users_active_day}
+							{formatApproxInteger(communityResponse.community_view.counts.users_active_day)}
 						</div>
 					</div>
 				</div>
@@ -61,6 +62,22 @@
 					</p>
 				</ElevatedBox>
 			{/if}
+			<ElevatedBox title="Activity" stacking="vertical">
+				<div class="secondaryNavigation__statList">
+					<div class="statistic">
+						<div class="statistic__metric">Posts</div>
+						<div class="statistic__value">
+							{formatApproxInteger(siteResponse.site_view.counts.posts)}
+						</div>
+					</div>
+					<div class="statistic">
+						<div class="statistic__metric">Users today</div>
+						<div class="statistic__value">
+							{formatApproxInteger(siteResponse.site_view.counts.users_active_day)}
+						</div>
+					</div>
+				</div>
+			</ElevatedBox>
 		{/await}
 	{/if}
 </div>
