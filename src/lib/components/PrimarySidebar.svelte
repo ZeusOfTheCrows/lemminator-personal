@@ -95,7 +95,7 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			color: colors.$maxContrastShadow;
+			color: colors.$maxContrastOnTheme;
 			font-size: 0.9rem;
 		}
 	}

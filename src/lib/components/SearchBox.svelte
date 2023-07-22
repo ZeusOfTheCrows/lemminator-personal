@@ -17,9 +17,9 @@
 		padding: 0.3rem;
 		font-size: 0.9rem;
 		border-radius: 10px;
-		border: solid 1px rgba(colors.$maxContrastShadow, 0.3);
+		border: solid 1px rgba(colors.$maxContrastOnTheme, 0.3);
 		outline: solid 2px colors.$color1;
-		background: colors.$maxContrastBgFill;
+		background: colors.$maxContrastTheme;
 		display: flex;
 		align-items: center;
 

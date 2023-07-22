@@ -1,45 +1,11 @@
 $color1: hsl(259, 50%, 94%);
 $color2: hsl(272, 67%, 97%);
 $deemphColor: #444;
-$maxContrastBgFill: white;
-$maxContrastShadow: black;
+$maxContrastTheme: white;
+$maxContrastOnTheme: black;
 $themedShadow: rgb(22, 2, 27);
 
 $gradient12: linear-gradient(10deg, $color1, $color2);
 
 $boxShadow: rgba(15, 0, 17, 0.03);
 $subtleBorder: rgba(0, 0, 0, 0.03);
-
-// SCSS function to convert a hex color to CSS filter hue-rotate value
-@function hex-to-hue-rotate($hex) {
-    $r: red($hex);
-    $g: green($hex);
-    $b: blue($hex);
-
-    // Convert RGB to HSL
-    $min: min($r, $g, $b);
-    $max: max($r, $g, $b);
-    $delta: $max - $min;
-
-    $hue: 0;
-    $saturation: 0;
-    $lightness: ($max + $min) / 2;
-
-    @if $delta !=0 {
-        $saturation: $delta / (if($lightness < 0.5, $max + $min, 2 - $max - $min));
-
-        @if $max ==$r {
-            $hue: (($g - $b) / $delta + if($g < $b, 6, 0)) * 60;
-        }
-
-        @else if $max ==$g {
-            $hue: (($b - $r) / $delta + 2) * 60;
-        }
-
-        @else {
-            $hue: (($r - $g) / $delta + 4) * 60;
-        }
-    }
-
-    @return hue-rotate($hue);
-}

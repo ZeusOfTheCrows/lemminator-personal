@@ -103,7 +103,7 @@
 	@use 'material-icons/iconfont/filled.css';
 
 	.root {
-		background: colors.$maxContrastBgFill;
+		background: colors.$maxContrastTheme;
 		display: flex;
 		flex-direction: column;
 		height: 100vh;
@@ -174,11 +174,7 @@
 		display: flex;
 		flex-direction: row;
 		align-items: start;
-		background: linear-gradient(
-			to bottom,
-			rgba(colors.$color2, 0.5),
-			colors.$maxContrastBgFill 50%
-		);
+		background: linear-gradient(to bottom, rgba(colors.$color2, 0.5), colors.$maxContrastTheme 50%);
 
 		.primarySidebar {
 			display: none;

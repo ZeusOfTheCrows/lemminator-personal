@@ -99,14 +99,14 @@
 				aspect-ratio: 1 / 1;
 				object-fit: cover;
 				padding: 0.3rem;
-				background: colors.$maxContrastBgFill;
+				background: colors.$maxContrastTheme;
 			}
 
 			.communityBanner__title {
-				color: colors.$maxContrastBgFill;
+				color: colors.$maxContrastTheme;
 				font-size: 1.25rem;
 				font-weight: bold;
-				text-shadow: 0 0 20px colors.$maxContrastShadow, 0 0 10px colors.$maxContrastShadow;
+				text-shadow: 0 0 20px colors.$maxContrastOnTheme, 0 0 10px colors.$maxContrastOnTheme;
 			}
 		}
 	}

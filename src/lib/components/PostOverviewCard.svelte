@@ -198,7 +198,7 @@
 		}
 
 		&.postOverviewCard--active {
-			outline: solid 1px rgba(colors.$maxContrastShadow, 0.2);
+			outline: solid 1px rgba(colors.$maxContrastOnTheme, 0.2);
 		}
 
 		&.postOverviewCard--inactive {
