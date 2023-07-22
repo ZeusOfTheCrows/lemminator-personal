@@ -2,6 +2,7 @@
 	import { formatRelativeTime } from '$lib/js/client';
 	import type { PostView } from 'lemmy-js-client';
 	import ElevatedBox from './ElevatedBox.svelte';
+	import TransparentButton from './TransparentButton.svelte';
 
 	// null = shimmer
 	export let postView: PostView | null;
@@ -22,9 +23,17 @@
 	<ElevatedBox stacking="horizontal">
 		{#if postView}
 			<div class="postOverviewCard__updown">
-				<div class="postOverviewCard__up">⮝</div>
+				<div class="postOverviewCard__up">
+					<TransparentButton appearance="smallRound">
+						<span class="material-icons">keyboard_arrow_up</span>
+					</TransparentButton>
+				</div>
 				<div class="postOverviewCard__score">{postView.counts.score}</div>
-				<div class="postOverviewCard__down">⮟</div>
+				<div class="postOverviewCard__down material-icons">
+					<TransparentButton appearance="smallRound">
+						<span class="material-icons">keyboard_arrow_down</span>
+					</TransparentButton>
+				</div>
 			</div>
 			<div class="postOverviewCard__main">
 				<div>
@@ -76,6 +85,7 @@
 <style lang="scss">
 	@use '$lib/css/colors';
 	@use '$lib/css/breakpoints';
+	@use 'material-icons/iconfont/filled.css';
 
 	.postOverviewCard {
 		background: white;
@@ -84,10 +94,11 @@
 		scroll-margin: 1rem; // Top padding of main content
 
 		.postOverviewCard__updown {
-			background: colors.$gradient12;
-			padding: 1rem;
+			background: rgba(colors.$color2, 0.6);
+			padding: 0.3rem 0.5rem;
 			display: flex;
 			flex-basis: 3.5rem;
+			gap: 0.5rem;
 			flex-shrink: 0;
 			flex-direction: column;
 			align-items: center;

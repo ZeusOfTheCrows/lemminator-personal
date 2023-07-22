@@ -1,8 +1,14 @@
 <script lang="ts">
 	export let title: string | undefined = undefined;
+	export let appearance: 'default' | 'smallRound' = 'default';
 </script>
 
-<button class="transparentButton" {title} on:click>
+<button
+	class="transparentButton"
+	{title}
+	on:click
+	class:transparentButton--smallRound={appearance === 'smallRound'}
+>
 	<slot />
 </button>
 
@@ -23,6 +29,11 @@
 
 		&:hover {
 			background: colors.$color2;
+		}
+
+		&.transparentButton--smallRound {
+			padding: 0.25rem;
+			border-radius: 100%;
 		}
 	}
 </style>
