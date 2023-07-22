@@ -70,7 +70,9 @@
 				<SearchBox />
 			</div>
 		</div>
-		<div class="header__menu">Menu</div>
+		<div class="header__menu">
+			<TransparentButton icon="person" />
+		</div>
 	</header>
 	<div class="page">
 		<aside class="primarySidebar">

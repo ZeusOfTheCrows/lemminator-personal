@@ -1,6 +1,7 @@
 <script lang="ts">
 	export let title: string | undefined = undefined;
 	export let appearance: 'default' | 'smallRound' = 'default';
+	export let icon: string | null = null;
 </script>
 
 <button
@@ -9,11 +10,15 @@
 	on:click
 	class:transparentButton--smallRound={appearance === 'smallRound'}
 >
+	{#if icon}
+		<span class="material-icons">{icon}</span>
+	{/if}
 	<slot />
 </button>
 
 <style lang="scss">
 	@use '$lib/css/colors';
+	@use 'material-icons/iconfont/filled.css';
 
 	.transparentButton {
 		display: flex;

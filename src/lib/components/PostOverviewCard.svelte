@@ -24,15 +24,11 @@
 		{#if postView}
 			<div class="postOverviewCard__updown">
 				<div class="postOverviewCard__up">
-					<TransparentButton appearance="smallRound">
-						<span class="material-icons">keyboard_arrow_up</span>
-					</TransparentButton>
+					<TransparentButton appearance="smallRound" icon="keyboard_arrow_up" />
 				</div>
 				<div class="postOverviewCard__score">{postView.counts.score}</div>
 				<div class="postOverviewCard__down material-icons">
-					<TransparentButton appearance="smallRound">
-						<span class="material-icons">keyboard_arrow_down</span>
-					</TransparentButton>
+					<TransparentButton appearance="smallRound" icon="keyboard_arrow_down" />
 				</div>
 			</div>
 			<div class="postOverviewCard__main">
