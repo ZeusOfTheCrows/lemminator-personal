@@ -46,7 +46,6 @@
 		li {
 			display: flex;
 			flex-direction: column;
-			padding-right: 1rem;
 			line-height: 1.2rem;
 			font-size: 0.9rem;
 
@@ -69,8 +68,6 @@
 				&:global(.highlightedRoute) {
 					border-color: colors.$subtleBorder;
 					background: colors.$gradient12;
-					border-top-right-radius: 10px;
-					border-bottom-right-radius: 10px;
 				}
 			}
 		}
