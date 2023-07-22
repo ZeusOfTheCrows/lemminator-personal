@@ -33,6 +33,22 @@
 					)}
 				</div>
 			</ElevatedBox>
+			<ElevatedBox title="Activity" stacking="vertical">
+				<div class="secondaryNavigation__statList">
+					<div class="statistic">
+						<div class="statistic__metric">Subscribers</div>
+						<div class="statistic__value">
+							{communityResponse.community_view.counts.subscribers}
+						</div>
+					</div>
+					<div class="statistic">
+						<div class="statistic__metric">Users today</div>
+						<div class="statistic__value">
+							{communityResponse.community_view.counts.users_active_day}
+						</div>
+					</div>
+				</div>
+			</ElevatedBox>
 		{/await}
 	{:else}
 		{#await siteResponse}
@@ -56,9 +72,10 @@
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
+		$innerPad: 1rem;
 
 		.secondaryNavigation__runningText {
-			padding: 1rem;
+			padding: $innerPad;
 			font-size: 0.85rem;
 			line-height: 1.1rem;
 
@@ -86,6 +103,27 @@
 			:global(hr) {
 				border: solid 1px colors.$subtleBorder;
 			}
+		}
+
+		.secondaryNavigation__statList {
+			padding: $innerPad;
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			gap: 1rem 3rem;
+		}
+	}
+
+	.statistic {
+		.statistic__metric {
+			font-size: 0.8rem;
+			color: colors.$deemphColor;
+			margin-bottom: 0.1rem;
+		}
+
+		.statistic__value {
+			font-size: 1.2rem;
+			font-weight: bold;
 		}
 	}
 </style>
