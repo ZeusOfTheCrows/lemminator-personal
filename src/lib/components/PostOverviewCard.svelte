@@ -6,6 +6,7 @@
 	// null = shimmer
 	export let postView: PostView | null;
 	export let showCommunity: boolean = true;
+	export let active: boolean | null = null;
 
 	function isImageLink(link: string | undefined): boolean {
 		if (!link) return false;
@@ -13,7 +14,11 @@
 	}
 </script>
 
-<div class="postOverviewCard">
+<div
+	class="postOverviewCard"
+	class:postOverviewCard--active={active == true}
+	class:postOverviewCard--inactive={active == false}
+>
 	<ElevatedBox stacking="horizontal">
 		{#if postView}
 			<div class="postOverviewCard__updown">
@@ -75,6 +80,8 @@
 	.postOverviewCard {
 		background: white;
 		border-radius: 10px;
+		transition: opacity 0.1s;
+		scroll-margin: 1rem; // Top padding of main content
 
 		.postOverviewCard__updown {
 			background: colors.$gradient12;
@@ -181,6 +188,14 @@
 		.postOverviewCard__actionLine {
 			opacity: 0.8;
 			font-size: 0.9rem;
+		}
+
+		&.postOverviewCard--active {
+			outline: solid 1px rgba(colors.$maxContrastShadow, 0.2);
+		}
+
+		&.postOverviewCard--inactive {
+			opacity: 0.5;
 		}
 	}
 </style>

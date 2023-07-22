@@ -2,6 +2,7 @@
 	import { getClient } from '$lib/js/client';
 	import type { GetPostsResponse } from 'lemmy-js-client';
 	import PostOverviewCard from './PostOverviewCard.svelte';
+	import { keynav } from '$lib/js/keynavStore';
 
 	let client = getClient();
 	export let communityName: string | null = null;
@@ -11,7 +12,38 @@
 			community_name: communityName ?? undefined
 		});
 	}
+
+	let postNavIndex: number | null = null;
+	let postListElement: HTMLElement;
+	$: {
+		// Make sure to run this after the active prop of the PostOverviewCard has propagated
+		setTimeout(() => {
+			if (postNavIndex !== null) {
+				const el = postListElement.querySelector('.postOverviewCard--active');
+				el?.scrollIntoView();
+			}
+		}, 1);
+	}
+
+	async function handleKeyUp(event: KeyboardEvent) {
+		const maxIndex = (await postsResponse).posts.length - 1;
+		if ($keynav.mode !== 'normal') return;
+
+		switch (event.key) {
+			case 'j':
+				postNavIndex = Math.min((postNavIndex ?? -1) + 1, maxIndex);
+				break;
+			case 'k':
+				postNavIndex = Math.max((postNavIndex ?? 0) - 1, 0);
+				break;
+			case 'Escape':
+				postNavIndex = null;
+				break;
+		}
+	}
 </script>
+
+<svelte:window on:keyup={handleKeyUp} />
 
 {#await postsResponse}
 	<div class="postList">
@@ -23,11 +55,15 @@
 		<PostOverviewCard postView={null} />
 	</div>
 {:then postsResponse}
-	<div class="postList">
-		{#each postsResponse.posts as postView}
+	<div class="postList" bind:this={postListElement}>
+		{#each postsResponse.posts as postView, i}
 			<!-- Can be revisited when an NSFW toggle has been implemented -->
 			{#if postView.post.nsfw === false}
-				<PostOverviewCard {postView} showCommunity={!communityName} />
+				<PostOverviewCard
+					{postView}
+					showCommunity={!communityName}
+					active={postNavIndex !== null ? i == postNavIndex : null}
+				/>
 			{/if}
 		{/each}
 	</div>
