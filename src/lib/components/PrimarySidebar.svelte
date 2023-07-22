@@ -39,6 +39,7 @@
 
 <style lang="scss">
 	@use '$lib/css/colors';
+	@use '$lib/css/breakpoints';
 	@use 'material-icons/iconfont/filled.css';
 
 	.mainNavigation {
@@ -50,12 +51,20 @@
 			font-size: 0.9rem;
 
 			a {
-				padding: 0.5rem 0 0.5rem 1rem;
+				padding: 0.7rem 0 0.7rem 1rem;
 				width: 100%;
 				height: 100%;
 				text-decoration: none;
 				border: solid 1px transparent;
 				border-left: none;
+
+				@include breakpoints.mediumAndUp {
+					padding: 0.5rem 0 0.5rem 1rem;
+				}
+
+				&:hover {
+					background: rgba(colors.$color2, 0.5);
+				}
 
 				&:global(.highlightedRoute) {
 					border-color: colors.$subtleBorder;
