@@ -116,6 +116,8 @@
 		align-items: center;
 		justify-content: space-between;
 		border-bottom: solid 1px colors.$subtleBorder;
+		box-shadow: 0 0 10px colors.$color2;
+		z-index: 1; // Prevent box-shadow from painting underneath cards
 
 		.header__logoMenuToggle {
 			display: flex;
