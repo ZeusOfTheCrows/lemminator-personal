@@ -185,7 +185,7 @@
 				// Fallbacks for load failures
 				font-size: 0; // We have alt text for screen readers, regular users don't need it
 				@include colors.themify() {
-					background: colors.themed('color1');
+					background: colors.themed('themedMainText');
 				}
 			}
 		}
