@@ -167,7 +167,7 @@
 		}
 
 		.header__logo {
-			width: 3rem;
+			width: 2rem;
 		}
 
 		.header__search {
