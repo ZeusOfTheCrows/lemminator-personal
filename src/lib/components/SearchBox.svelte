@@ -18,7 +18,7 @@
 		font-size: 0.9rem;
 		border-radius: 10px;
 		@include colors.themify() {
-			border: solid 1px rgba(colors.themed('maxContrastOnTheme'), 0.3);
+			border: solid 1px rgba(colors.themed('themedShadow'), 0.3);
 			outline: solid 2px colors.themed('color1');
 			background: colors.themed('maxContrastTheme');
 			color: colors.themed('maxContrastOnTheme');

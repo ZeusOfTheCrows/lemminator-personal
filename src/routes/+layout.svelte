@@ -121,7 +121,7 @@
 	.root {
 		@include colors.themify() {
 			background: colors.themed('maxContrastTheme');
-			color: colors.themed('maxContrastOnTheme');
+			color: colors.themed('themedMainText');
 		}
 		display: flex;
 		flex-direction: column;
@@ -248,11 +248,11 @@
 
 					@keyframes dim {
 						0% {
-							box-shadow: 0 0 0 100vmax rgba(colors.themed('themedShadow'), 0);
+							box-shadow: 0 0 0 100vmax rgba(rgb(15, 5, 20), 0);
 							transform: translateX(-100%);
 						}
 						100% {
-							box-shadow: 0 0 0 100vmax rgba(colors.themed('themedShadow'), 0.4);
+							box-shadow: 0 0 0 100vmax rgba(rgb(15, 5, 20), 0.8);
 							transform: translateX(0%);
 						}
 					}

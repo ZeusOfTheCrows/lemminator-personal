@@ -20,7 +20,7 @@
 	.elevatedBox {
 		display: flex;
 		@include colors.themify() {
-			background: colors.themed('maxContrastTheme');
+			background: colors.themed('elevatedBoxBg');
 		}
 		border-radius: 10px;
 		overflow: hidden;
@@ -36,13 +36,12 @@
 		@include colors.themify() {
 			border: solid 1px colors.themed('subtleBorder');
 			box-shadow: 3px 0 15px colors.themed('boxShadow'), 0 3px 15px colors.themed('boxShadow');
-			// box-shadow: 1px 1px 55px colors.themed('boxShadow');
 
 			.elevatedBox__title {
 				padding: 0.75rem 1rem;
 				font-size: 0.8rem;
 				color: colors.themed('deemphColor');
-				background: colors.themed('gradient12');
+				background: colors.themed('elevatedBoxAccent');
 			}
 		}
 	}

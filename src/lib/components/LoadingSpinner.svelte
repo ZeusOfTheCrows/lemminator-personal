@@ -16,7 +16,7 @@
 
 		.loadingSpinner__token {
 			@include colors.themify() {
-				background: colors.themed('color1');
+				background: colors.themed('menuAccent');
 			}
 			border-radius: 100%;
 			min-width: 2rem;
@@ -42,7 +42,7 @@
 				display: block;
 				content: '';
 				@include colors.themify() {
-					background: darken(colors.themed('color1'), 10%);
+					background: colors.themed('maxContrastOnTheme');
 				}
 				width: 20%;
 				border-radius: 100%;

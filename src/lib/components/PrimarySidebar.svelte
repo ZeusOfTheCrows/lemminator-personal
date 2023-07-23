@@ -63,12 +63,12 @@
 
 				@include colors.themify() {
 					&:hover {
-						background: rgba(colors.themed('color2'), 0.5);
+						background: rgba(colors.themed('menuAccent'), 0.3);
 					}
 
 					&:global(.highlightedRoute) {
 						border-color: colors.themed('subtleBorder');
-						background: colors.themed('gradient12');
+						background: colors.themed('menuAccent');
 					}
 				}
 			}

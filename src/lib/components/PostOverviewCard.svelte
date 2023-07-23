@@ -93,7 +93,7 @@
 
 		.postOverviewCard__updown {
 			@include colors.themify() {
-				background: rgba(colors.themed('color2'), 0.6);
+				background: rgba(colors.themed('elevatedBoxAccent'), 0.6);
 			}
 			padding: 0.3rem 0.5rem;
 			display: flex;
@@ -211,7 +211,7 @@
 
 		&.postOverviewCard--active {
 			@include colors.themify() {
-				outline: solid 1px rgba(colors.themed('maxContrastOnTheme'), 0.1);
+				outline: solid 1px rgba(colors.themed('themedMainText'), 0.2);
 			}
 		}
 
