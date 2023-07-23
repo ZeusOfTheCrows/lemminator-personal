@@ -43,14 +43,18 @@
 	@use 'material-icons/iconfont/filled.css';
 
 	.mainNavigation {
+		font-family: 'Lato', sans-serif;
+		@include colors.themify() {
+			color: rgba(colors.themed('themedMainText'), 0.9);
+		}
+
 		li {
 			display: flex;
 			flex-direction: column;
 			line-height: 1.2rem;
-			font-size: 0.9rem;
 
 			a {
-				padding: 0.7rem 0 0.7rem 1rem;
+				padding: 1.2rem;
 				width: 100%;
 				height: 100%;
 				text-decoration: none;
