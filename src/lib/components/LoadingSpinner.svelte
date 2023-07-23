@@ -42,7 +42,7 @@
 				display: block;
 				content: '';
 				@include colors.themify() {
-					background: colors.themed('maxContrastOnTheme');
+					background: rgba(colors.themed('themedMainText'), 0.7);
 				}
 				width: 20%;
 				border-radius: 100%;

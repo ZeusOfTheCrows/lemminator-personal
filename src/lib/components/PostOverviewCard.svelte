@@ -120,13 +120,13 @@
 			gap: 1rem;
 
 			&.postOverviewCard__main--shimmer {
-				animation: shimmer 2s infinite linear;
+				animation: shimmer 1.25s infinite ease-in-out;
 				@include colors.themify() {
-					background: linear-gradient(
+					background-image: linear-gradient(
 						to right,
-						rgba(colors.themed('color1'), 0.1) 4%,
-						colors.themed('color2 25%'),
-						rgba(colors.themed('color1'), 0.1) 36%
+						rgba(colors.themed('themedMainText'), 0) 4%,
+						rgba(colors.themed('themedMainText'), 0.1) 25%,
+						rgba(colors.themed('themedMainText'), 0) 36%
 					);
 				}
 				background-size: 1000px 100%;
@@ -136,10 +136,13 @@
 
 				@keyframes shimmer {
 					0% {
-						background-position: -1000px 0;
+						background-position: -400px 0%;
+					}
+					40% {
+						background-position: 600px 0%;
 					}
 					100% {
-						background-position: 1000px 0;
+						background-position: 600px 0%;
 					}
 				}
 			}
