@@ -35,7 +35,8 @@
 
 		@include colors.themify() {
 			border: solid 1px colors.themed('subtleBorder');
-			box-shadow: 1px 1px 55px colors.themed('boxShadow');
+			box-shadow: 3px 0 15px colors.themed('boxShadow'), 0 3px 15px colors.themed('boxShadow');
+			// box-shadow: 1px 1px 55px colors.themed('boxShadow');
 
 			.elevatedBox__title {
 				padding: 0.75rem 1rem;

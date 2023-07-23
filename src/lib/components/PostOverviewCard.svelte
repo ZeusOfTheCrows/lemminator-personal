@@ -87,6 +87,9 @@
 		border-radius: 10px;
 		transition: opacity 0.1s;
 		scroll-margin: 1rem; // Top padding of main content
+		@include colors.themify() {
+			outline: solid 1px rgba(colors.themed('maxContrastOnTheme'), 0.05);
+		}
 
 		.postOverviewCard__updown {
 			@include colors.themify() {
@@ -208,7 +211,7 @@
 
 		&.postOverviewCard--active {
 			@include colors.themify() {
-				outline: solid 1px rgba(colors.themed('maxContrastOnTheme'), 0.2);
+				outline: solid 1px rgba(colors.themed('maxContrastOnTheme'), 0.1);
 			}
 		}
 
