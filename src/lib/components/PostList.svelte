@@ -2,7 +2,7 @@
 	import { getClient } from '$lib/js/client';
 	import type { GetPostsResponse } from 'lemmy-js-client';
 	import PostOverviewCard from './PostOverviewCard.svelte';
-	import { keynav } from '$lib/js/keynavStore';
+	import { keynav } from '$lib/js/globals';
 
 	let client = getClient();
 	export let communityName: string | null = null;

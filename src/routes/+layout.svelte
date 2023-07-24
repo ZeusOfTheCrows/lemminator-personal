@@ -7,9 +7,8 @@
 	import logoOnDark from '$lib/img/logoOnDark.png';
 	import logoOnLightSvg from '$lib/img/logoOnLight.svg';
 	import logoOnDarkSvg from '$lib/img/logoOnDark.svg';
-	import type { GetSiteResponse } from 'lemmy-js-client';
-	import { getClient } from '$lib/js/client';
 	import SearchBox from '$lib/components/SearchBox.svelte';
+	import { cachedCalls } from '$lib/js/globals';
 
 	let root: HTMLElement;
 
@@ -37,12 +36,6 @@
 	});
 
 	let primarySidebarModal: HTMLDialogElement;
-
-	let client = getClient();
-	let siteResponse: Promise<GetSiteResponse> = new Promise(() => {});
-	$: {
-		siteResponse = client.getSite();
-	}
 	let theme = 'dark';
 </script>
 
@@ -70,7 +63,7 @@
 					{:else if theme === 'dark'}
 						<img src={logoOnDark} alt="Lemminator logo" class="header__logo" />
 					{/if}
-					{#await siteResponse then siteResponse}
+					{#await $cachedCalls.siteResponse then siteResponse}
 						{siteResponse.site_view.site.name}
 					{/await}
 				</a>
@@ -95,7 +88,7 @@
 			</aside>
 			<dialog class="primarySidebarModal" bind:this={primarySidebarModal}>
 				<div class="primarySidebarModal__top">
-					{#await siteResponse then siteResponse}
+					{#await $cachedCalls.siteResponse then siteResponse}
 						<div>{siteResponse.site_view.site.name}</div>
 					{/await}
 					<TransparentButton on:click={() => primarySidebarModal.close()} title="Close navigation">

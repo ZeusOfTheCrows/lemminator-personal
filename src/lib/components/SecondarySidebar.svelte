@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { getClient } from '$lib/js/client';
 	import ElevatedBox from './ElevatedBox.svelte';
-	import type { GetCommunityResponse, GetSiteResponse } from 'lemmy-js-client';
+	import type { GetCommunityResponse } from 'lemmy-js-client';
 	import { renderEnhancedMarkdown } from '$lib/js/markdown';
 	import LoadingSpinner from './LoadingSpinner.svelte';
 	import { formatApproxInteger } from '$lib/js/format';
+	import { getClient } from '$lib/js/client';
+	import { cachedCalls } from '$lib/js/globals';
 
 	let client = getClient();
-	export let siteResponse: Promise<GetSiteResponse> = new Promise(() => {});
 	let communityResponse: Promise<GetCommunityResponse> = new Promise(() => {});
 
 	// Community context, if applicable
@@ -52,7 +52,7 @@
 			</ElevatedBox>
 		{/await}
 	{:else}
-		{#await siteResponse}
+		{#await $cachedCalls.siteResponse}
 			<LoadingSpinner minHeight="4rem" />
 		{:then siteResponse}
 			{#if siteResponse.site_view.site.description}

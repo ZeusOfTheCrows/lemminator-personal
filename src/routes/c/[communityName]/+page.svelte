@@ -4,7 +4,8 @@
 	import SecondarySidebar from '$lib/components/SecondarySidebar.svelte';
 	import PageHolder from '$lib/components/PageHolder.svelte';
 	import { getClient } from '$lib/js/client';
-	import type { GetCommunityResponse, GetSiteResponse } from 'lemmy-js-client';
+	import type { GetCommunityResponse } from 'lemmy-js-client';
+	import { cachedCalls } from '$lib/js/globals';
 
 	const client = getClient();
 	let communityResponse: Promise<GetCommunityResponse> = new Promise(() => {});
@@ -12,10 +13,6 @@
 		communityResponse = client.getCommunity({
 			name: $page.params.communityName
 		});
-	}
-	let siteResponse: Promise<GetSiteResponse> = new Promise(() => {});
-	$: {
-		siteResponse = client.getSite();
 	}
 
 	function makeBannerImageVar(url: string | undefined): string | undefined {
@@ -28,7 +25,7 @@
 </script>
 
 <svelte:head>
-	{#await siteResponse then siteResponse}
+	{#await $cachedCalls.siteResponse then siteResponse}
 		{#await communityResponse then communityResponse}
 			<title>
 				{communityResponse.community_view.community.title} - {siteResponse.site_view.site.name}
@@ -61,7 +58,7 @@
 			<PostList communityName={$page.params.communityName} />
 		</svelte:fragment>
 		<svelte:fragment slot="secondarySidebar">
-			<SecondarySidebar communityName={$page.params.communityName} {siteResponse} />
+			<SecondarySidebar communityName={$page.params.communityName} />
 		</svelte:fragment>
 	</PageHolder>
 {/await}
