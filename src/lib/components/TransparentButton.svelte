@@ -1,6 +1,6 @@
 <script lang="ts">
 	export let title: string | undefined = undefined;
-	export let appearance: 'default' | 'smallRound' = 'default';
+	export let appearance: 'default' | 'dimmed' = 'default';
 	export let icon: string | null = null;
 	export let fontSize = '1rem';
 </script>
@@ -10,7 +10,7 @@
 	{title}
 	on:click
 	class:transparentButton--default={appearance === 'default'}
-	class:transparentButton--smallRound={appearance === 'smallRound'}
+	class:transparentButton--dimmed={appearance === 'dimmed'}
 	style:font-size={fontSize}
 >
 	{#if icon}
@@ -34,20 +34,16 @@
 		border-radius: 10px;
 		font-family: 'Lato', sans-serif;
 		gap: 0.5rem;
+		padding: 0.5rem;
 
-		&:hover {
-			@include colors.themify() {
+		@include colors.themify() {
+			&.transparentButton--dimmed {
+				color: rgba(colors.themed('themedMainText'), 0.8);
+			}
+
+			&:hover {
 				background: colors.themed('color2');
 			}
-		}
-
-		&.transparentButton--default {
-			padding: 0.5rem;
-		}
-
-		&.transparentButton--smallRound {
-			padding: 0.25rem;
-			border-radius: 100%;
 		}
 
 		.material-icons {

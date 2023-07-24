@@ -59,13 +59,28 @@
 					<img class="postOverviewCard__image" src={postView.post.url} alt={postView.post.name} />
 				{/if}
 				<div class="postOverviewCard__actionLine">
-					<TransparentButton icon="keyboard_arrow_up" title="Upvote" fontSize="0.875rem">
+					<TransparentButton
+						appearance="dimmed"
+						icon="keyboard_arrow_up"
+						title="Upvote"
+						fontSize="0.875rem"
+					>
 						{postView.counts.upvotes}
 					</TransparentButton>
-					<TransparentButton icon="keyboard_arrow_down" title="Downvote" fontSize="0.875rem">
+					<TransparentButton
+						appearance="dimmed"
+						icon="keyboard_arrow_down"
+						title="Downvote"
+						fontSize="0.875rem"
+					>
 						{postView.counts.downvotes}
 					</TransparentButton>
-					<TransparentButton icon="comment" title="View comments" fontSize="0.875rem">
+					<TransparentButton
+						appearance="dimmed"
+						icon="comment"
+						title="View comments"
+						fontSize="0.875rem"
+					>
 						{postView.counts.comments}
 					</TransparentButton>
 				</div>
