@@ -22,15 +22,6 @@
 >
 	<ElevatedBox stacking="horizontal">
 		{#if postView}
-			<div class="postOverviewCard__updown">
-				<div class="postOverviewCard__up">
-					<TransparentButton appearance="smallRound" icon="keyboard_arrow_up" />
-				</div>
-				<div class="postOverviewCard__score">{postView.counts.score}</div>
-				<div class="postOverviewCard__down material-icons">
-					<TransparentButton appearance="smallRound" icon="keyboard_arrow_down" />
-				</div>
-			</div>
 			<div class="postOverviewCard__main">
 				<div>
 					<div class="postOverviewCard__metaLine">
@@ -67,9 +58,17 @@
 				{#if isImageLink(postView.post.url)}
 					<img class="postOverviewCard__image" src={postView.post.url} alt={postView.post.name} />
 				{/if}
-				<ul class="postOverviewCard__actionLine">
-					<li>{postView.counts.comments} comments</li>
-				</ul>
+				<div class="postOverviewCard__actionLine">
+					<TransparentButton icon="keyboard_arrow_up" title="Upvote" fontSize="0.875rem">
+						{postView.counts.upvotes}
+					</TransparentButton>
+					<TransparentButton icon="keyboard_arrow_down" title="Downvote" fontSize="0.875rem">
+						{postView.counts.downvotes}
+					</TransparentButton>
+					<TransparentButton icon="comment" title="View comments" fontSize="0.875rem">
+						{postView.counts.comments}
+					</TransparentButton>
+				</div>
 			</div>
 		{:else}
 			<div class="postOverviewCard__updown">&nbsp;</div>
@@ -81,7 +80,6 @@
 <style lang="scss">
 	@use '$lib/css/colors';
 	@use '$lib/css/breakpoints';
-	@use 'material-icons/iconfont/filled.css';
 
 	.postOverviewCard {
 		border-radius: 10px;
@@ -91,33 +89,11 @@
 			outline: solid 1px rgba(colors.themed('maxContrastOnTheme'), 0.05);
 		}
 
-		.postOverviewCard__updown {
-			@include colors.themify() {
-				background: rgba(colors.themed('elevatedBoxAccent'), 0.6);
-			}
-			padding: 0.3rem 0.5rem;
-			display: flex;
-			flex-basis: 3.5rem;
-			gap: 0.5rem;
-			flex-shrink: 0;
-			flex-direction: column;
-			align-items: center;
-			font-size: 1.2rem;
-
-			@include breakpoints.mediumAndUp {
-				flex-basis: 4rem;
-			}
-
-			.postOverviewCard__score {
-				font-size: 0.75rem;
-			}
-		}
-
 		.postOverviewCard__main {
-			padding: 1rem;
 			display: flex;
 			flex-direction: column;
 			gap: 1rem;
+			width: 100%;
 
 			&.postOverviewCard__main--shimmer {
 				animation: shimmer 1.25s infinite ease-in-out;
@@ -153,7 +129,7 @@
 				color: colors.themed('deemphColor');
 			}
 			font-size: 0.75rem;
-			padding-bottom: 0.3rem;
+			padding: 1rem 1rem 0.5rem 1rem;
 			display: flex;
 			flex-direction: row;
 			align-items: center;
@@ -194,6 +170,7 @@
 			font-size: 1.2rem;
 			font-weight: bold;
 			line-height: 1.4rem;
+			padding: 0 1rem;
 		}
 
 		.postOverviewCard__image {
@@ -202,14 +179,24 @@
 				border: solid 1px colors.themed('subtleBorder');
 			}
 			border-radius: 10px;
+			margin: 0 1rem;
 			aspect-ratio: 16 / 9;
 			object-fit: cover;
 			object-position: center;
 		}
 
 		.postOverviewCard__actionLine {
-			opacity: 0.8;
-			font-size: 0.9rem;
+			padding: 0.25rem 0.5rem; // Padding is weird to make the button icon line up
+
+			@include colors.themify() {
+				color: rgba(colors.themed('maxContrastOnTheme'), 0.8);
+				background: rgba(colors.themed('elevatedBoxAccent'), 0.6);
+			}
+
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			gap: 1rem;
 		}
 
 		&.postOverviewCard--active {
