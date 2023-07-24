@@ -8,7 +8,7 @@
 	import logoOnLightSvg from '$lib/img/logoOnLight.svg';
 	import logoOnDarkSvg from '$lib/img/logoOnDark.svg';
 	import SearchBox from '$lib/components/SearchBox.svelte';
-	import { cachedCalls } from '$lib/js/globals';
+	import { cachedCalls, theme } from '$lib/js/globals';
 
 	let root: HTMLElement;
 
@@ -36,7 +36,6 @@
 	});
 
 	let primarySidebarModal: HTMLDialogElement;
-	let theme = 'dark';
 </script>
 
 <svelte:head>
@@ -45,7 +44,7 @@
 	<link rel="icon" href={logoOnDarkSvg} media="(prefers-color-scheme: dark)" />
 </svelte:head>
 
-<div class:lightTheme={theme === 'light'} class:darkTheme={theme === 'dark'}>
+<div class:lightTheme={$theme === 'light'} class:darkTheme={$theme === 'dark'}>
 	<div class="root" bind:this={root}>
 		<header class="header">
 			<div class="header__logoMenuToggle">
@@ -58,9 +57,9 @@
 					</TransparentButton>
 				</div>
 				<a href="/">
-					{#if theme === 'light'}
+					{#if $theme === 'light'}
 						<img src={logoOnLight} alt="Lemminator logo" class="header__logo" />
-					{:else if theme === 'dark'}
+					{:else if $theme === 'dark'}
 						<img src={logoOnDark} alt="Lemminator logo" class="header__logo" />
 					{/if}
 					{#await $cachedCalls.siteResponse then siteResponse}
@@ -77,7 +76,7 @@
 				<TransparentButton
 					title="Toggle dark mode"
 					icon="dark_mode"
-					on:click={() => (theme = theme === 'light' ? 'dark' : 'light')}
+					on:click={() => ($theme = $theme === 'light' ? 'dark' : 'light')}
 				/>
 				<TransparentButton icon="person" />
 			</div>
