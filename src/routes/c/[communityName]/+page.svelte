@@ -34,9 +34,9 @@
 	{/await}
 </svelte:head>
 
-{#await communityResponse then communityResponse}
-	<PageHolder>
-		<svelte:fragment slot="main">
+<PageHolder>
+	<svelte:fragment slot="main">
+		{#await communityResponse then communityResponse}
 			<div
 				class="communityBanner"
 				class:communityBanner--hasImage={!!communityResponse.community_view.community.banner}
@@ -55,13 +55,13 @@
 					</h1>
 				</div>
 			</div>
-			<PostList communityName={$page.params.communityName} />
-		</svelte:fragment>
-		<svelte:fragment slot="secondarySidebar">
-			<SecondarySidebar communityName={$page.params.communityName} />
-		</svelte:fragment>
-	</PageHolder>
-{/await}
+		{/await}
+		<PostList communityName={$page.params.communityName} />
+	</svelte:fragment>
+	<svelte:fragment slot="secondarySidebar">
+		<SecondarySidebar communityName={$page.params.communityName} />
+	</svelte:fragment>
+</PageHolder>
 
 <style lang="scss">
 	@use '$lib/css/colors';
