@@ -1,5 +1,6 @@
 import DOMPurify from 'dompurify';
 import MarkdownIt from 'markdown-it';
+import markdown_it_link_attributes from 'markdown-it-link-attributes';
 import markdown_it_footnote from 'markdown-it-footnote';
 import markdown_it_sub from 'markdown-it-sub';
 import markdown_it_sup from 'markdown-it-sup';
@@ -24,11 +25,19 @@ export function renderEnhancedMarkdown(input: string) {
         }
     };
 
-    const rendered = new MarkdownIt()
-        .use(markdown_it_sub)
-        .use(markdown_it_sup)
-        .use(markdown_it_footnote)
-        .use(markdown_it_container, 'spoiler', spoilerConfig)
-        .render(input);
-    return rendered;
+    const md = new MarkdownIt({
+        linkify: true,
+    });
+    md.linkify.set({ fuzzyLink: false });
+    md.use(markdown_it_sub)
+    md.use(markdown_it_sup)
+    md.use(markdown_it_footnote)
+    md.use(markdown_it_container, 'spoiler', spoilerConfig)
+    md.use(markdown_it_link_attributes, {
+        attrs: {
+            target: "_blank",
+            rel: "nofollow",
+        }
+    })
+    return md.render(input);
 }
