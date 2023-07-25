@@ -5,15 +5,18 @@
 
 	const dispatch = createEventDispatcher();
 	const client = getClient();
-	let communitiesResponse = client.listCommunities({
-		type_: 'Local',
-		sort: 'TopDay'
-	});
-	$: {
-		communitiesResponse.then(() => {
+	let communitiesResponse = client
+		.listCommunities({
+			type_: 'Local',
+			sort: 'TopDay'
+		})
+		.then((response) => {
 			dispatch('communitiesResponseLoaded');
+			return response;
+		})
+		.catch(() => {
+			console.error('Community sidebar load failed');
 		});
-	}
 </script>
 
 <ul class="mainNavigation">
@@ -22,18 +25,20 @@
 	{#await communitiesResponse}
 		<LoadingSpinner minHeight="4rem" />
 	{:then communitiesResponse}
-		{#each communitiesResponse.communities as community}
-			<li class="communityItem">
-				<a href={`/c/${community.community.name}`} class="communityItem highlightableRoute">
-					{#if community.community.icon}
-						<img src={community.community.icon} alt="" class="communityItem__icon" />
-					{:else}
-						<div class="communityItem__iconPlaceholder material-icons">people</div>
-					{/if}
-					{community.community.title}
-				</a>
-			</li>
-		{/each}
+		{#if communitiesResponse}
+			{#each communitiesResponse.communities as community}
+				<li class="communityItem">
+					<a href={`/c/${community.community.name}`} class="communityItem highlightableRoute">
+						{#if community.community.icon}
+							<img src={community.community.icon} alt="" class="communityItem__icon" />
+						{:else}
+							<div class="communityItem__iconPlaceholder material-icons">people</div>
+						{/if}
+						{community.community.title}
+					</a>
+				</li>
+			{/each}
+		{/if}
 	{/await}
 </ul>
 
