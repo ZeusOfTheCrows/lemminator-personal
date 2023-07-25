@@ -3,11 +3,13 @@
 	import type { PostView } from 'lemmy-js-client';
 	import ElevatedBox from './ElevatedBox.svelte';
 	import TransparentButton from './TransparentButton.svelte';
+	import { renderEnhancedMarkdown } from '$lib/js/markdown';
 
 	// null = shimmer
 	export let postView: PostView | null;
 	export let showCommunity: boolean = true;
 	export let active: boolean | null = null;
+	export let variant: 'list' | 'detail' = 'list';
 
 	function isImageLink(link: string | undefined): boolean {
 		if (!link) return false;
@@ -23,18 +25,20 @@
 	<ElevatedBox stacking="horizontal">
 		{#if postView}
 			<div class="postOverviewCard__main">
-				<div>
+				<div class="postOverviewCard__beforeImage">
 					<div class="postOverviewCard__metaLine">
 						{#if showCommunity}
 							<div class="postOverviewCard__community">
-								{#if postView.community.icon}
-									<img
-										src={postView.community.icon}
-										alt={postView.community.title}
-										class="postOverviewCard__entityIcon"
-									/>
-								{/if}
-								{postView.community.name}
+								<a href={`/c/${postView.community.name}`}>
+									{#if postView.community.icon}
+										<img
+											src={postView.community.icon}
+											alt={postView.community.title}
+											class="postOverviewCard__entityIcon"
+										/>
+									{/if}
+									{postView.community.name}
+								</a>
 							</div>
 							&middot;
 						{/if}
@@ -54,9 +58,20 @@
 						</div>
 					</div>
 					<div class="postOverviewCard__name">{postView.post.name}</div>
+					{#if postView.post.body && variant === 'detail'}
+						<div class="postOverviewCard__textBody">
+							{@html renderEnhancedMarkdown(postView.post.body)}
+						</div>
+					{/if}
 				</div>
 				{#if isImageLink(postView.post.url)}
-					<img class="postOverviewCard__image" src={postView.post.url} alt={postView.post.name} />
+					<img
+						class="postOverviewCard__image"
+						class:postOverviewCard__image--list={variant === 'list'}
+						class:postOverviewCard__image--detail={variant === 'detail'}
+						src={postView.post.url}
+						alt={postView.post.name}
+					/>
 				{/if}
 				<div class="postOverviewCard__actionLine">
 					<TransparentButton
@@ -76,6 +91,7 @@
 						{postView.counts.downvotes}
 					</TransparentButton>
 					<TransparentButton
+						href={`/c/${postView.community.name}/${postView.post.id}`}
 						appearance="dimmed"
 						icon="comment"
 						title="View comments"
@@ -94,6 +110,7 @@
 
 <style lang="scss">
 	@use '$lib/css/colors';
+	@use '$lib/css/markdown';
 	@use '$lib/css/breakpoints';
 
 	.postOverviewCard {
@@ -139,53 +156,78 @@
 			}
 		}
 
-		.postOverviewCard__metaLine {
-			@include colors.themify() {
-				color: colors.themed('deemphColor');
-			}
-			font-size: 0.75rem;
-			padding: 1rem 1rem 0.5rem 1rem;
+		.postOverviewCard__beforeImage {
 			display: flex;
-			flex-direction: row;
-			align-items: center;
-			gap: 0.2rem;
+			flex-direction: column;
+			gap: 0.3rem;
+			padding: 1rem;
+			padding-bottom: 0;
 
-			.postOverviewCard__community,
-			.postOverviewCard__user {
-				gap: 0.3rem;
+			.postOverviewCard__metaLine {
+				@include colors.themify() {
+					color: colors.themed('deemphColor');
+				}
+				font-size: 0.75rem;
 				display: flex;
 				flex-direction: row;
 				align-items: center;
-			}
+				gap: 0.2rem;
 
-			.postOverviewCard__relativeTimePresep,
-			.postOverviewCard__relativeTime {
-				display: none;
+				.postOverviewCard__community,
+				.postOverviewCard__user {
+					&,
+					> * {
+						display: flex;
+						flex-direction: row;
+						align-items: center;
+						gap: 0.3rem;
+					}
 
-				@include breakpoints.mediumAndUp {
-					display: block;
+					a {
+						text-decoration: none;
+
+						&:hover {
+							text-decoration: underline;
+						}
+					}
+				}
+
+				.postOverviewCard__relativeTimePresep,
+				.postOverviewCard__relativeTime {
+					display: none;
+
+					@include breakpoints.mediumAndUp {
+						display: block;
+					}
+				}
+
+				.postOverviewCard__entityIcon {
+					width: 20px;
+					height: 20px;
+					border-radius: 100%;
+					object-fit: cover;
+
+					// Fallbacks for load failures
+					font-size: 0; // We have alt text for screen readers, regular users don't need it
+					@include colors.themify() {
+						background: colors.themed('themedMainText');
+					}
 				}
 			}
 
-			.postOverviewCard__entityIcon {
-				width: 20px;
-				height: 20px;
-				border-radius: 100%;
-				object-fit: cover;
-
-				// Fallbacks for load failures
-				font-size: 0; // We have alt text for screen readers, regular users don't need it
-				@include colors.themify() {
-					background: colors.themed('themedMainText');
-				}
+			.postOverviewCard__name {
+				font-size: 1.2rem;
+				font-weight: bold;
+				line-height: 1.4rem;
 			}
-		}
 
-		.postOverviewCard__name {
-			font-size: 1.2rem;
-			font-weight: bold;
-			line-height: 1.4rem;
-			padding: 0 1rem;
+			.postOverviewCard__textBody {
+				margin-top: 0.5rem;
+				line-height: 1.2rem;
+				font-size: 0.9rem;
+
+				@include markdown.styleExternalContent;
+			}
 		}
 
 		.postOverviewCard__image {
@@ -195,9 +237,12 @@
 			}
 			border-radius: 10px;
 			margin: 0 1rem;
-			aspect-ratio: 16 / 9;
 			object-fit: cover;
 			object-position: center;
+
+			&.postOverviewCard__image--list {
+				aspect-ratio: 16 / 9;
+			}
 		}
 
 		.postOverviewCard__actionLine {

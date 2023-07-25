@@ -84,6 +84,7 @@
 
 <style lang="scss">
 	@use '$lib/css/colors';
+	@use '$lib/css/markdown';
 
 	.secondaryNavigation {
 		display: flex;
@@ -96,32 +97,7 @@
 			font-size: 0.85rem;
 			line-height: 1.1rem;
 
-			:global(h1),
-			:global(h2),
-			:global(h3),
-			:global(h4),
-			:global(h5),
-			:global(p) {
-				margin-bottom: 0.5rem;
-
-				&:last-child {
-					margin-bottom: 0;
-				}
-			}
-
-			:global(li) {
-				padding-bottom: 0.2rem;
-			}
-
-			:global(img) {
-				max-width: 100%;
-			}
-
-			:global(hr) {
-				@include colors.themify() {
-					border: solid 1px colors.themed('subtleBorder');
-				}
-			}
+			@include markdown.styleExternalContent;
 		}
 
 		.secondaryNavigation__statList {

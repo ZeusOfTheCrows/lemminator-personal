@@ -1,0 +1,53 @@
+@use '$lib/css/colors';
+
+@mixin styleExternalContent {
+
+    :global(h1),
+    :global(h2),
+    :global(p),
+    :global(ul),
+    :global(ol) {
+        margin-bottom: 1rem;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    :global(h1) {
+        font-size: 1.4rem;
+        line-height: 1.35rem;
+    }
+
+    :global(h2) {
+        font-size: 1.25rem;
+    }
+
+    :global(h3) {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    :global(li) {
+        padding-bottom: 0.5rem;
+        margin-left: 1rem;
+    }
+
+    :global(ul)> :global(li) {
+        list-style-type: disc;
+    }
+
+    :global(ol)> :global(li) {
+        list-style: decimal;
+    }
+
+    :global(img) {
+        max-width: 100%;
+    }
+
+    :global(hr) {
+        @include colors.themify() {
+            border: solid 1px colors.themed('subtleBorder');
+        }
+    }
+}

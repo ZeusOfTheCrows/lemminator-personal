@@ -1,23 +1,39 @@
 <script lang="ts">
 	export let title: string | undefined = undefined;
+	export let href: string | null = null;
 	export let appearance: 'default' | 'dimmed' = 'default';
 	export let icon: string | null = null;
 	export let fontSize = '1rem';
 </script>
 
-<button
-	class="transparentButton"
-	{title}
-	on:click
-	class:transparentButton--default={appearance === 'default'}
-	class:transparentButton--dimmed={appearance === 'dimmed'}
-	style:font-size={fontSize}
->
-	{#if icon}
-		<span class="material-icons" style:font-size={fontSize}>{icon}</span>
-	{/if}
-	<slot />
-</button>
+{#if href}
+	<a
+		{href}
+		class="transparentButton"
+		class:transparentButton--default={appearance === 'default'}
+		class:transparentButton--dimmed={appearance === 'dimmed'}
+		style:font-size={fontSize}
+	>
+		{#if icon}
+			<span class="material-icons" style:font-size={fontSize}>{icon}</span>
+		{/if}
+		<slot />
+	</a>
+{:else}
+	<button
+		class="transparentButton"
+		{title}
+		on:click
+		class:transparentButton--default={appearance === 'default'}
+		class:transparentButton--dimmed={appearance === 'dimmed'}
+		style:font-size={fontSize}
+	>
+		{#if icon}
+			<span class="material-icons" style:font-size={fontSize}>{icon}</span>
+		{/if}
+		<slot />
+	</button>
+{/if}
 
 <style lang="scss">
 	@use '$lib/css/colors';
@@ -50,5 +66,9 @@
 			display: flex;
 			align-items: center;
 		}
+	}
+
+	a {
+		text-decoration: none;
 	}
 </style>
