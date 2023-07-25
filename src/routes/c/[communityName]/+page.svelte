@@ -78,18 +78,11 @@
 		padding-bottom: 1rem;
 		margin-bottom: 1rem;
 
-		@include colors.themify() {
-			$gradient: linear-gradient(
-				to top,
-				colors.themed('themedShadow'),
-				rgba(colors.themed('themedShadow'), 0)
-			);
+		$gradient: linear-gradient(to top, rgb(22, 2, 27), rgba(22, 2, 27, 0));
+		background: $gradient, url('$lib/img/fills/fill1.svg'), #0e0035;
 
-			background: $gradient, url('$lib/img/fills/fill1.svg'), #0e0035;
-
-			&.communityBanner--hasImage {
-				background: $gradient, var(--bannerImage);
-			}
+		&.communityBanner--hasImage {
+			background: $gradient, var(--bannerImage);
 		}
 
 		.communityBanner__info {
@@ -104,17 +97,12 @@
 				aspect-ratio: 1 / 1;
 				object-fit: cover;
 				padding: 0.3rem;
-				@include colors.themify() {
-					background: colors.themed('maxContrastTheme');
-				}
+				background: white;
 			}
 
 			.communityBanner__title {
-				@include colors.themify() {
-					color: colors.themed('maxContrastTheme');
-					text-shadow: 0 0 20px colors.themed('themedShadow'),
-						0 0 10px colors.themed('themedShadow');
-				}
+				color: white;
+				text-shadow: 0 0 20px rgb(22, 2, 27), 0 0 10px rgb(22, 2, 27);
 				font-size: 1.25rem;
 				font-weight: bold;
 			}
