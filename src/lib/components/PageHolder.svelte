@@ -13,6 +13,7 @@
 	@use '$lib/css/resets';
 	@use '$lib/css/globals';
 	@use '$lib/css/colors';
+	@use '$lib/css/measurements';
 	@use '$lib/css/breakpoints';
 
 	.main {
@@ -32,7 +33,7 @@
 			display: block;
 			padding: 1rem;
 			position: sticky;
-			top: 0;
+			top: measurements.$headerVSize;
 			width: 300px;
 			flex-grow: 0;
 			flex-shrink: 0;

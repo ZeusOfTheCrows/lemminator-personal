@@ -108,19 +108,23 @@
 	@use '$lib/css/globals';
 	@use '$lib/css/colors';
 	@use '$lib/css/breakpoints';
+	@use '$lib/css/measurements';
 	@use 'material-icons/iconfont/filled.css';
 
 	.root {
+		display: flex;
+		flex-direction: column;
+		min-height: 100vh;
 		@include colors.themify() {
 			background: colors.themed('maxContrastTheme');
 			color: colors.themed('themedMainText');
 		}
-		display: flex;
-		flex-direction: column;
-		height: 100vh;
 	}
 
 	header {
+		position: sticky;
+		height: measurements.$headerVSize;
+		top: 0;
 		$gap: 1rem;
 		padding: 0.5rem 1rem;
 		display: flex;
@@ -129,10 +133,11 @@
 		align-items: center;
 		justify-content: space-between;
 		@include colors.themify() {
+			background: colors.themed('maxContrastTheme');
 			border-bottom: solid 1px colors.themed('subtleBorder');
 			box-shadow: 0 0 10px colors.themed('color2');
 		}
-		z-index: 1; // Prevent box-shadow from painting underneath cards
+		z-index: 1; // Prevent secondary sidebar from painting over header
 
 		.header__logoMenuToggle {
 			display: flex;
@@ -188,7 +193,6 @@
 	.page {
 		flex-grow: 1;
 		flex-shrink: 1;
-		overflow: scroll;
 		display: flex;
 		flex-direction: row;
 		align-items: start;
@@ -210,7 +214,7 @@
 			@include breakpoints.desktopAndUp {
 				display: block;
 				position: sticky;
-				top: 0;
+				top: measurements.$headerVSize;
 			}
 		}
 
