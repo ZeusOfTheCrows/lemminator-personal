@@ -5,6 +5,7 @@
 	import type { PageData } from './$types';
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
 	import PostOverviewCard from '$lib/components/PostOverviewCard.svelte';
+	import CommentSection from '$lib/components/CommentSection.svelte';
 
 	export let data: PageData;
 </script>
@@ -14,10 +15,21 @@
 		{#await data.postResponse}
 			<LoadingSpinner minHeight="10rem" />
 		{:then postResponse}
-			<PostOverviewCard postView={postResponse.post_view} active={null} variant="detail" />
+			<div class="postDetailLayouter">
+				<PostOverviewCard postView={postResponse.post_view} active={null} variant="detail" />
+				<CommentSection commentsResponse={data.commentsResponse} />
+			</div>
 		{/await}
 	</svelte:fragment>
 	<svelte:fragment slot="secondarySidebar">
 		<SecondarySidebar communityName={$page.params.communityName} />
 	</svelte:fragment>
 </PageHolder>
+
+<style lang="scss">
+	.postDetailLayouter {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+</style>

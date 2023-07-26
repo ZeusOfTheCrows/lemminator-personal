@@ -4,6 +4,7 @@
 	import ElevatedBox from './ElevatedBox.svelte';
 	import TransparentButton from './TransparentButton.svelte';
 	import { renderEnhancedMarkdown } from '$lib/js/markdown';
+	import EntityIcon from './EntityIcon.svelte';
 
 	// null = shimmer
 	export let postView: PostView | null;
@@ -31,11 +32,7 @@
 							<div class="postOverviewCard__community">
 								<a href={`/c/${postView.community.name}`}>
 									{#if postView.community.icon}
-										<img
-											src={postView.community.icon}
-											alt={postView.community.title}
-											class="postOverviewCard__entityIcon"
-										/>
+										<EntityIcon src={postView.community.icon} alt={postView.community.title} />
 									{/if}
 									{postView.community.name}
 								</a>
@@ -44,11 +41,7 @@
 						{/if}
 						<div class="postOverviewCard__user">
 							{#if !showCommunity && postView.creator.avatar}
-								<img
-									src={postView.creator.avatar}
-									alt="Avatar"
-									class="postOverviewCard__entityIcon"
-								/>
+								<EntityIcon src={postView.creator.avatar} alt="Avatar" />
 							{/if}
 							{postView.creator.name}
 						</div>
@@ -174,14 +167,12 @@
 				gap: 0.2rem;
 
 				.postOverviewCard__community,
+				.postOverviewCard__community > *,
 				.postOverviewCard__user {
-					&,
-					> * {
-						display: flex;
-						flex-direction: row;
-						align-items: center;
-						gap: 0.3rem;
-					}
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					gap: 0.3rem;
 
 					a {
 						text-decoration: none;
@@ -198,19 +189,6 @@
 
 					@include breakpoints.mediumAndUp {
 						display: block;
-					}
-				}
-
-				.postOverviewCard__entityIcon {
-					width: 20px;
-					height: 20px;
-					border-radius: 100%;
-					object-fit: cover;
-
-					// Fallbacks for load failures
-					font-size: 0; // We have alt text for screen readers, regular users don't need it
-					@include colors.themify() {
-						background: colors.themed('themedMainText');
 					}
 				}
 			}

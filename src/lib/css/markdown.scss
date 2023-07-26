@@ -6,7 +6,8 @@
     :global(h2),
     :global(p),
     :global(ul),
-    :global(ol) {
+    :global(ol),
+    :global(blockquote) {
         margin-bottom: 1rem;
 
         &:last-child {
@@ -49,6 +50,13 @@
     :global(hr) {
         @include colors.themify() {
             border: solid 1px colors.themed('subtleBorder');
+        }
+    }
+
+    :global(blockquote) {
+        @include colors.themify() {
+            border-left: solid 5px rgba(colors.themed('maxContrastOnTheme'), 0.1);
+            padding-left: 0.5rem;
         }
     }
 }
