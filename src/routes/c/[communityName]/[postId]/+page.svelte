@@ -10,6 +10,12 @@
 	export let data: PageData;
 </script>
 
+<svelte:head>
+	<title>
+		{data.postResponse.post_view.post.name} - {data.postResponse.community_view.community.title}
+	</title>
+</svelte:head>
+
 <PageHolder>
 	<svelte:fragment slot="main">
 		{#await data.postResponse}
