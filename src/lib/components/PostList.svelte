@@ -3,6 +3,7 @@
 	import type { GetPostsResponse } from 'lemmy-js-client';
 	import PostOverviewCard from './PostOverviewCard.svelte';
 	import { keynav } from '$lib/js/globals';
+	import { goto } from '$app/navigation';
 
 	let client = getClient();
 	export let communityName: string | null = null;
@@ -38,6 +39,13 @@
 				break;
 			case 'Escape':
 				postNavIndex = null;
+				break;
+			case 'Enter':
+			case 'o':
+				if (postNavIndex !== null) {
+					const selectedPostView = (await postsResponse).posts[postNavIndex];
+					goto(`/c/${selectedPostView.community.name}/${selectedPostView.post.id}`);
+				}
 				break;
 		}
 	}
