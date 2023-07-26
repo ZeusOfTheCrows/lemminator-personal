@@ -105,11 +105,12 @@
 	@use '$lib/css/colors';
 	@use '$lib/css/markdown';
 	@use '$lib/css/breakpoints';
+	@use '$lib/css/measurements';
 
 	.postOverviewCard {
 		border-radius: 10px;
 		transition: opacity 0.1s;
-		scroll-margin: 1rem; // Top padding of main content
+		scroll-margin: calc(measurements.$headerVSize + 1rem); // Top padding of main content
 		@include colors.themify() {
 			outline: solid 1px rgba(colors.themed('maxContrastOnTheme'), 0.05);
 		}
