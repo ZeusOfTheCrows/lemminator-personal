@@ -14,6 +14,11 @@
 
 <ElevatedBox stacking="vertical">
 	<div class="commentSection">
+		{#if commentsResponse.comments.length == 0}
+			<div class="commentSection__isEmpty">
+				There are no comments yet. Early bird gets the worm!
+			</div>
+		{/if}
 		{#each getCommentViewsForPath('0') as commentRecord}
 			<div class="comment">
 				<div class="comment__metaLine">
@@ -53,6 +58,12 @@
 	@use '$lib/css/markdown';
 
 	.commentSection {
+		.commentSection__isEmpty {
+			padding: 2rem 0;
+			text-align: center;
+			opacity: 0.5;
+		}
+
 		.comment {
 			display: flex;
 			flex-direction: column;
