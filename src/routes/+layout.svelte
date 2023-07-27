@@ -198,10 +198,11 @@
 		align-items: start;
 		@include colors.themify() {
 			background: linear-gradient(
-				to bottom,
-				rgba(colors.themed('color2'), 0.5),
-				colors.themed('maxContrastTheme') 50%
-			);
+					to bottom,
+					rgba(colors.themed('color2'), 0.5),
+					colors.themed('maxContrastTheme') 50%
+				)
+				fixed;
 		}
 
 		.primarySidebar {
