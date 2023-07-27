@@ -5,6 +5,7 @@
 	import TransparentButton from './TransparentButton.svelte';
 	import { renderEnhancedMarkdown } from '$lib/js/markdown';
 	import EntityIcon from './EntityIcon.svelte';
+	import { getDetailLinkForPost } from '$lib/js/navigation';
 
 	// null = shimmer
 	export let postView: PostView | null;
@@ -51,7 +52,9 @@
 						</div>
 					</div>
 					<div class="postOverviewCard__name">
-						{postView.post.name}
+						<a href={getDetailLinkForPost(postView)}>
+							{postView.post.name}
+						</a>
 					</div>
 					{#if postView.post.url}
 						<div class="postOverviewCard__hostname">
@@ -96,7 +99,7 @@
 						{postView.counts.downvotes}
 					</TransparentButton>
 					<TransparentButton
-						href={`/c/${postView.community.name}/${postView.post.id}`}
+						href={getDetailLinkForPost(postView)}
 						appearance="dimmed"
 						icon="comment"
 						title="View comments"
@@ -211,6 +214,10 @@
 				font-size: 1.2rem;
 				font-weight: bold;
 				line-height: 1.4rem;
+
+				a {
+					text-decoration: none;
+				}
 			}
 
 			.postOverviewCard__hostname {

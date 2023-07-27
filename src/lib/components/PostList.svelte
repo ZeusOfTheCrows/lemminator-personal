@@ -4,6 +4,7 @@
 	import PostOverviewCard from './PostOverviewCard.svelte';
 	import { keynav } from '$lib/js/globals';
 	import { goto } from '$app/navigation';
+	import { getDetailLinkForPost } from '$lib/js/navigation';
 
 	let client = getClient();
 	export let communityName: string | null = null;
@@ -44,7 +45,7 @@
 			case 'o':
 				if (postNavIndex !== null) {
 					const selectedPostView = (await postsResponse).posts[postNavIndex];
-					goto(`/c/${selectedPostView.community.name}/${selectedPostView.post.id}`);
+					goto(getDetailLinkForPost(selectedPostView));
 				}
 				break;
 		}
