@@ -159,7 +159,6 @@
 				text-decoration: none;
 				gap: 0.5rem;
 				font-size: 1.1rem;
-				font-family: 'Lato', sans-serif;
 				font-weight: bold;
 			}
 		}

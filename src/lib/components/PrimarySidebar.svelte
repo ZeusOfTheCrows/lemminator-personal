@@ -48,7 +48,6 @@
 	@use 'material-icons/iconfont/filled.css';
 
 	.mainNavigation {
-		font-family: 'Lato', sans-serif;
 		@include colors.themify() {
 			color: rgba(colors.themed('themedMainText'), 0.9);
 		}
