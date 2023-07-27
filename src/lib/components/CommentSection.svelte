@@ -74,7 +74,7 @@
 				border-bottom: solid 1px colors.themed('subtleBorder');
 
 				&:nth-child(2n) {
-					background: rgba(colors.themed('themedShadow'), 0.02);
+					background: rgba(colors.themed('elevatedBoxAccent'), 0.5);
 				}
 			}
 
