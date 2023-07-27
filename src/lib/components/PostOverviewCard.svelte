@@ -50,7 +50,19 @@
 							{formatRelativeTime(postView.post.published)}
 						</div>
 					</div>
-					<div class="postOverviewCard__name">{postView.post.name}</div>
+					<div class="postOverviewCard__name">
+						{postView.post.name}
+					</div>
+					{#if postView.post.url}
+						<div class="postOverviewCard__hostname">
+							<a class="postOverviewCard__link" href={postView.post.url} target="_blank">
+								<span class="material-icons">launch</span>
+								<span class="postOverviewCard__link__hostname">
+									{new URL(postView.post.url).hostname.replace(/^www\./, '')}
+								</span>
+							</a>
+						</div>
+					{/if}
 					{#if postView.post.body && variant === 'detail'}
 						<div class="postOverviewCard__textBody">
 							{@html renderEnhancedMarkdown(postView.post.body)}
@@ -106,6 +118,7 @@
 	@use '$lib/css/markdown';
 	@use '$lib/css/breakpoints';
 	@use '$lib/css/measurements';
+	@use 'material-icons/iconfont/filled.css';
 
 	.postOverviewCard {
 		border-radius: 10px;
@@ -198,6 +211,34 @@
 				font-size: 1.2rem;
 				font-weight: bold;
 				line-height: 1.4rem;
+			}
+
+			.postOverviewCard__hostname {
+				padding: 0.3rem 0;
+				.postOverviewCard__link {
+					font-weight: normal;
+					text-decoration: none;
+					padding: 0.3rem 0.5rem;
+					border-radius: 5px;
+
+					&,
+					.material-icons {
+						font-size: 0.8rem;
+					}
+
+					@include colors.themify() {
+						background: colors.themed('elevatedBoxAccent');
+						color: rgba(colors.themed('themedMainText'), 0.6);
+
+						&:hover {
+							filter: brightness(0.95);
+						}
+					}
+
+					> * {
+						vertical-align: middle;
+					}
+				}
 			}
 
 			.postOverviewCard__textBody {
