@@ -2,7 +2,7 @@
 	import { getClient } from '$lib/js/client';
 	import type { GetPostsResponse } from 'lemmy-js-client';
 	import PostOverviewCard from './PostOverviewCard.svelte';
-	import { keynav } from '$lib/js/globals';
+	import { keynav, lastKeyboardSelectedPostId } from '$lib/js/globals';
 	import { goto } from '$app/navigation';
 	import { getDetailLinkForPost } from '$lib/js/navigation';
 
@@ -20,7 +20,13 @@
 	$: {
 		// Make sure to run this after the active prop of the PostOverviewCard has propagated
 		setTimeout(() => {
-			if (postNavIndex !== null) {
+			// For initial page load: restore keyboard selection
+			if (postNavIndex === null && $lastKeyboardSelectedPostId !== null) {
+				Promise.all([postsResponse]).then(([{ posts }]) => {
+					postNavIndex = posts.findIndex((p) => p.post.id === $lastKeyboardSelectedPostId) ?? null;
+					$lastKeyboardSelectedPostId = null;
+				});
+			} else if (postNavIndex !== null && postListElement) {
 				const el = postListElement.querySelector('.postOverviewCard--active');
 				el?.scrollIntoView();
 			}
@@ -45,6 +51,7 @@
 			case 'o':
 				if (postNavIndex !== null) {
 					const selectedPostView = (await postsResponse).posts[postNavIndex];
+					$lastKeyboardSelectedPostId = selectedPostView.post.id;
 					goto(getDetailLinkForPost(selectedPostView));
 				}
 				break;

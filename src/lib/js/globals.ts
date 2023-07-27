@@ -25,4 +25,7 @@ function getThemePreference(): Theme {
 export const theme: Writable<Theme> = writable(getThemePreference());
 theme.subscribe((newValue) => {
     Cookies.set('activeTheme', newValue);
-})
+});
+
+// Used by keyboard navigation to restore state when returning to a post list
+export const lastKeyboardSelectedPostId: Writable<number | null> = writable(null);
