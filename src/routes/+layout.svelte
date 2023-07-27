@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { afterNavigate } from '$app/navigation';
+	import { afterNavigate, beforeNavigate } from '$app/navigation';
 	import { page } from '$app/stores';
 	import PrimarySidebar from '$lib/components/PrimarySidebar.svelte';
 	import TransparentButton from '$lib/components/TransparentButton.svelte';
@@ -30,7 +30,14 @@
 		}, 1);
 	}
 
+	let navigating = false;
+
+	beforeNavigate(() => {
+		navigating = true;
+	});
+
 	afterNavigate(() => {
+		navigating = false;
 		updateHighlightedRouteStyling();
 		primarySidebarModal.close();
 	});
@@ -43,6 +50,8 @@
 	<link rel="icon" href={logoOnLightSvg} media="(prefers-color-scheme: light)" />
 	<link rel="icon" href={logoOnDarkSvg} media="(prefers-color-scheme: dark)" />
 </svelte:head>
+
+<div class="loader" class:loader--navigating={navigating}>&nbsp;</div>
 
 <div class:lightTheme={$theme === 'light'} class:darkTheme={$theme === 'dark'}>
 	<div class="root" bind:this={root}>
@@ -118,6 +127,33 @@
 		@include colors.themify() {
 			background: colors.themed('maxContrastTheme');
 			color: colors.themed('themedMainText');
+		}
+	}
+
+	.loader {
+		position: fixed;
+		height: 0.25rem;
+		top: 0;
+		left: 0;
+		width: 0vw;
+		opacity: 0;
+		box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.2);
+		transition: opacity 0.1s ease-in;
+		z-index: 2;
+		background: purple;
+
+		&.loader--navigating {
+			opacity: 1;
+			animation: loaderAnimation 10s cubic-bezier(0.45, 0.81, 0.925, 0.61) forwards;
+		}
+
+		@keyframes loaderAnimation {
+			0% {
+				width: 0vw;
+			}
+			100% {
+				width: 100vw;
+			}
 		}
 	}
 
