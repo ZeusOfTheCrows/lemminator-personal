@@ -8,6 +8,15 @@
 
 	let client = getClient();
 	export let communityName: string | null = null;
+	let prevCommunityName: string | null = null;
+	$: {
+		if (prevCommunityName !== communityName) {
+			prevCommunityName = communityName;
+			console.debug('Reset selected post');
+			postNavIndex = null;
+		}
+	}
+
 	let postsResponse: Promise<GetPostsResponse> = new Promise(() => {});
 	$: {
 		postsResponse = client.getPosts({
