@@ -58,7 +58,12 @@
 					</div>
 					{#if postView.post.url}
 						<div class="postOverviewCard__hostname">
-							<a class="postOverviewCard__link" href={postView.post.url} target="_blank">
+							<a
+								class="postOverviewCard__link"
+								href={postView.post.url}
+								target="_blank"
+								title="Open post link"
+							>
 								<span class="material-icons">launch</span>
 								<span class="postOverviewCard__link__hostname">
 									{new URL(postView.post.url).hostname.replace(/^www\./, '')}
