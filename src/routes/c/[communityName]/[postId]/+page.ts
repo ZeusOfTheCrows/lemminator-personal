@@ -9,7 +9,12 @@ export const load = (({ params }) => {
     if (isNaN(postIdNum)) throw error(400, 'Invalid ID');
 
     return {
-        postResponse: client.getPost({ id: postIdNum }).catch((e) => {
+        postResponse: client.getPost({ id: postIdNum }).then(response => {
+            if (response.community_view.community.name !== params.communityName) {
+                throw error(404, 'Could not find post');
+            }
+            return response;
+        }).catch(e => {
             if (e === 'couldnt_find_post') {
                 throw error(404, 'Could not find post');
             } else if (e.type === 'invalid-json') {
