@@ -238,7 +238,7 @@
 						color: rgba(colors.themed('themedMainText'), 0.6);
 
 						&:hover {
-							filter: brightness(0.95);
+							background: colors.themed('color2');
 						}
 					}
 
