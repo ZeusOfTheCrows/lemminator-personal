@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { getClient } from '$lib/js/client';
-	import type { GetPostsResponse } from 'lemmy-js-client';
+	import type { GetPostsResponse, PostView } from 'lemmy-js-client';
 	import PostOverviewCard from './PostOverviewCard.svelte';
 	import { keynav, lastKeyboardSelectedPostId } from '$lib/js/globals';
 	import { goto } from '$app/navigation';
@@ -10,18 +10,27 @@
 	export let communityName: string | null = null;
 	let prevCommunityName: string | null = null;
 	$: {
-		if (prevCommunityName !== communityName) {
+		if (prevCommunityName != communityName) {
 			prevCommunityName = communityName;
-			console.debug('Reset selected post');
+			console.debug(
+				'Reset selected post (previous community %s, now %s)',
+				prevCommunityName,
+				communityName
+			);
 			postNavIndex = null;
+			postResponses = [];
 		}
 	}
 
-	let postsResponse: Promise<GetPostsResponse> = new Promise(() => {});
+	let postResponses: Promise<GetPostsResponse>[] = [];
 	$: {
-		postsResponse = client.getPosts({
-			community_name: communityName ?? undefined
-		});
+		if (!postResponses.length) {
+			postResponses.push(
+				client.getPosts({
+					community_name: communityName ?? undefined
+				})
+			);
+		}
 	}
 
 	let postNavIndex: number | null = null;
@@ -31,7 +40,7 @@
 		setTimeout(() => {
 			// For initial page load: restore keyboard selection
 			if (postNavIndex === null && $lastKeyboardSelectedPostId !== null) {
-				Promise.all([postsResponse]).then(([{ posts }]) => {
+				Promise.all(postResponses).then(([{ posts }]) => {
 					const matchedIndex = posts.findIndex((p) => p.post.id === $lastKeyboardSelectedPostId);
 					if (matchedIndex >= 0) {
 						postNavIndex = matchedIndex;
@@ -46,7 +55,10 @@
 	}
 
 	async function handleKeyUp(event: KeyboardEvent) {
-		const maxIndex = (await postsResponse).posts.length - 1;
+		const awaitedResponses = await Promise.all(postResponses);
+		const posts = awaitedResponses.reduce((acc: PostView[], cur) => acc.concat(cur.posts), []);
+		const maxIndex = posts.length - 1;
+
 		if ($keynav.mode !== 'normal') return;
 
 		switch (event.key) {
@@ -62,7 +74,7 @@
 			case 'Enter':
 			case 'o':
 				if (postNavIndex !== null) {
-					const selectedPostView = (await postsResponse).posts[postNavIndex];
+					const selectedPostView = posts[postNavIndex];
 					$lastKeyboardSelectedPostId = selectedPostView.post.id;
 					goto(getDetailLinkForPost(selectedPostView));
 				}
@@ -73,31 +85,33 @@
 
 <svelte:window on:keyup={handleKeyUp} />
 
-{#await postsResponse}
-	<div class="postList">
-		<PostOverviewCard postView={null} />
-		<PostOverviewCard postView={null} />
-		<PostOverviewCard postView={null} />
-		<PostOverviewCard postView={null} />
-		<PostOverviewCard postView={null} />
-		<PostOverviewCard postView={null} />
-	</div>
-{:then postsResponse}
-	<div class="postList" bind:this={postListElement}>
-		{#each postsResponse.posts as postView, i}
-			<!-- Can be revisited when an NSFW toggle has been implemented -->
-			{#if postView.post.nsfw === false}
-				<PostOverviewCard
-					{postView}
-					showCommunity={!communityName}
-					active={postNavIndex !== null ? i == postNavIndex : null}
-				/>
-			{/if}
-		{/each}
-	</div>
-{:catch postsResponse}
-	Error loading posts
-{/await}
+{#each postResponses as postsResponse}
+	{#await postsResponse}
+		<div class="postList">
+			<PostOverviewCard postView={null} />
+			<PostOverviewCard postView={null} />
+			<PostOverviewCard postView={null} />
+			<PostOverviewCard postView={null} />
+			<PostOverviewCard postView={null} />
+			<PostOverviewCard postView={null} />
+		</div>
+	{:then postsResponse}
+		<div class="postList" bind:this={postListElement}>
+			{#each postsResponse.posts as postView, i}
+				<!-- Can be revisited when an NSFW toggle has been implemented -->
+				{#if postView.post.nsfw === false}
+					<PostOverviewCard
+						{postView}
+						showCommunity={!communityName}
+						active={postNavIndex !== null ? i == postNavIndex : null}
+					/>
+				{/if}
+			{/each}
+		</div>
+	{:catch postsResponse}
+		Error loading posts
+	{/await}
+{/each}
 
 <style lang="scss">
 	@use '$lib/css/resets';
