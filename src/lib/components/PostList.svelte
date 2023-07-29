@@ -33,7 +33,7 @@
 			if (postNavIndex === null && $lastKeyboardSelectedPostId !== null) {
 				Promise.all([postsResponse]).then(([{ posts }]) => {
 					const matchedIndex = posts.findIndex((p) => p.post.id === $lastKeyboardSelectedPostId);
-					if (matchedIndex > 0) {
+					if (matchedIndex >= 0) {
 						postNavIndex = matchedIndex;
 					}
 					$lastKeyboardSelectedPostId = null;
