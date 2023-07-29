@@ -8,18 +8,18 @@
 
 	export let node: CommentTreeNode;
 	export let flattenedTree: CommentView[];
-	let isEvenInFlattenedTree: boolean;
+	let isAlternate: boolean;
 	$: {
 		const index = flattenedTree.findIndex((item) => item == node.leaf);
 		if (index === undefined) {
 			throw 'could not find item in comment tree';
 		} else {
-			isEvenInFlattenedTree = index % 2 == 0;
+			isAlternate = index % 2 != 0;
 		}
 	}
 </script>
 
-<div class="comment" class:comment--isEvenInList={isEvenInFlattenedTree}>
+<div class="comment" class:comment--alternate={isAlternate}>
 	<div class="comment__metaLine">
 		{#if node.leaf.creator.avatar}
 			<EntityIcon src={node.leaf.creator.avatar} alt="Avatar" />
@@ -67,7 +67,7 @@
 		@include colors.themify() {
 			border-bottom: solid 1px colors.themed('subtleBorder');
 
-			&.comment--isEvenInList {
+			&.comment--alternate {
 				background: rgba(colors.themed('elevatedBoxAccent'), 0.25);
 			}
 		}
