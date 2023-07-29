@@ -6,6 +6,7 @@
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
 	import PostOverviewCard from '$lib/components/PostOverviewCard.svelte';
 	import CommentSection from '$lib/components/CommentSection.svelte';
+	import { getCommentTree } from '$lib/js/comments';
 
 	export let data: PageData;
 </script>
@@ -23,7 +24,7 @@
 		{:then postResponse}
 			<div class="postDetailLayouter">
 				<PostOverviewCard postView={postResponse.post_view} active={null} variant="detail" />
-				<CommentSection commentsResponse={data.commentsResponse} />
+				<CommentSection tree={getCommentTree(data.commentsResponse)} />
 			</div>
 		{/await}
 	</svelte:fragment>
