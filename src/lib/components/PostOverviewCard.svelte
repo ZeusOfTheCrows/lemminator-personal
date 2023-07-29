@@ -78,7 +78,7 @@
 					{/if}
 				</div>
 				{#if isImageLink(postView.post.url)}
-					<a href={getDetailLinkForPost(postView)}>
+					<a class="postOverviewCard__imageLink" href={getDetailLinkForPost(postView)}>
 						<img
 							class="postOverviewCard__image"
 							class:postOverviewCard__image--list={variant === 'list'}
@@ -264,18 +264,21 @@
 			}
 		}
 
-		.postOverviewCard__image {
-			max-width: 100%;
-			@include colors.themify() {
-				border: solid 1px colors.themed('subtleBorder');
-			}
-			border-radius: 10px;
+		.postOverviewCard__imageLink {
 			margin: 0 1rem;
-			object-fit: cover;
-			object-position: center;
 
-			&.postOverviewCard__image--list {
-				aspect-ratio: 16 / 9;
+			.postOverviewCard__image {
+				width: 100%;
+				@include colors.themify() {
+					border: solid 1px colors.themed('subtleBorder');
+				}
+				border-radius: 10px;
+				object-fit: cover;
+				object-position: center;
+
+				&.postOverviewCard__image--list {
+					aspect-ratio: 16 / 9;
+				}
 			}
 		}
 
