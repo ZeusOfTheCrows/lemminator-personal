@@ -56,7 +56,7 @@
 							{postView.post.name}
 						</a>
 					</div>
-					{#if postView.post.url}
+					{#if postView.post.url && !isImageLink(postView.post.url)}
 						<div class="postOverviewCard__hostname">
 							<a
 								class="postOverviewCard__link"
