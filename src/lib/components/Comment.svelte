@@ -5,6 +5,7 @@
 	import type { CommentTreeNode } from '$lib/js/comments';
 	import CommentList from './CommentList.svelte';
 	import type { CommentView } from 'lemmy-js-client';
+	import { formatRelativeTime } from '$lib/js/client';
 
 	export let node: CommentTreeNode;
 	export let flattenedTree: CommentView[];
@@ -25,6 +26,10 @@
 			<EntityIcon src={node.leaf.creator.avatar} alt="Avatar" />
 		{/if}
 		{node.leaf.creator.name}
+		<div class="comment__relativeTimePresep">&middot;</div>
+		<div class="comment__relativeTime">
+			{formatRelativeTime(node.leaf.comment.published)}
+		</div>
 	</div>
 	<div class="comment__content">
 		{@html renderEnhancedMarkdown(node.leaf.comment.content)}
