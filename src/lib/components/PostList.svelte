@@ -11,12 +11,12 @@
 	let prevCommunityName: string | null = null;
 	$: {
 		if (prevCommunityName != communityName) {
-			prevCommunityName = communityName;
 			console.debug(
 				'Reset selected post (previous community %s, now %s)',
 				prevCommunityName,
 				communityName
 			);
+			prevCommunityName = communityName;
 			postNavIndex = null;
 			postResponses = [];
 		}
