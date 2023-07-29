@@ -92,7 +92,7 @@
 		.comment__content {
 			font-size: 0.9rem;
 			line-height: 1.25rem;
-			@include markdown.styleExternalContent;
+			@include markdown.styleExternalContent($allowFontSizeIncreases: false);
 		}
 
 		.comment__actionLine {

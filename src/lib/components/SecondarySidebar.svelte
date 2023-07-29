@@ -97,7 +97,7 @@
 			font-size: 0.85rem;
 			line-height: 1.1rem;
 
-			@include markdown.styleExternalContent;
+			@include markdown.styleExternalContent($allowFontSizeIncreases: true);
 		}
 
 		.secondaryNavigation__statList {

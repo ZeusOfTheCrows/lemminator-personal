@@ -258,7 +258,7 @@
 				line-height: 1.2rem;
 				font-size: 0.9rem;
 
-				@include markdown.styleExternalContent;
+				@include markdown.styleExternalContent($allowFontSizeIncreases: true);
 			}
 		}
 

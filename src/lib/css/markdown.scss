@@ -1,6 +1,6 @@
 @use '$lib/css/colors';
 
-@mixin styleExternalContent {
+@mixin styleExternalContent($allowFontSizeIncreases) {
 
     :global(h1),
     :global(h2),
@@ -15,19 +15,21 @@
         }
     }
 
-    :global(h1) {
-        font-size: 1.4rem;
-        line-height: 1.35rem;
-    }
+    @if $allowFontSizeIncreases {
+        :global(h1) {
+            font-size: 1.4rem;
+            line-height: 1.35rem;
+        }
 
-    :global(h2) {
-        font-size: 1.25rem;
-        line-height: 1.25rem;
-    }
+        :global(h2) {
+            font-size: 1.25rem;
+            line-height: 1.25rem;
+        }
 
-    :global(h3) {
-        font-size: 1.1rem;
-        margin-bottom: 0.5rem;
+        :global(h3) {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
     }
 
     :global(li) {
