@@ -55,10 +55,11 @@
 		li {
 			display: flex;
 			flex-direction: column;
+			font-size: 0.95rem;
 			line-height: 1.2rem;
 
 			a {
-				padding: 1.2rem;
+				padding: 0.8rem 1.2rem;
 				width: 100%;
 				height: 100%;
 				text-decoration: none;
