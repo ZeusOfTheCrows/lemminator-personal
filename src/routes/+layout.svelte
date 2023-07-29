@@ -51,9 +51,8 @@
 	<link rel="icon" href={logoOnDarkSvg} media="(prefers-color-scheme: dark)" />
 </svelte:head>
 
-<div class="loader" class:loader--navigating={navigating}>&nbsp;</div>
-
 <div class:lightTheme={$theme === 'light'} class:darkTheme={$theme === 'dark'}>
+	<div class="loader" class:loader--navigating={navigating}>&nbsp;</div>
 	<div class="root" bind:this={root}>
 		<header class="header">
 			<div class="header__logoMenuToggle">
@@ -137,10 +136,9 @@
 		left: 0;
 		width: 0vw;
 		opacity: 0;
-		box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.2);
 		transition: opacity 0.1s ease-in;
 		z-index: 2;
-		background: purple;
+		background: #e1a1ff;
 
 		&.loader--navigating {
 			opacity: 1;
