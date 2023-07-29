@@ -46,7 +46,6 @@
 </script>
 
 <svelte:head>
-	<title>Lemminator</title>
 	<link rel="icon" href={logoOnLightSvg} media="(prefers-color-scheme: light)" />
 	<link rel="icon" href={logoOnDarkSvg} media="(prefers-color-scheme: dark)" />
 </svelte:head>
