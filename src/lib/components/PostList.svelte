@@ -32,7 +32,10 @@
 			// For initial page load: restore keyboard selection
 			if (postNavIndex === null && $lastKeyboardSelectedPostId !== null) {
 				Promise.all([postsResponse]).then(([{ posts }]) => {
-					postNavIndex = posts.findIndex((p) => p.post.id === $lastKeyboardSelectedPostId) ?? null;
+					const matchedIndex = posts.findIndex((p) => p.post.id === $lastKeyboardSelectedPostId);
+					if (matchedIndex > 0) {
+						postNavIndex = matchedIndex;
+					}
 					$lastKeyboardSelectedPostId = null;
 				});
 			} else if (postNavIndex !== null && postListElement) {
