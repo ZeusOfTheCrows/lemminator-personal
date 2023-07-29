@@ -78,13 +78,15 @@
 					{/if}
 				</div>
 				{#if isImageLink(postView.post.url)}
-					<img
-						class="postOverviewCard__image"
-						class:postOverviewCard__image--list={variant === 'list'}
-						class:postOverviewCard__image--detail={variant === 'detail'}
-						src={postView.post.url}
-						alt={postView.post.name}
-					/>
+					<a href={getDetailLinkForPost(postView)}>
+						<img
+							class="postOverviewCard__image"
+							class:postOverviewCard__image--list={variant === 'list'}
+							class:postOverviewCard__image--detail={variant === 'detail'}
+							src={postView.post.url}
+							alt={postView.post.name}
+						/>
+					</a>
 				{/if}
 				<div class="postOverviewCard__actionLine">
 					<TransparentButton
