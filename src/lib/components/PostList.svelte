@@ -116,7 +116,7 @@
 			{/each}
 		</div>
 	{/if}
-	{#if !loading}
+	{#if !loading && postViews.length}
 		<div class="loadMorePlacer">
 			<TransparentButton icon="keyboard_double_arrow_down" on:click={loadNextPage}>
 				Load more
