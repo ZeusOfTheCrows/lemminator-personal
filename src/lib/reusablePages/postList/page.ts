@@ -6,7 +6,7 @@ export interface LoadCommunityData {
     pageId: number,
     communityResponse?: Promise<CommunityResponse>,
     streamed: {
-        postResponse: Promise<GetPostsResponse>,
+        postsResponse: Promise<GetPostsResponse>,
     }
 }
 
@@ -19,7 +19,7 @@ export const loadCommunityPage = (communityName: string | undefined, pageId: str
     const result: LoadCommunityData = {
         pageId: pageIdNum,
         streamed: {
-            postResponse: client.getPosts({
+            postsResponse: client.getPosts({
                 community_name: communityName,
                 page: pageIdNum,
                 limit: POST_PAGE_LIMIT,

@@ -9,7 +9,7 @@
 {#if data.communityResponse}
 	<PostListPage
 		communityResponse={data.communityResponse}
-		postsResponsePromise={data.streamed.postResponse}
+		postsResponsePromise={data.streamed.postsResponse}
 		pageId={data.pageId}
 	/>
 {/if}

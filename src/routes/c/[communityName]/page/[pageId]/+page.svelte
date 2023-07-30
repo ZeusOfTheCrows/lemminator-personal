@@ -5,8 +5,10 @@
 	export let data: PageData;
 </script>
 
-<PostListPage
-	communityResponse={data.communityResponse}
-	postsResponsePromise={data.streamed.postResponse}
-	pageId={data.pageId}
-/>
+{#if data.communityResponse}
+	<PostListPage
+		communityResponse={data.communityResponse}
+		postsResponsePromise={data.streamed.postsResponse}
+		pageId={data.pageId}
+	/>
+{/if}
