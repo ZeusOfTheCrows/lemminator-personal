@@ -2,6 +2,7 @@
 	import { getClient } from '$lib/js/client';
 	import { createEventDispatcher } from 'svelte';
 	import LoadingSpinner from './LoadingSpinner.svelte';
+	import { page } from '$app/stores';
 
 	const dispatch = createEventDispatcher();
 	const client = getClient();
@@ -20,21 +21,31 @@
 </script>
 
 <ul class="mainNavigation">
-	<li><a href="/" class="highlightableRoute">Frontpage</a></li>
-	<li><a href="/subscriptions" class="highlightableRoute">Subscriptions</a></li>
+	<li>
+		<a
+			href="/"
+			class:highlightedRoute={$page.route.id == '/' || $page.route.id?.startsWith('/frontpage/')}
+			>Frontpage</a
+		>
+	</li>
+	<li><a href="/subscriptions">Subscriptions</a></li>
 	{#await communitiesResponse}
 		<LoadingSpinner minHeight="4rem" />
 	{:then communitiesResponse}
 		{#if communitiesResponse}
-			{#each communitiesResponse.communities as community}
+			{#each communitiesResponse.communities as communityView}
 				<li class="communityItem">
-					<a href={`/c/${community.community.name}`} class="communityItem highlightableRoute">
-						{#if community.community.icon}
-							<img src={community.community.icon} alt="" class="communityItem__icon" />
+					<a
+						href={`/c/${communityView.community.name}`}
+						class="communityItem"
+						class:highlightedRoute={$page.params.communityName == communityView.community.name}
+					>
+						{#if communityView.community.icon}
+							<img src={communityView.community.icon} alt="" class="communityItem__icon" />
 						{:else}
 							<div class="communityItem__iconPlaceholder material-icons">people</div>
 						{/if}
-						{community.community.title}
+						{communityView.community.title}
 					</a>
 				</li>
 			{/each}
@@ -74,11 +85,6 @@
 					&:hover {
 						background: rgba(colors.themed('menuAccent'), 0.3);
 					}
-
-					&:global(.highlightedRoute) {
-						border-color: colors.themed('subtleBorder');
-						background: colors.themed('menuAccent');
-					}
 				}
 			}
 		}
@@ -110,6 +116,13 @@
 				color: colors.themed('maxContrastOnTheme');
 				font-size: 0.9rem;
 			}
+		}
+	}
+
+	.highlightedRoute {
+		@include colors.themify() {
+			border-color: colors.themed('subtleBorder');
+			background: colors.themed('menuAccent');
 		}
 	}
 </style>

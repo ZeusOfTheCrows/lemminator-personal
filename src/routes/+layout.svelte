@@ -11,25 +11,6 @@
 	import { cachedCalls, theme } from '$lib/js/globals';
 
 	let root: HTMLElement;
-
-	function updateHighlightedRouteStyling() {
-		// Stupid workaround: we have to wait for the DOM to settle in case this callback
-		// got triggered due to a data load event. The timeout moves us to the back of the event
-		// handling queue.
-		setTimeout(() => {
-			let path = $page.url.pathname;
-			if (root) {
-				root.querySelectorAll('a.highlightableRoute').forEach((element) => {
-					if (element.attributes.getNamedItem('href')?.value == path) {
-						element.classList.add('highlightedRoute');
-					} else {
-						element.classList.remove('highlightedRoute');
-					}
-				});
-			}
-		}, 1);
-	}
-
 	let navigating = false;
 
 	beforeNavigate(() => {
@@ -38,7 +19,6 @@
 
 	afterNavigate(() => {
 		navigating = false;
-		updateHighlightedRouteStyling();
 		primarySidebarModal.close();
 	});
 
@@ -90,7 +70,7 @@
 		</header>
 		<div class="page">
 			<aside class="primarySidebar">
-				<PrimarySidebar on:communitiesResponseLoaded={updateHighlightedRouteStyling} />
+				<PrimarySidebar />
 			</aside>
 			<dialog class="primarySidebarModal" bind:this={primarySidebarModal}>
 				<div class="primarySidebarModal__top">
@@ -102,7 +82,7 @@
 					</TransparentButton>
 				</div>
 				<div class="primarySidebarModal__body">
-					<PrimarySidebar on:communitiesResponseLoaded={updateHighlightedRouteStyling} />
+					<PrimarySidebar />
 				</div>
 			</dialog>
 			<slot />
