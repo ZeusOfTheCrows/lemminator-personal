@@ -15,7 +15,7 @@
 
 	function isImageLink(link: string | undefined): boolean {
 		if (!link) return false;
-		return Boolean(link.match(/\.(png|jpe?g|gif)$/));
+		return Boolean(link.match(/\.(png|jpe?g|gif|webp)$/));
 	}
 </script>
 
