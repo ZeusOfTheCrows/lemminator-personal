@@ -3,6 +3,9 @@
 	import SecondarySidebar from '$lib/components/SecondarySidebar.svelte';
 	import PageHolder from '$lib/components/PageHolder.svelte';
 	import { cachedCalls } from '$lib/js/globals';
+	import type { PageData } from './$types';
+
+	export let data: PageData;
 </script>
 
 <svelte:head>
@@ -13,7 +16,7 @@
 
 <PageHolder>
 	<svelte:fragment slot="main">
-		<PostList />
+		<PostList communityName={null} postsResponsePromise={data.streamed.postResponse} />
 	</svelte:fragment>
 	<svelte:fragment slot="secondarySidebar">
 		<SecondarySidebar />

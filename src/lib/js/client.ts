@@ -10,3 +10,5 @@ export function getClient() {
 export function formatRelativeTime(raw_timestamp: string): string {
     return moment(raw_timestamp).fromNow();
 }
+
+export const POST_PAGE_SIZE = 10;

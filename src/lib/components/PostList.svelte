@@ -1,97 +1,99 @@
 <script lang="ts">
-	import { getClient } from '$lib/js/client';
-	import type { GetPostsResponse, PostView } from 'lemmy-js-client';
-	import PostOverviewCard from './PostOverviewCard.svelte';
-	import { keynav, lastKeyboardSelectedPostId } from '$lib/js/globals';
-	import { goto } from '$app/navigation';
+	import { afterNavigate, goto } from '$app/navigation';
+	import { page } from '$app/stores';
+	import { keynav } from '$lib/js/globals';
 	import { getDetailLinkForPost } from '$lib/js/navigation';
-	import { onMount } from 'svelte';
-	import TransparentButton from './TransparentButton.svelte';
+	import type { GetPostsResponse } from 'lemmy-js-client';
+	import PostOverviewCard from './PostOverviewCard.svelte';
+	import isEqual from 'lodash.isequal';
+	import { createEventDispatcher } from 'svelte';
 
-	let client = getClient();
+	const dispatch = createEventDispatcher();
+
 	export let communityName: string | null = null;
-	let prevCommunityName: string | null = null;
-	$: {
-		if (prevCommunityName != communityName) {
-			console.debug(
-				'Reset selected post (previous community %s, now %s)',
-				prevCommunityName,
-				communityName
-			);
-			prevCommunityName = communityName;
+	afterNavigate(async ({ from, to }) => {
+		if (!isEqual(from?.route, to?.route) || !isEqual(from?.params, to?.params)) {
+			// Sometimes PostList gets recycled when navigating from community to community.
+			// Reinitialize keyboard navigation in that case.
+			console.log('Initialize post list navigation');
 			postNavIndex = null;
-		}
-	}
+			const postsResponse = await postsResponsePromise;
+			const rawSelectedPostId = $page.url.searchParams.get('selectedPostId');
 
-	let loading = false;
-	let postViews: PostView[] = [];
-	let nextPageToRequest = 1;
-	let postsResponsePromise: Promise<GetPostsResponse> = new Promise(() => {});
-	onMount(() => {
-		postViews = [];
-		nextPageToRequest = 1;
-		loadNextPage();
+			if (rawSelectedPostId !== null) {
+				if (rawSelectedPostId == 'first' && postsResponse.posts.length > 0) {
+					postNavIndex = 0;
+				} else if (rawSelectedPostId == 'last' && postsResponse.posts.length > 0) {
+					postNavIndex = postsResponse.posts.length - 1;
+				} else if (!isNaN(parseInt(rawSelectedPostId))) {
+					const selectedPostId = parseInt(rawSelectedPostId);
+					const resolvedIndex = postsResponse.posts.findIndex((pv) => pv.post.id == selectedPostId);
+					postNavIndex = resolvedIndex >= 0 ? resolvedIndex : null;
+				}
+			}
+		}
 	});
 
-	async function loadNextPage() {
-		console.log('Loading page', nextPageToRequest);
-		loading = true;
-		postsResponsePromise = client
-			.getPosts({
-				community_name: communityName ?? undefined,
-				page: nextPageToRequest
-			})
-			.then((response) => {
-				loading = false;
-				postViews = postViews.concat(response.posts);
-				nextPageToRequest += 1;
-				return response;
-			});
-	}
+	export let postsResponsePromise: Promise<GetPostsResponse>;
 
 	let postNavIndex: number | null = null;
 	let postPageElement: HTMLElement;
 	$: {
 		// Make sure to run this after the active prop of the PostOverviewCard has propagated
 		setTimeout(() => {
-			// For initial page load: restore keyboard selection
-			if (postNavIndex === null && $lastKeyboardSelectedPostId !== null) {
-				Promise.all([postsResponsePromise]).then(([{ posts }]) => {
-					const matchedIndex = posts.findIndex((p) => p.post.id === $lastKeyboardSelectedPostId);
-					if (matchedIndex >= 0) {
-						postNavIndex = matchedIndex;
-					}
-					$lastKeyboardSelectedPostId = null;
-				});
-			} else if (postNavIndex !== null && postPageElement) {
+			if (postNavIndex !== null && postPageElement) {
 				const el = postPageElement.querySelector('.postOverviewCard--active');
 				el?.scrollIntoView();
 			}
 		}, 1);
 	}
 
+	async function propagateKeynavToUrl() {
+		if (postNavIndex === null) {
+			$page.url.searchParams.delete('selectedPostId');
+		} else {
+			const postViews = (await postsResponsePromise).posts;
+			$page.url.searchParams.set('selectedPostId', postViews[postNavIndex].post.id.toString());
+		}
+		goto(`?${$page.url.searchParams.toString()}`, {
+			replaceState: true,
+			keepFocus: true,
+			noScroll: true
+		});
+	}
+
 	async function handleKeyUp(event: KeyboardEvent) {
+		const postViews = (await postsResponsePromise).posts;
 		const maxIndex = postViews.length - 1;
 		if ($keynav.mode !== 'normal') return;
 
 		switch (event.key) {
 			case 'j':
-				postNavIndex = Math.min((postNavIndex ?? -1) + 1, maxIndex);
-				if (postNavIndex == maxIndex && !loading) {
-					loadNextPage();
+				const unclampedPostNavIndexDown = (postNavIndex ?? -1) + 1;
+				if (unclampedPostNavIndexDown <= maxIndex) {
+					postNavIndex = unclampedPostNavIndexDown;
+					propagateKeynavToUrl();
+				} else {
+					dispatch('requestNextPage');
 				}
 				break;
 			case 'k':
-				postNavIndex = Math.max((postNavIndex ?? 0) - 1, 0);
+				const unclampedPostNavIndexUp = (postNavIndex ?? 0) - 1;
+				if (unclampedPostNavIndexUp >= 0) {
+					postNavIndex = unclampedPostNavIndexUp;
+					propagateKeynavToUrl();
+				} else {
+					dispatch('requestPrevPage');
+				}
 				break;
 			case 'Escape':
 				postNavIndex = null;
+				propagateKeynavToUrl();
 				break;
 			case 'Enter':
 			case 'o':
 				if (postNavIndex !== null) {
 					const selectedPostView = postViews[postNavIndex];
-					$lastKeyboardSelectedPostId = selectedPostView.post.id;
 					goto(getDetailLinkForPost(selectedPostView));
 				}
 				break;
@@ -101,10 +103,19 @@
 
 <svelte:window on:keyup={handleKeyUp} />
 
-<div class="postList">
-	{#if postViews.length}
-		<div class="postPage" bind:this={postPageElement}>
-			{#each postViews as postView, i}
+{#await postsResponsePromise}
+	<div class="postList">
+		<PostOverviewCard postView={null} />
+		<PostOverviewCard postView={null} />
+		<PostOverviewCard postView={null} />
+		<PostOverviewCard postView={null} />
+		<PostOverviewCard postView={null} />
+		<PostOverviewCard postView={null} />
+	</div>
+{:then postsResponse}
+	{#if postsResponse.posts.length}
+		<div class="postList" bind:this={postPageElement}>
+			{#each postsResponse.posts as postView, i}
 				<!-- Can be revisited when an NSFW toggle has been implemented -->
 				{#if postView.post.nsfw === false}
 					<PostOverviewCard
@@ -116,26 +127,9 @@
 			{/each}
 		</div>
 	{/if}
-	{#if !loading && postViews.length}
-		<div class="loadMorePlacer">
-			<TransparentButton icon="keyboard_double_arrow_down" on:click={loadNextPage}>
-				Load more
-			</TransparentButton>
-		</div>
-	{/if}
-	{#await postsResponsePromise}
-		<div class="postPage">
-			<PostOverviewCard postView={null} />
-			<PostOverviewCard postView={null} />
-			<PostOverviewCard postView={null} />
-			<PostOverviewCard postView={null} />
-			<PostOverviewCard postView={null} />
-			<PostOverviewCard postView={null} />
-		</div>
-	{:catch postsResponse}
-		Error loading posts
-	{/await}
-</div>
+{:catch}
+	Error loading posts
+{/await}
 
 <style lang="scss">
 	@use '$lib/css/resets';
@@ -145,16 +139,5 @@
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
-
-		.postPage {
-			display: flex;
-			flex-direction: column;
-			gap: 1rem;
-		}
-
-		.loadMorePlacer {
-			display: flex;
-			justify-content: center;
-		}
 	}
 </style>
