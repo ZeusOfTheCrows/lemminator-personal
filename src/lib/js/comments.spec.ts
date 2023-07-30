@@ -323,8 +323,10 @@ describe('getCommentTree', () => {
                             },
                             children: [
                             ],
+                            fullPath: [2123755, 2123787],
                         },
                     ],
+                    fullPath: [2123755],
                 },
             ],
             flattenedTree: [

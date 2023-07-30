@@ -3,6 +3,7 @@ import type { CommentView, GetCommentsResponse } from "lemmy-js-client";
 export interface CommentTreeNode {
     leaf: CommentView;
     children: CommentTreeNode[];
+    fullPath: number[];
 }
 
 export interface CommentTree {
@@ -10,17 +11,18 @@ export interface CommentTree {
     flattenedTree: CommentView[];
 }
 
-function addLeafToTree(nodes: CommentTreeNode[], commentView: CommentView, processedPath: string[]): boolean {
-    if (processedPath.length == 1) {
+function addLeafToTree(nodes: CommentTreeNode[], commentView: CommentView, fullPath: number[], partialPath: number[]): boolean {
+    if (partialPath.length == 1) {
         nodes.push({
             leaf: commentView,
             children: [],
+            fullPath,
         });
         return true;
     } else {
-        const matchedLeaf = nodes.find(n => n.leaf.comment.id.toString() == processedPath[0]);
+        const matchedLeaf = nodes.find(n => n.leaf.comment.id == partialPath[0]);
         if (matchedLeaf) {
-            return addLeafToTree(matchedLeaf.children, commentView, processedPath.slice(1));
+            return addLeafToTree(matchedLeaf.children, commentView, fullPath, partialPath.slice(1));
         } else {
             return false;
         }
@@ -41,8 +43,10 @@ export function getCommentTree(commentsResponse: GetCommentsResponse): CommentTr
     while (unprocessedComments.length) {
         const processedComments: CommentView[] = [];
         for (const commentView of unprocessedComments) {
-            const processedPath = commentView.comment.path.replace(/^0\./, '').split('.');
-            if (addLeafToTree(topNodes, commentView, processedPath)) {
+            const processedPath = commentView.comment.path.replace(/^0\./, '')
+                .split('.')
+                .map(item => parseInt(item));
+            if (addLeafToTree(topNodes, commentView, processedPath, processedPath)) {
                 processedComments.push(commentView);
             }
         }
