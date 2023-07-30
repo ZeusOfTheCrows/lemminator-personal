@@ -2,7 +2,8 @@ import { LemmyHttp } from "lemmy-js-client";
 import moment from "moment";
 
 export function getClient() {
-    let baseUrl = 'https://lemmy.ml';
+    const hostname = import.meta.env.VITE_INSTANCE_HOSTNAME;
+    let baseUrl = `https://${hostname}`;
     let client: LemmyHttp = new LemmyHttp(baseUrl);
     return client;
 }
