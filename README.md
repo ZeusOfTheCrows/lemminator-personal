@@ -1,38 +1,30 @@
-# create-svelte
+# Lemminator
+A web UI for Lemmy
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+## Goal
+Lemminator wants to make Lemmy a place where even your friends who aren't into tech will feel at home. By creating a welcoming experience for people from all walks of life, Lemminator hopes to help a wide variety of communities come to fruition.
 
-## Creating a project
+Lemminator aims to:
+- Make using Lemmy simple and easy
+- Be pleasant to look at
+- Cater to the needs of the average internet user
 
-If you're seeing this, you've probably already done this step. Congrats!
+Lemminator will not offer every possible feature or setting. While it may endlessly obsess over tweaking the basics, the [official Lemmy web UI](https://github.com/LemmyNet/lemmy-ui) as well as projects like [Alexandrite](https://alexandrite.app/) are more feature-focused. Power users may prefer them instead - no hard feelings! (Before you go though, give our keyboard navigation for posts and communities. It's pretty cool.)
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+## Using Lemminator
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+Right now, Lemminator isn't ready to be a daily driver. There is a demo server up at https://lemminator.netlify.app/ if you'd like to follow the progress.
 
-## Developing
+Lemminator is a generic web frontend meant to be hosted by the owner of your favorite instance. This prevents brand confusion that can arise when the website lives on a different domain name than the instance. You can run Lemminator independently if you want to, but keep in mind that instances may limit your in-browser API access via CORS.
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+### Developing
 
-```bash
-npm run dev
+The codebase is a standard SvelteKit/Vite website. Run `yarn` to get your dependencies, then `yarn run dev` to get a development server up and running.
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+### Deploying
+Lemminator should be able to deploy to Netlify out of the box with no configuration. For other deployment scenarios, refer to [SvelteKit's documentation](https://kit.svelte.dev/docs/adapter-auto).
 
-## Building
+## Contributing
+Thank you for your interest in contributing. As being a maintainer can be quite stressful, I'm trying to focus my limited energy on development. Due to this, I might not respond to feature requests or spontaneous feature patches. Hopefully you understand. Feel free to submit bug fixes and bug reports though.
 
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+I've licensed the code under AGPL v3.0 so that you can fork the repo if my judgements aren't in the best interest of the community or if I lack time to continue the project.
