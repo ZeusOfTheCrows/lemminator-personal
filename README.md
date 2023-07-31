@@ -9,7 +9,7 @@ Lemminator aims to:
 - Be pleasant to look at
 - Cater to the needs of the average internet user
 
-Lemminator will not offer every possible feature or setting. While it may endlessly obsess over tweaking the basics, the [official Lemmy web UI](https://github.com/LemmyNet/lemmy-ui) as well as projects like [Alexandrite](https://alexandrite.app/) are more feature-focused. Power users may prefer them instead - no hard feelings! (Before you go though, give our keyboard navigation for posts and communities. It's pretty cool.)
+Lemminator will not offer every possible feature or setting. While it may endlessly obsess over tweaking the basics, the [official Lemmy web UI](https://github.com/LemmyNet/lemmy-ui) as well as projects like [Alexandrite](https://alexandrite.app/) are more feature-focused. Power users may prefer them instead - no hard feelings! (Before you go though, give our keyboard navigation for posts and communities a try. It's pretty cool.)
 
 ## Using Lemminator
 
