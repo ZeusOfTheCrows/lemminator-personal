@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { afterNavigate, beforeNavigate } from '$app/navigation';
-	import { page } from '$app/stores';
 	import PrimarySidebar from '$lib/components/PrimarySidebar.svelte';
 	import TransparentButton from '$lib/components/TransparentButton.svelte';
 	import logoOnLight from '$lib/img/logoOnLight.png';
