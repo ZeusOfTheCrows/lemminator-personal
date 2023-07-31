@@ -5,8 +5,9 @@
 
 	export let nodes: CommentTreeNode[];
 	export let flattenedTree: CommentView[];
+	export let focusedCommentId: number | null;
 </script>
 
 {#each nodes as node, i}
-	<Comment {node} {flattenedTree} />
+	<Comment {node} {flattenedTree} {focusedCommentId} />
 {/each}

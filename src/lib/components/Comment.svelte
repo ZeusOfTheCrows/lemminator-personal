@@ -18,9 +18,23 @@
 			isAlternate = index % 2 != 0;
 		}
 	}
+
+	export let commentElement: HTMLElement;
+	export let focusedCommentId: number | null;
+	$: {
+		if (focusedCommentId === node.leaf.comment.id) {
+			commentElement.scrollIntoView();
+		}
+	}
 </script>
 
-<div class="comment" class:comment--alternate={isAlternate}>
+<div
+	class="comment"
+	class:comment--alternate={isAlternate}
+	class:comment--selected={focusedCommentId === node.leaf.comment.id}
+	class:comment--deselected={focusedCommentId !== null && focusedCommentId !== node.leaf.comment.id}
+	bind:this={commentElement}
+>
 	<div class="comment__metaLine">
 		{#if node.leaf.creator.avatar}
 			<EntityIcon src={node.leaf.creator.avatar} alt="Avatar" />
@@ -55,25 +69,35 @@
 </div>
 {#if node.children.length}
 	<div class="commentDescendants">
-		<CommentList nodes={node.children} {flattenedTree} />
+		<CommentList nodes={node.children} {flattenedTree} {focusedCommentId} />
 	</div>
 {/if}
 
 <style lang="scss">
 	@use '$lib/css/colors';
 	@use '$lib/css/markdown';
+	@use '$lib/css/measurements';
 
 	.comment {
 		display: flex;
 		flex-direction: column;
 		gap: 0.5rem;
 		padding: 1rem 0;
+		scroll-margin: calc(measurements.$headerVSize + 1rem);
 
 		@include colors.themify() {
 			border-bottom: solid 1px colors.themed('subtleBorder');
 
 			&.comment--alternate {
 				background: rgba(colors.themed('elevatedBoxAccent'), 0.25);
+			}
+
+			&.comment--selected {
+				box-shadow: inset 0 0 5px rgba(colors.themed('themedShadow'), 0.1);
+			}
+
+			&.comment--deselected {
+				opacity: 0.4;
 			}
 		}
 
