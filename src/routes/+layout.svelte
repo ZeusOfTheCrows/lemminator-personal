@@ -8,6 +8,8 @@
 	import logoOnDarkSvg from '$lib/img/logoOnDark.svg';
 	import SearchBox from '$lib/components/SearchBox.svelte';
 	import { cachedCalls, theme } from '$lib/js/globals';
+	import Cookies from 'js-cookie';
+	import { onMount } from 'svelte';
 
 	let root: HTMLElement;
 	let navigating = false;
@@ -19,6 +21,15 @@
 	afterNavigate(() => {
 		navigating = false;
 		primarySidebarModal.close();
+	});
+
+	onMount(() => {
+		if (Cookies.get('demoDisclaimer') == undefined) {
+			alert(
+				"Hi! Thanks for trying out this early demo of Lemminator. You may notice stuff that is not working. If you're cool with that, carry on!\n\nThis message will only appear once."
+			);
+			Cookies.set('demoDisclaimer', 'shown');
+		}
 	});
 
 	let primarySidebarModal: HTMLDialogElement;
