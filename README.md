@@ -17,6 +17,26 @@ Right now, Lemminator isn't ready to be a daily driver. There is a demo server u
 
 Lemminator is a generic web frontend meant to be hosted by the owner of your favorite instance. This prevents brand confusion that can arise when the website lives on a different domain name than the instance. You can run Lemminator independently if you want to, but keep in mind that instances may limit your in-browser API access via CORS.
 
+
+### Keyboard hotkeys
+
+While Lemminator generally caters to regular end users, its keyboard navigation is a fun gimmick for power users. The information below ought to be integrated into the UI at some point.
+
+#### Navigate between posts
+
+- `j` moves to the next post
+- `k` moves to the previous post
+- `o` opens the selected post
+
+`j`/`k` should work between pages.
+
+#### Navigate between comments
+
+- `j` moves to the next comment on the same level
+- `k` moves to the previous comment on the same level
+- `h` moves to the parent comment
+- `l` moves to the first child of the current comment
+
 ### Developing
 
 The codebase is a standard SvelteKit/Vite website. Run `yarn` to get your dependencies, then `yarn run dev` to get a development server up and running.
