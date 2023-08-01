@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { renderEnhancedMarkdown } from '$lib/js/markdown';
 	import EntityIcon from './EntityIcon.svelte';
-	import TransparentButton from './TransparentButton.svelte';
+	import ThemedButton from './ThemedButton.svelte';
 	import type { CommentTreeNode } from '$lib/js/comments';
 	import CommentList from './CommentList.svelte';
 	import type { CommentView } from 'lemmy-js-client';
@@ -49,22 +49,17 @@
 		{@html renderEnhancedMarkdown(node.leaf.comment.content)}
 	</div>
 	<div class="comment__actionLine">
-		<TransparentButton
-			appearance="dimmed"
-			icon="keyboard_arrow_up"
-			title="Upvote"
-			fontSize="0.875rem"
-		>
+		<ThemedButton appearance="dimmed" icon="keyboard_arrow_up" title="Upvote" fontSize="0.875rem">
 			{node.leaf.counts.upvotes}
-		</TransparentButton>
-		<TransparentButton
+		</ThemedButton>
+		<ThemedButton
 			appearance="dimmed"
 			icon="keyboard_arrow_down"
 			title="Downvote"
 			fontSize="0.875rem"
 		>
 			{node.leaf.counts.downvotes}
-		</TransparentButton>
+		</ThemedButton>
 	</div>
 </div>
 {#if node.children.length}

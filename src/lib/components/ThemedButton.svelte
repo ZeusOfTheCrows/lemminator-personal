@@ -9,9 +9,9 @@
 {#if href}
 	<a
 		{href}
-		class="transparentButton"
-		class:transparentButton--default={appearance === 'default'}
-		class:transparentButton--dimmed={appearance === 'dimmed'}
+		class="ThemedButton"
+		class:ThemedButton--default={appearance === 'default'}
+		class:ThemedButton--dimmed={appearance === 'dimmed'}
 		style:font-size={fontSize}
 	>
 		{#if icon}
@@ -21,11 +21,11 @@
 	</a>
 {:else}
 	<button
-		class="transparentButton"
+		class="ThemedButton"
 		{title}
 		on:click
-		class:transparentButton--default={appearance === 'default'}
-		class:transparentButton--dimmed={appearance === 'dimmed'}
+		class:ThemedButton--default={appearance === 'default'}
+		class:ThemedButton--dimmed={appearance === 'dimmed'}
 		style:font-size={fontSize}
 	>
 		{#if icon}
@@ -39,7 +39,7 @@
 	@use '$lib/css/colors';
 	@use 'material-icons/iconfont/filled.css';
 
-	.transparentButton {
+	.ThemedButton {
 		display: flex;
 		flex-direction: row;
 		justify-content: stretch;
@@ -53,7 +53,7 @@
 		padding: 0.5rem;
 
 		@include colors.themify() {
-			&.transparentButton--dimmed {
+			&.ThemedButton--dimmed {
 				color: rgba(colors.themed('themedMainText'), 0.8);
 			}
 

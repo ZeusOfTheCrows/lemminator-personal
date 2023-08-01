@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { afterNavigate, beforeNavigate } from '$app/navigation';
 	import PrimarySidebar from '$lib/components/PrimarySidebar.svelte';
-	import TransparentButton from '$lib/components/TransparentButton.svelte';
+	import ThemedButton from '$lib/components/ThemedButton.svelte';
 	import logoOnLight from '$lib/img/logoOnLight.png';
 	import logoOnDark from '$lib/img/logoOnDark.png';
 	import logoOnLightSvg from '$lib/img/logoOnLight.svg';
@@ -58,12 +58,9 @@
 		<header class="header">
 			<div class="header__logoMenuToggle">
 				<div class="header__menuToggle">
-					<TransparentButton
-						on:click={() => primarySidebarModal.showModal()}
-						title="Open navigation"
-					>
+					<ThemedButton on:click={() => primarySidebarModal.showModal()} title="Open navigation">
 						<span class="material-icons">menu</span>
-					</TransparentButton>
+					</ThemedButton>
 				</div>
 				<a href="/">
 					{#if $theme === 'light'}
@@ -82,12 +79,12 @@
 				</div>
 			</div>
 			<div class="header__menu">
-				<TransparentButton
+				<ThemedButton
 					title="Toggle dark mode"
 					icon="dark_mode"
 					on:click={() => ($theme = $theme === 'light' ? 'dark' : 'light')}
 				/>
-				<TransparentButton icon="person" />
+				<ThemedButton icon="person" />
 			</div>
 		</header>
 		<div class="page">
@@ -99,9 +96,9 @@
 					{#await $cachedCalls.siteResponse then siteResponse}
 						<div>{siteResponse.site_view.site.name}</div>
 					{/await}
-					<TransparentButton on:click={() => primarySidebarModal.close()} title="Close navigation">
+					<ThemedButton on:click={() => primarySidebarModal.close()} title="Close navigation">
 						<span class="material-icons">menu_open</span>
-					</TransparentButton>
+					</ThemedButton>
 				</div>
 				<div class="primarySidebarModal__body">
 					<PrimarySidebar />

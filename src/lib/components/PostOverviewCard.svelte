@@ -2,7 +2,7 @@
 	import { formatRelativeTime } from '$lib/js/client';
 	import type { PostView } from 'lemmy-js-client';
 	import ElevatedBox from './ElevatedBox.svelte';
-	import TransparentButton from './TransparentButton.svelte';
+	import ThemedButton from './ThemedButton.svelte';
 	import { renderEnhancedMarkdown } from '$lib/js/markdown';
 	import EntityIcon from './EntityIcon.svelte';
 	import { getDetailLinkForPost } from '$lib/js/navigation';
@@ -89,23 +89,23 @@
 					</a>
 				{/if}
 				<div class="postOverviewCard__actionLine">
-					<TransparentButton
+					<ThemedButton
 						appearance="dimmed"
 						icon="keyboard_arrow_up"
 						title="Upvote"
 						fontSize="0.875rem"
 					>
 						{postView.counts.upvotes}
-					</TransparentButton>
-					<TransparentButton
+					</ThemedButton>
+					<ThemedButton
 						appearance="dimmed"
 						icon="keyboard_arrow_down"
 						title="Downvote"
 						fontSize="0.875rem"
 					>
 						{postView.counts.downvotes}
-					</TransparentButton>
-					<TransparentButton
+					</ThemedButton>
+					<ThemedButton
 						href={getDetailLinkForPost(postView)}
 						appearance="dimmed"
 						icon="comment"
@@ -113,7 +113,7 @@
 						fontSize="0.875rem"
 					>
 						{postView.counts.comments}
-					</TransparentButton>
+					</ThemedButton>
 				</div>
 			</div>
 		{:else}

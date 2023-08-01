@@ -7,7 +7,7 @@
 	import type { CommunityResponse, GetPostsResponse } from 'lemmy-js-client';
 	import { afterNavigate, goto } from '$app/navigation';
 	import { POST_PAGE_SIZE } from '$lib/js/client';
-	import TransparentButton from '$lib/components/TransparentButton.svelte';
+	import ThemedButton from '$lib/components/ThemedButton.svelte';
 
 	export let communityResponse: CommunityResponse;
 	export let postsResponsePromise: Promise<GetPostsResponse>;
@@ -82,12 +82,12 @@
 			{#await postsResponsePromise then}
 				{#if pageId > 1}
 					<div class="loadMorePlacer">
-						<TransparentButton
+						<ThemedButton
 							icon="keyboard_double_arrow_up"
 							href={`/c/${communityResponse.community_view.community.name}/page/${pageId - 1}`}
 						>
 							Load previous
-						</TransparentButton>
+						</ThemedButton>
 					</div>
 				{/if}
 			{/await}
@@ -100,12 +100,12 @@
 			{#await postsResponsePromise then postsResponse}
 				{#if postsResponse.posts.length >= POST_PAGE_SIZE}
 					<div class="loadMorePlacer">
-						<TransparentButton
+						<ThemedButton
 							icon="keyboard_double_arrow_down"
 							href={`/c/${communityResponse.community_view.community.name}/page/${pageId + 1}`}
 						>
 							Load next
-						</TransparentButton>
+						</ThemedButton>
 					</div>
 				{/if}
 			{/await}
