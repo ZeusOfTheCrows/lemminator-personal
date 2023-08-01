@@ -269,6 +269,8 @@
 
 			.postOverviewCard__image {
 				width: 100%;
+				max-width: 900px;
+
 				@include colors.themify() {
 					border: solid 1px colors.themed('subtleBorder');
 				}
