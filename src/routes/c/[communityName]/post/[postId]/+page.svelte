@@ -24,7 +24,7 @@
 		{:then postResponse}
 			<div class="postDetailLayouter">
 				<PostOverviewCard postView={postResponse.post_view} active={null} variant="detail" />
-				<CommentSection tree={getCommentTree(data.commentsResponse)} />
+				<CommentSection tree={getCommentTree(data.commentsResponse.comments)} />
 			</div>
 		{/await}
 	</svelte:fragment>

@@ -9,6 +9,7 @@ export const load = (({ params }) => {
     if (isNaN(postIdNum)) throw error(400, 'Invalid ID');
 
     return {
+        // The implicit page limit appears to be 50. An explicit limit cannot be set.
         postResponse: client.getPost({ id: postIdNum }).then(response => {
             if (response.community_view.community.name !== params.communityName) {
                 throw error(404, 'Could not find post');

@@ -9,6 +9,7 @@ export interface CommentTreeNode {
 export interface CommentTree {
     topNodes: CommentTreeNode[];
     flattenedTree: CommentView[];
+    fullyLoaded: boolean;
 }
 
 function addLeafToTree(nodes: CommentTreeNode[], commentView: CommentView, fullPath: number[], partialPath: number[]): boolean {
@@ -29,16 +30,20 @@ function addLeafToTree(nodes: CommentTreeNode[], commentView: CommentView, fullP
     }
 }
 
-function flattenCommentTree(topNodes: CommentTreeNode[]): CommentView[] {
-    return topNodes.reduce((acc: CommentView[], cur: CommentTreeNode) => {
+function flattenCommentTree(nodes: CommentTreeNode[]): CommentView[] {
+    return nodes.reduce((acc: CommentView[], cur: CommentTreeNode) => {
         acc = acc.concat(cur.leaf).concat(flattenCommentTree(cur.children));
         return acc;
     }, []);
 }
 
-export function getCommentTree(commentsResponse: GetCommentsResponse): CommentTree {
+export function getCommentTree(comments: CommentView[]): CommentTree {
     const topNodes: CommentTreeNode[] = [];
-    let unprocessedComments: CommentView[] = [...commentsResponse.comments];
+    let unprocessedComments: CommentView[] = [...comments];
+
+    // A heuristic. The API library doesn't expose info indicating if a dataset is
+    // complete.
+    let fullyLoaded = comments.length % 50 != 0;
 
     while (unprocessedComments.length) {
         const processedComments: CommentView[] = [];
@@ -60,6 +65,7 @@ export function getCommentTree(commentsResponse: GetCommentsResponse): CommentTr
             return {
                 topNodes,
                 flattenedTree: flattenCommentTree(topNodes),
+                fullyLoaded,
             };
         }
     }
@@ -67,5 +73,6 @@ export function getCommentTree(commentsResponse: GetCommentsResponse): CommentTr
     return {
         topNodes,
         flattenedTree: flattenCommentTree(topNodes),
+        fullyLoaded,
     };
 }
