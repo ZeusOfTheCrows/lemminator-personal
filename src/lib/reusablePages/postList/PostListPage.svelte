@@ -3,15 +3,23 @@
 	import PostList from '$lib/components/PostList.svelte';
 	import SecondarySidebar from '$lib/components/SecondarySidebar.svelte';
 	import PageHolder from '$lib/components/PageHolder.svelte';
-	import { cachedCalls } from '$lib/js/globals';
+	import { cachedCalls, restoredScrollY } from '$lib/js/globals';
 	import type { CommunityResponse, GetPostsResponse } from 'lemmy-js-client';
-	import { goto } from '$app/navigation';
+	import { afterNavigate, goto } from '$app/navigation';
 	import { POST_PAGE_SIZE } from '$lib/js/client';
 	import TransparentButton from '$lib/components/TransparentButton.svelte';
 
 	export let communityResponse: CommunityResponse;
 	export let postsResponsePromise: Promise<GetPostsResponse>;
 	export let pageId: number;
+
+	$: {
+		Promise.all([postsResponsePromise]).then(() => {
+			if ($restoredScrollY) {
+				window.scrollTo({ top: $restoredScrollY });
+			}
+		});
+	}
 
 	function makeBannerImageVar(url: string | undefined): string | undefined {
 		if (url) {

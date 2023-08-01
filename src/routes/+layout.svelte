@@ -7,9 +7,10 @@
 	import logoOnLightSvg from '$lib/img/logoOnLight.svg';
 	import logoOnDarkSvg from '$lib/img/logoOnDark.svg';
 	import SearchBox from '$lib/components/SearchBox.svelte';
-	import { cachedCalls, theme } from '$lib/js/globals';
+	import { cachedCalls, restoredScrollY, theme } from '$lib/js/globals';
 	import Cookies from 'js-cookie';
 	import { onMount } from 'svelte';
+	import type { Snapshot } from './$types';
 
 	let root: HTMLElement;
 	let navigating = false;
@@ -31,6 +32,17 @@
 			Cookies.set('demoDisclaimer', 'shown');
 		}
 	});
+
+	export const snapshot: Snapshot = {
+		capture: () => {
+			return {
+				scrollY: window.scrollY
+			};
+		},
+		restore: (value) => {
+			$restoredScrollY = value.scrollY;
+		}
+	};
 
 	let primarySidebarModal: HTMLDialogElement;
 </script>

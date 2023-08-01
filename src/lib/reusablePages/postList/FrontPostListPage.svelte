@@ -2,7 +2,7 @@
 	import PostList from '$lib/components/PostList.svelte';
 	import SecondarySidebar from '$lib/components/SecondarySidebar.svelte';
 	import PageHolder from '$lib/components/PageHolder.svelte';
-	import { cachedCalls } from '$lib/js/globals';
+	import { cachedCalls, restoredScrollY } from '$lib/js/globals';
 	import type { GetPostsResponse } from 'lemmy-js-client';
 	import TransparentButton from '$lib/components/TransparentButton.svelte';
 	import { POST_PAGE_SIZE } from '$lib/js/client';
@@ -10,6 +10,14 @@
 
 	export let postsResponsePromise: Promise<GetPostsResponse>;
 	export let pageId: number;
+
+	$: {
+		Promise.all([postsResponsePromise]).then(() => {
+			if ($restoredScrollY) {
+				window.scrollTo({ top: $restoredScrollY });
+			}
+		});
+	}
 
 	function onRequestPrevPage() {
 		if (pageId <= 1) return;
