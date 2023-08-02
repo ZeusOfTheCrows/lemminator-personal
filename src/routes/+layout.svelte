@@ -7,10 +7,9 @@
 	import logoOnLightSvg from '$lib/img/logoOnLight.svg';
 	import logoOnDarkSvg from '$lib/img/logoOnDark.svg';
 	import SearchBox from '$lib/components/SearchBox.svelte';
-	import { cachedCalls, restoredScrollY, theme } from '$lib/js/globals';
+	import { cachedCalls, theme } from '$lib/js/globals';
 	import Cookies from 'js-cookie';
 	import { onMount } from 'svelte';
-	import type { Snapshot } from './$types';
 
 	let root: HTMLElement;
 	let navigating = false;
