@@ -1,4 +1,4 @@
-import { POST_PAGE_SIZE as POST_PAGE_LIMIT, getClient } from "$lib/js/client";
+import { POST_PAGE_SIZE as POST_PAGE_LIMIT, getClient, wrapForApiTimeouts } from "$lib/js/client";
 import { error } from "@sveltejs/kit";
 import type { CommunityResponse, GetPostsResponse } from "lemmy-js-client";
 
@@ -16,7 +16,7 @@ export const loadCommunityPage = (communityName: string | undefined, pageId: str
 
     const result: LoadCommunityData = {
         pageId: pageIdNum,
-        postsResponse: client.getPosts({
+        postsResponse: wrapForApiTimeouts(client.getPosts({
             community_name: communityName,
             page: pageIdNum,
             limit: POST_PAGE_LIMIT,
@@ -27,13 +27,13 @@ export const loadCommunityPage = (communityName: string | undefined, pageId: str
                 throw error(502, 'Invalid upstream response');
             }
             throw e;
-        }),
+        })),
     }
 
     if (communityName) {
-        result.communityResponse = client.getCommunity({
+        result.communityResponse = wrapForApiTimeouts(client.getCommunity({
             name: communityName,
-        });
+        }));
     }
 
     return result;
