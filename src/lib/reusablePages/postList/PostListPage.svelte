@@ -3,23 +3,15 @@
 	import PostList from '$lib/components/PostList.svelte';
 	import SecondarySidebar from '$lib/components/SecondarySidebar.svelte';
 	import PageHolder from '$lib/components/PageHolder.svelte';
-	import { cachedCalls, restoredScrollY } from '$lib/js/globals';
+	import { cachedCalls } from '$lib/js/globals';
 	import type { CommunityResponse, GetPostsResponse } from 'lemmy-js-client';
-	import { afterNavigate, goto } from '$app/navigation';
+	import { goto } from '$app/navigation';
 	import { POST_PAGE_SIZE } from '$lib/js/client';
 	import ThemedButton from '$lib/components/ThemedButton.svelte';
 
 	export let communityResponse: CommunityResponse;
-	export let postsResponsePromise: Promise<GetPostsResponse>;
+	export let postsResponse: GetPostsResponse;
 	export let pageId: number;
-
-	$: {
-		Promise.all([postsResponsePromise]).then(() => {
-			if ($restoredScrollY) {
-				window.scrollTo({ top: $restoredScrollY });
-			}
-		});
-	}
 
 	function makeBannerImageVar(url: string | undefined): string | undefined {
 		if (url) {
@@ -38,7 +30,7 @@
 	}
 
 	function onRequestNextPage() {
-		Promise.all([postsResponsePromise]).then(([postsResponse]) => {
+		Promise.all([postsResponse]).then(([postsResponse]) => {
 			if (postsResponse.posts.length < POST_PAGE_SIZE) return;
 
 			goto(
@@ -79,7 +71,7 @@
 					</h1>
 				</div>
 			</div>
-			{#await postsResponsePromise then}
+			{#await postsResponse then}
 				{#if pageId > 1}
 					<div class="loadMorePlacer">
 						<ThemedButton
@@ -93,22 +85,20 @@
 			{/await}
 			<PostList
 				communityName={$page.params.communityName}
-				{postsResponsePromise}
+				{postsResponse}
 				on:requestNextPage={onRequestNextPage}
 				on:requestPrevPage={onRequestPrevPage}
 			/>
-			{#await postsResponsePromise then postsResponse}
-				{#if postsResponse.posts.length >= POST_PAGE_SIZE}
-					<div class="loadMorePlacer">
-						<ThemedButton
-							icon="keyboard_double_arrow_down"
-							href={`/c/${communityResponse.community_view.community.name}/page/${pageId + 1}`}
-						>
-							Load next
-						</ThemedButton>
-					</div>
-				{/if}
-			{/await}
+			{#if postsResponse.posts.length >= POST_PAGE_SIZE}
+				<div class="loadMorePlacer">
+					<ThemedButton
+						icon="keyboard_double_arrow_down"
+						href={`/c/${communityResponse.community_view.community.name}/page/${pageId + 1}`}
+					>
+						Load next
+					</ThemedButton>
+				</div>
+			{/if}
 		</div>
 	</svelte:fragment>
 	<svelte:fragment slot="secondarySidebar">

@@ -33,17 +33,6 @@
 		}
 	});
 
-	export const snapshot: Snapshot = {
-		capture: () => {
-			return {
-				scrollY: window.scrollY
-			};
-		},
-		restore: (value) => {
-			$restoredScrollY = value.scrollY;
-		}
-	};
-
 	let primarySidebarModal: HTMLDialogElement;
 </script>
 

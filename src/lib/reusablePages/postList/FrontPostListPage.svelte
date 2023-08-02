@@ -2,22 +2,14 @@
 	import PostList from '$lib/components/PostList.svelte';
 	import SecondarySidebar from '$lib/components/SecondarySidebar.svelte';
 	import PageHolder from '$lib/components/PageHolder.svelte';
-	import { cachedCalls, restoredScrollY } from '$lib/js/globals';
+	import { cachedCalls } from '$lib/js/globals';
 	import type { GetPostsResponse } from 'lemmy-js-client';
 	import ThemedButton from '$lib/components/ThemedButton.svelte';
 	import { POST_PAGE_SIZE } from '$lib/js/client';
 	import { goto } from '$app/navigation';
 
-	export let postsResponsePromise: Promise<GetPostsResponse>;
+	export let postsResponse: GetPostsResponse;
 	export let pageId: number;
-
-	$: {
-		Promise.all([postsResponsePromise]).then(() => {
-			if ($restoredScrollY) {
-				window.scrollTo({ top: $restoredScrollY });
-			}
-		});
-	}
 
 	function onRequestPrevPage() {
 		if (pageId <= 1) return;
@@ -26,7 +18,7 @@
 	}
 
 	function onRequestNextPage() {
-		Promise.all([postsResponsePromise]).then(([postsResponse]) => {
+		Promise.all([postsResponse]).then(([postsResponse]) => {
 			if (postsResponse.posts.length < POST_PAGE_SIZE) return;
 
 			goto(`/frontpage/${pageId + 1}?selectedPostId=first`);
@@ -43,22 +35,20 @@
 <PageHolder>
 	<svelte:fragment slot="main">
 		<div class="frontPostListPage">
-			{#await postsResponsePromise then}
-				{#if pageId > 1}
-					<div class="loadMorePlacer">
-						<ThemedButton icon="keyboard_double_arrow_up" href={`/frontpage/${pageId - 1}`}>
-							Load previous
-						</ThemedButton>
-					</div>
-				{/if}
-			{/await}
+			{#if pageId > 1}
+				<div class="loadMorePlacer">
+					<ThemedButton icon="keyboard_double_arrow_up" href={`/frontpage/${pageId - 1}`}>
+						Load previous
+					</ThemedButton>
+				</div>
+			{/if}
 			<PostList
 				communityName={null}
-				{postsResponsePromise}
+				{postsResponse}
 				on:requestPrevPage={onRequestPrevPage}
 				on:requestNextPage={onRequestNextPage}
 			/>
-			{#await postsResponsePromise then postsResponse}
+			{#await postsResponse then postsResponse}
 				{#if postsResponse.posts.length >= POST_PAGE_SIZE}
 					<div class="loadMorePlacer">
 						<ThemedButton icon="keyboard_double_arrow_down" href={`/frontpage/${pageId + 1}`}>

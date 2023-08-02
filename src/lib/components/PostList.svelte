@@ -17,7 +17,6 @@
 			// Reinitialize keyboard navigation in that case.
 			console.log('Initialize post list navigation');
 			postNavIndex = null;
-			const postsResponse = await postsResponsePromise;
 			const rawSelectedPostId = $page.url.searchParams.get('selectedPostId');
 
 			if (rawSelectedPostId !== null) {
@@ -34,7 +33,7 @@
 		}
 	});
 
-	export let postsResponsePromise: Promise<GetPostsResponse>;
+	export let postsResponse: GetPostsResponse;
 
 	let postNavIndex: number | null = null;
 	let postPageElement: HTMLElement;
@@ -52,7 +51,7 @@
 		if (postNavIndex === null) {
 			$page.url.searchParams.delete('selectedPostId');
 		} else {
-			const postViews = (await postsResponsePromise).posts;
+			const postViews = (await postsResponse).posts;
 			$page.url.searchParams.set('selectedPostId', postViews[postNavIndex].post.id.toString());
 		}
 		goto(`?${$page.url.searchParams.toString()}`, {
@@ -63,7 +62,7 @@
 	}
 
 	async function handleKeyUp(event: KeyboardEvent) {
-		const postViews = (await postsResponsePromise).posts;
+		const postViews = (await postsResponse).posts;
 		const maxIndex = postViews.length - 1;
 		if ($keynav.mode !== 'normal') return;
 
@@ -103,7 +102,7 @@
 
 <svelte:window on:keyup={handleKeyUp} />
 
-{#await postsResponsePromise}
+{#await postsResponse}
 	<div class="postList">
 		<PostOverviewCard postView={null} />
 		<PostOverviewCard postView={null} />

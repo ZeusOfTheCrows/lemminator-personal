@@ -4,10 +4,8 @@ import type { CommunityResponse, GetPostsResponse } from "lemmy-js-client";
 
 export interface LoadCommunityData {
     pageId: number,
+    postsResponse: Promise<GetPostsResponse>,
     communityResponse?: Promise<CommunityResponse>,
-    streamed: {
-        postsResponse: Promise<GetPostsResponse>,
-    }
 }
 
 export const loadCommunityPage = (communityName: string | undefined, pageId: string): LoadCommunityData => {
@@ -18,20 +16,18 @@ export const loadCommunityPage = (communityName: string | undefined, pageId: str
 
     const result: LoadCommunityData = {
         pageId: pageIdNum,
-        streamed: {
-            postsResponse: client.getPosts({
-                community_name: communityName,
-                page: pageIdNum,
-                limit: POST_PAGE_LIMIT,
-            }).catch(e => {
-                if (e.type === 'invalid-json') {
-                    // We don't always get a clean exception from the Lemmy API library
-                    // when the post doesn't exist
-                    throw error(502, 'Invalid upstream response');
-                }
-                throw e;
-            }),
-        }
+        postsResponse: client.getPosts({
+            community_name: communityName,
+            page: pageIdNum,
+            limit: POST_PAGE_LIMIT,
+        }).catch(e => {
+            if (e.type === 'invalid-json') {
+                // We don't always get a clean exception from the Lemmy API library
+                // when the post doesn't exist
+                throw error(502, 'Invalid upstream response');
+            }
+            throw e;
+        }),
     }
 
     if (communityName) {

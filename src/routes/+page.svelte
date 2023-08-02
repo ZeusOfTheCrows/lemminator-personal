@@ -5,4 +5,4 @@
 	export let data: PageData;
 </script>
 
-<FrontPostListPage postsResponsePromise={data.streamed.postsResponse} pageId={1} />
+<FrontPostListPage postsResponse={data.postsResponse} pageId={1} />
