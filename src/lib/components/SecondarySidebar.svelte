@@ -59,6 +59,9 @@
 				<ElevatedBox title={`About ${siteResponse.site_view.site.name}`} stacking="vertical">
 					<p class="secondaryNavigation__runningText">
 						{@html renderEnhancedMarkdown(siteResponse.site_view.site.description)}
+						{#if siteResponse.site_view.site.sidebar}
+							{@html renderEnhancedMarkdown(siteResponse.site_view.site.sidebar)}
+						{/if}
 					</p>
 				</ElevatedBox>
 			{/if}
