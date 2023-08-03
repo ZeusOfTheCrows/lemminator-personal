@@ -19,7 +19,7 @@
 		}
 	}
 
-	export let commentElement: HTMLElement;
+	let commentElement: HTMLElement;
 	export let focusedCommentId: number | null;
 	$: {
 		if (focusedCommentId === node.leaf.comment.id) {
