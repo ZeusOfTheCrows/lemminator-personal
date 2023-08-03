@@ -9,7 +9,6 @@ export interface CommentTreeNode {
 export interface CommentTree {
     topNodes: CommentTreeNode[];
     flattenedTree: CommentView[];
-    fullyLoaded: boolean;
 }
 
 function addLeafToTree(nodes: CommentTreeNode[], commentView: CommentView, fullPath: number[], partialPath: number[]): boolean {
@@ -41,10 +40,6 @@ export function getCommentTree(comments: CommentView[]): CommentTree {
     const topNodes: CommentTreeNode[] = [];
     let unprocessedComments: CommentView[] = [...comments];
 
-    // A heuristic. The API library doesn't expose info indicating if a dataset is
-    // complete.
-    let fullyLoaded = comments.length % 50 != 0;
-
     while (unprocessedComments.length) {
         const processedComments: CommentView[] = [];
         for (const commentView of unprocessedComments) {
@@ -65,7 +60,6 @@ export function getCommentTree(comments: CommentView[]): CommentTree {
             return {
                 topNodes,
                 flattenedTree: flattenCommentTree(topNodes),
-                fullyLoaded,
             };
         }
     }
@@ -73,6 +67,12 @@ export function getCommentTree(comments: CommentView[]): CommentTree {
     return {
         topNodes,
         flattenedTree: flattenCommentTree(topNodes),
-        fullyLoaded,
     };
+}
+
+export function mergeCommentLists(existingComments: CommentView[], commentsToMerge: CommentView[]) {
+    // Assumption is that the existing comments tree doesn't contain duplicates
+    const existingIds = existingComments.map((c) => c.comment.id);
+    const newComments = commentsToMerge.filter(c => !existingIds.includes(c.comment.id));
+    return existingComments.concat(commentsToMerge);
 }

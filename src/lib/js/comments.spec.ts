@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { getCommentTree } from "./comments";
+import { getCommentTree, mergeCommentLists } from "./comments";
 import type { Comment, CommentView } from "lemmy-js-client";
 
-function fabricateCommentView(overrides: Partial<Comment>): CommentView {
+function fabricateCommentView(overrides: Partial<Comment>, numChildren: number): CommentView {
     return {
         comment: {
             id: 2155471,
@@ -77,7 +77,7 @@ function fabricateCommentView(overrides: Partial<Comment>): CommentView {
             upvotes: 1,
             downvotes: 0,
             published: "2023-08-01T19:43:36.102876",
-            child_count: 0,
+            child_count: numChildren,
             hot_rank: 1728,
         },
         creator_banned_from_community: false,
@@ -570,56 +570,79 @@ describe('getCommentTree', () => {
                         creator_blocked: false,
                     },
                 ],
-                fullyLoaded: true,
             });
     });
 
-    it('parses a fabricated comment tree', () => {
+    it('parses a fabricated comment tree with omitted comments', () => {
+        const comment_123 = fabricateCommentView({
+            id: 123,
+            path: "0.123",
+        }, 2);
+        const comment_123_456 = fabricateCommentView({
+            id: 456,
+            path: "0.123.456",
+        }, 0);
+        const comment_789 = fabricateCommentView({
+            id: 789,
+            path: "0.789",
+        }, 0);
+
         expect(getCommentTree([
-            fabricateCommentView({
-                id: 123,
-                path: "0.123",
-            }),
-            fabricateCommentView({
-                id: 456,
-                path: "0.123.456",
-            }),
-            fabricateCommentView({
-                id: 789,
-                path: "0.789",
-            }),
+            comment_123,
+            comment_123_456,
+            comment_789,
         ])).toEqual({
             topNodes: [
                 {
-                    leaf: fabricateCommentView({ id: 123, path: "0.123" }),
+                    leaf: comment_123,
                     children: [{
-                        leaf: fabricateCommentView({ id: 456, path: "0.123.456" }),
+                        leaf: comment_123_456,
                         children: [],
                         fullPath: [123, 456],
                     }],
                     fullPath: [123],
                 },
                 {
-                    leaf: fabricateCommentView({ id: 789, path: "0.789" }),
+                    leaf: comment_789,
                     children: [],
                     fullPath: [789],
                 },
             ],
             flattenedTree: [
-                fabricateCommentView({
-                    id: 123,
-                    path: "0.123",
-                }),
-                fabricateCommentView({
-                    id: 456,
-                    path: "0.123.456",
-                }),
-                fabricateCommentView({
-                    id: 789,
-                    path: "0.789",
-                }),
+                comment_123,
+                comment_123_456,
+                comment_789
             ],
-            fullyLoaded: true,
         })
-    })
+    });
+});
+
+describe('mergeCommentLists', () => {
+    it('removes duplicate entries', () => {
+        const comment_12 = fabricateCommentView({
+            id: 12,
+            path: "0.12",
+        }, 2);
+        const comment_12_34 = fabricateCommentView({
+            id: 34,
+            path: "0.12.34",
+        }, 0);
+        const comment_56 = fabricateCommentView({
+            id: 56,
+            path: "0.56",
+        }, 0);
+        const comment_56_78 = fabricateCommentView({
+            id: 56,
+            path: "0.56.78",
+        }, 0);
+
+        expect(mergeCommentLists([
+            comment_12,
+            comment_12_34,
+        ], [
+            comment_12_34,
+            comment_56,
+            comment_56_78,
+        ]))
+    });
 });
