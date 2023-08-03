@@ -24,5 +24,5 @@ function getThemePreference(): Theme {
 }
 export const theme: Writable<Theme> = writable(getThemePreference());
 theme.subscribe((newValue) => {
-    Cookies.set('activeTheme', newValue);
+    Cookies.set('activeTheme', newValue, { expires: 365 * 5 });
 });
