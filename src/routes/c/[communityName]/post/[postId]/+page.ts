@@ -25,7 +25,8 @@ export const load = (({ params }) => {
             }
             throw e;
         })),
-        commentsResponse: wrapForApiTimeouts(client.getComments({ post_id: postIdNum, limit: 50, sort: 'Hot' }).catch((e) => {
+        // Calculation of "Load more" counts depends on comments not being omitted for exceeding a depth limit
+        commentsResponse: wrapForApiTimeouts(client.getComments({ post_id: postIdNum, limit: 50, sort: 'Hot', max_depth: 999 }).catch((e) => {
             if (e === 'couldnt_get_comments') {
                 throw error(502, "Could not fetch comments");
             }

@@ -6,6 +6,9 @@
 	import CommentList from './CommentList.svelte';
 	import type { CommentView } from 'lemmy-js-client';
 	import { formatRelativeTime } from '$lib/js/client';
+	import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
 
 	export let node: CommentTreeNode;
 	export let flattenedTree: CommentView[];
@@ -64,7 +67,13 @@
 </div>
 {#if node.children.length}
 	<div class="commentDescendants">
-		<CommentList nodes={node.children} {flattenedTree} {focusedCommentId} />
+		<!-- Event forwarding doesn't work here. We have to redispatch it. -->
+		<CommentList
+			nodes={node.children}
+			{flattenedTree}
+			{focusedCommentId}
+			on:subtreeExpansionRequested={(item) => dispatch('subtreeExpansionRequested', item.detail)}
+		/>
 	</div>
 {/if}
 

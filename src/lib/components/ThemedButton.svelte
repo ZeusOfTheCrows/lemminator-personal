@@ -48,7 +48,6 @@
 		outline: none;
 		cursor: pointer;
 		border-radius: 10px;
-		font-family: 'Lato', sans-serif;
 		gap: 0.5rem;
 		padding: 0.5rem;
 

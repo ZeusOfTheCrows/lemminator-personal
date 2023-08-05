@@ -6,9 +6,22 @@
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
 	import PostOverviewCard from '$lib/components/PostOverviewCard.svelte';
 	import CommentSection from '$lib/components/CommentSection.svelte';
-	import { getCommentTree } from '$lib/js/comments';
+	import { getCommentTree, expandCommentsForId } from '$lib/js/comments';
+	import type { CommentView } from 'lemmy-js-client';
+	import { getClient } from '$lib/js/client';
 
 	export let data: PageData;
+	let commentViews: CommentView[] = data.commentsResponse.comments;
+
+	async function loadCommentsForId(comment_id: number) {
+		console.log('Load comments', comment_id);
+		const newComments = await getClient().getComments({
+			parent_id: comment_id,
+			// Calculation of "Load more" counts depends on comments not being omitted for exceeding a depth limit
+			max_depth: 999
+		});
+		commentViews = expandCommentsForId(comment_id, commentViews, newComments.comments);
+	}
 </script>
 
 <svelte:head>
@@ -24,7 +37,10 @@
 		{:then postResponse}
 			<div class="postDetailLayouter">
 				<PostOverviewCard postView={postResponse.post_view} active={null} variant="detail" />
-				<CommentSection tree={getCommentTree(data.commentsResponse.comments)} />
+				<CommentSection
+					tree={getCommentTree(commentViews)}
+					on:subtreeExpansionRequested={(item) => loadCommentsForId(item.detail)}
+				/>
 			</div>
 		{/await}
 	</svelte:fragment>
