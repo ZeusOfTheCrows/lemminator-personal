@@ -248,7 +248,7 @@
 				display: flex;
 				flex-direction: column;
 				gap: 1rem;
-				position: absolute;
+				position: fixed;
 				animation: dim 0.1s ease-in forwards;
 				top: 0;
 				left: 0;
