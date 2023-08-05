@@ -1,7 +1,7 @@
 <script lang="ts">
 	export let title: string | undefined = undefined;
 	export let href: string | null = null;
-	export let appearance: 'default' | 'dimmed' = 'default';
+	export let appearance: 'default' | 'dimmed' | 'filled' = 'default';
 	export let icon: string | null = null;
 	export let fontSize = '1rem';
 </script>
@@ -9,9 +9,10 @@
 {#if href}
 	<a
 		{href}
-		class="ThemedButton"
-		class:ThemedButton--default={appearance === 'default'}
-		class:ThemedButton--dimmed={appearance === 'dimmed'}
+		class="themedButton"
+		class:themedButton--default={appearance === 'default'}
+		class:themedButton--dimmed={appearance === 'dimmed'}
+		class:themedButton--filled={appearance === 'filled'}
 		style:font-size={fontSize}
 	>
 		{#if icon}
@@ -21,11 +22,12 @@
 	</a>
 {:else}
 	<button
-		class="ThemedButton"
+		class="themedButton"
 		{title}
 		on:click
-		class:ThemedButton--default={appearance === 'default'}
-		class:ThemedButton--dimmed={appearance === 'dimmed'}
+		class:themedButton--default={appearance === 'default'}
+		class:themedButton--dimmed={appearance === 'dimmed'}
+		class:themedButton--filled={appearance === 'filled'}
 		style:font-size={fontSize}
 	>
 		{#if icon}
@@ -39,7 +41,7 @@
 	@use '$lib/css/colors';
 	@use 'material-icons/iconfont/filled.css';
 
-	.ThemedButton {
+	.themedButton {
 		display: flex;
 		flex-direction: row;
 		justify-content: stretch;
@@ -52,8 +54,15 @@
 		padding: 0.5rem;
 
 		@include colors.themify() {
-			&.ThemedButton--dimmed {
+			&.themedButton--dimmed {
 				color: rgba(colors.themed('themedMainText'), 0.8);
+			}
+
+			&.themedButton--filled {
+				background: colors.themed('color2');
+				&:hover {
+					background: darken(colors.themed('color2'), 1%);
+				}
 			}
 
 			&:hover {

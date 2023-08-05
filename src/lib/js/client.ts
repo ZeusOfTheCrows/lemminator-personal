@@ -24,4 +24,14 @@ export async function wrapForApiTimeouts<T>(promise: Promise<T>): Promise<T> {
     })
 }
 
+export async function startSession(usernameOrEmail: string, password: string): Promise<string> {
+    const client = getClient();
+    const loginResponse = await client.login({
+        username_or_email: usernameOrEmail,
+        password,
+    });
+    if (!loginResponse.jwt) throw 'token_missing';
+    return loginResponse.jwt;
+}
+
 export const POST_PAGE_SIZE = 10;

@@ -63,3 +63,18 @@ $themes: (
 @function themed($key) {
     @return map-get($theme-map, $key);
 }
+
+@mixin defineModalDim {
+
+    @include themify() {
+        @keyframes dim {
+            0% {
+                box-shadow: 0 0 0 100vmax rgba(rgb(15, 5, 20), 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 100vmax rgba(rgb(15, 5, 20), 0.8);
+            }
+        }
+    }
+}

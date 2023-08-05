@@ -7,9 +7,10 @@
 	import logoOnLightSvg from '$lib/img/logoOnLight.svg';
 	import logoOnDarkSvg from '$lib/img/logoOnDark.svg';
 	import SearchBox from '$lib/components/SearchBox.svelte';
-	import { cachedCalls, theme } from '$lib/js/globals';
+	import { session, cachedCalls, theme } from '$lib/js/globals';
 	import Cookies from 'js-cookie';
 	import { onMount } from 'svelte';
+	import LoginPopup from '$lib/components/LoginPopup.svelte';
 
 	let root: HTMLElement;
 	let navigating = false;
@@ -72,7 +73,11 @@
 					icon="dark_mode"
 					on:click={() => ($theme = $theme === 'light' ? 'dark' : 'light')}
 				/>
-				<ThemedButton icon="person" />
+				{#if $session.state === 'authenticated'}
+					<ThemedButton icon="person">Logged in</ThemedButton>
+				{:else}
+					<ThemedButton icon="person" on:click={() => ($session.state = 'authenticating')} />
+				{/if}
 			</div>
 		</header>
 		<div class="page">
@@ -95,6 +100,10 @@
 			<slot />
 		</div>
 	</div>
+
+	{#if $session.state === 'authenticating'}
+		<LoginPopup on:dismiss={() => ($session.state = 'unauthenticated')} />
+	{/if}
 </div>
 
 <style lang="scss">
@@ -204,7 +213,7 @@
 			display: flex;
 			flex-direction: row;
 			gap: 0.5rem;
-			align-items: right;
+			align-items: center;
 			justify-content: center;
 		}
 	}
@@ -258,20 +267,21 @@
 				max-width: 300px;
 				padding: 0;
 				margin: 0;
+				animation: dim 0.1s ease-in forwards, slideLeft 0.1s ease-in forwards;
 
 				@include colors.themify() {
 					background: colors.themed('maxContrastTheme');
 					color: colors.themed('maxContrastOnTheme');
+				}
 
-					@keyframes dim {
-						0% {
-							box-shadow: 0 0 0 100vmax rgba(rgb(15, 5, 20), 0);
-							transform: translateX(-100%);
-						}
-						100% {
-							box-shadow: 0 0 0 100vmax rgba(rgb(15, 5, 20), 0.8);
-							transform: translateX(0%);
-						}
+				@include colors.defineModalDim;
+				@keyframes slideLeft {
+					0% {
+						transform: translateX(-100%);
+					}
+
+					100% {
+						transform: translateX(0%);
 					}
 				}
 			}
