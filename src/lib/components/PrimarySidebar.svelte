@@ -45,7 +45,9 @@
 						{:else}
 							<div class="communityItem__iconPlaceholder material-icons">people</div>
 						{/if}
-						{communityView.community.title}
+						<div class="communityItem__title">
+							{communityView.community.title}
+						</div>
 					</a>
 				</li>
 			{/each}
@@ -78,7 +80,7 @@
 				border-left: none;
 
 				@include breakpoints.mediumAndUp {
-					padding: 0.5rem 0 0.5rem 1rem;
+					padding: 0.5rem 1rem;
 				}
 
 				@include colors.themify() {
@@ -107,6 +109,7 @@
 				aspect-ratio: 1 / 1;
 				border-radius: 100%;
 				background: colors.themed('color1');
+				flex-shrink: 0;
 			}
 
 			.communityItem__iconPlaceholder {
@@ -115,6 +118,12 @@
 				justify-content: center;
 				color: colors.themed('maxContrastOnTheme');
 				font-size: 0.9rem;
+			}
+
+			.communityItem__title {
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				overflow: hidden;
 			}
 		}
 	}
