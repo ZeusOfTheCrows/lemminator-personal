@@ -15,7 +15,6 @@
 	import UserMenu from '$lib/components/UserMenu.svelte';
 	import { offset, flip, shift } from 'svelte-floating-ui/dom';
 	import { createFloatingActions } from 'svelte-floating-ui';
-	import Dismissable from '$lib/components/Dismissable.svelte';
 
 	let root: HTMLElement;
 	let navigating = false;
