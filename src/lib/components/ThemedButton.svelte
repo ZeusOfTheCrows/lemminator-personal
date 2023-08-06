@@ -4,6 +4,7 @@
 	export let appearance: 'default' | 'dimmed' | 'filled' = 'default';
 	export let icon: string | null = null;
 	export let fontSize = '1rem';
+	export let toggled = false;
 </script>
 
 {#if href}
@@ -13,6 +14,7 @@
 		class:themedButton--default={appearance === 'default'}
 		class:themedButton--dimmed={appearance === 'dimmed'}
 		class:themedButton--filled={appearance === 'filled'}
+		class:themedButton--toggled={toggled}
 		style:font-size={fontSize}
 	>
 		{#if icon}
@@ -28,6 +30,7 @@
 		class:themedButton--default={appearance === 'default'}
 		class:themedButton--dimmed={appearance === 'dimmed'}
 		class:themedButton--filled={appearance === 'filled'}
+		class:themedButton--toggled={toggled}
 		style:font-size={fontSize}
 	>
 		{#if icon}
@@ -62,8 +65,14 @@
 			&.themedButton--filled {
 				background: colors.themed('color2');
 				&:hover {
-					background: darken(colors.themed('color2'), 1%);
+					background: darken(colors.themed('color2'), 2%);
 				}
+			}
+
+			&.themedButton--toggled {
+				background: colors.themed('color3');
+				outline: solid 1px colors.themed('color1');
+				color: colors.themed('themedMainText');
 			}
 
 			&:hover {

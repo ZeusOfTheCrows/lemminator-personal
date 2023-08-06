@@ -90,10 +90,11 @@
 				{/if}
 				<div class="postOverviewCard__actionLine">
 					<ThemedButton
-						appearance="dimmed"
+						appearance={postView.my_vote == 1 ? 'default' : 'dimmed'}
 						icon="keyboard_arrow_up"
 						title="Upvote"
 						fontSize="0.875rem"
+						toggled={postView.my_vote == 1}
 					>
 						{postView.counts.upvotes}
 					</ThemedButton>
@@ -102,6 +103,7 @@
 						icon="keyboard_arrow_down"
 						title="Downvote"
 						fontSize="0.875rem"
+						toggled={postView.my_vote == -1}
 					>
 						{postView.counts.downvotes}
 					</ThemedButton>
