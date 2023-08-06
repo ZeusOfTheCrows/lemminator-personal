@@ -28,7 +28,7 @@ export type Unauthenticated = {
 export type Authenticating = {
     state: 'authenticating',
     jwt: undefined,
-    callback?: Promise<void>,
+    callback?: () => {},
 }
 export type Authenticated = {
     state: 'authenticated',

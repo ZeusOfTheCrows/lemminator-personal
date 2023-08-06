@@ -45,6 +45,15 @@
 
 	let primarySidebarModal: HTMLDialogElement;
 	let userMenuOpen = false;
+
+	let postAuthCallback: (() => {}) | null = null;
+	$: {
+		if ($session.state === 'authenticating') {
+			postAuthCallback = $session.callback ?? null;
+		} else if ($session.state === 'authenticated' && postAuthCallback) {
+			postAuthCallback();
+		}
+	}
 </script>
 
 <svelte:head>

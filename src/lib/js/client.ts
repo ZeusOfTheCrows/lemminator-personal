@@ -1,6 +1,6 @@
 import { invalidateAll } from "$app/navigation";
 import { error } from "@sveltejs/kit";
-import { LemmyHttp, type GetSiteResponse, type ListCommunitiesResponse, type GetCommunityResponse, type GetCommentsResponse, type GetPostsResponse, type GetPostResponse, type LoginResponse } from "lemmy-js-client";
+import { LemmyHttp, type GetSiteResponse, type ListCommunitiesResponse, type GetCommunityResponse, type GetCommentsResponse, type GetPostsResponse, type GetPostResponse, type LoginResponse, type PostResponse } from "lemmy-js-client";
 import moment from "moment";
 import { TimeoutError, timeout } from 'promise-timeout';
 
@@ -61,6 +61,14 @@ class ApiClient {
         return this.wrapForApiTimeouts(this.innerClient.getPost({
             auth: jwt,
             id: post_id,
+        }));
+    }
+
+    voteOnPost(postId: number, score: 1 | 0 | -1, jwt: string): Promise<PostResponse> {
+        return this.wrapForApiTimeouts(this.innerClient.likePost({
+            auth: jwt,
+            post_id: postId,
+            score,
         }));
     }
 

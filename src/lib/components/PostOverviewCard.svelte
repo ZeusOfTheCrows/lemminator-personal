@@ -1,11 +1,13 @@
 <script lang="ts">
-	import { formatRelativeTime } from '$lib/js/client';
+	import { formatRelativeTime, getClient } from '$lib/js/client';
 	import type { PostView } from 'lemmy-js-client';
 	import ElevatedBox from './ElevatedBox.svelte';
 	import ThemedButton from './ThemedButton.svelte';
 	import { renderEnhancedMarkdown } from '$lib/js/markdown';
 	import EntityIcon from './EntityIcon.svelte';
 	import { getDetailLinkForPost } from '$lib/js/navigation';
+	import { session } from '$lib/js/globals';
+	import { invalidate } from '$app/navigation';
 
 	// null = shimmer
 	export let postView: PostView | null;
@@ -16,6 +18,33 @@
 	function isImageLink(link: string | undefined): boolean {
 		if (!link) return false;
 		return Boolean(link.match(/\.(png|jpe?g|gif|webp)$/));
+	}
+
+	async function sendToggledVote(valueToToggle: 1 | -1) {
+		if (!postView) return;
+		if (!$session.jwt) throw 'Token should have been present';
+		const client = getClient();
+		const postResponse = await client.voteOnPost(
+			postView.post.id,
+			postView.my_vote === valueToToggle ? 0 : valueToToggle,
+			$session.jwt
+		);
+
+		// Update UI and prefetched page
+		postView = postResponse.post_view;
+		invalidate(`/c/${postView.community.name}/post/${postView.post.id}`);
+	}
+
+	async function toggleVote(vote: 1 | -1) {
+		if ($session.state === 'unauthenticated') {
+			$session = {
+				state: 'authenticating',
+				jwt: undefined,
+				callback: () => sendToggledVote(vote)
+			};
+		} else if ($session.state === 'authenticated') {
+			await sendToggledVote(vote);
+		}
 	}
 </script>
 
@@ -95,6 +124,7 @@
 						title="Upvote"
 						fontSize="0.875rem"
 						toggled={postView.my_vote == 1}
+						on:click={() => toggleVote(1)}
 					>
 						{postView.counts.upvotes}
 					</ThemedButton>
@@ -104,6 +134,7 @@
 						title="Downvote"
 						fontSize="0.875rem"
 						toggled={postView.my_vote == -1}
+						on:click={() => toggleVote(-1)}
 					>
 						{postView.counts.downvotes}
 					</ThemedButton>
