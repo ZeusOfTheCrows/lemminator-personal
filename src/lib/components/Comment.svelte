@@ -88,6 +88,7 @@
 		gap: 0.5rem;
 		padding: 1rem 0;
 		scroll-margin: calc(measurements.$headerVSize + 1rem);
+		line-break: anywhere; // Prevent extreme cases from disrupting the layout
 
 		@include colors.themify() {
 			border-bottom: solid 1px colors.themed('subtleBorder');
