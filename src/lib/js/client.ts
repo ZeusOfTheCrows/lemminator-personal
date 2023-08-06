@@ -72,11 +72,11 @@ class ApiClient {
         }));
     }
 
-    getComments(postId: number, optional?: { parentCommentId?: number }, jwt?: string): Promise<GetCommentsResponse> {
+    getComments(postId?: number, parentCommentId?: number, jwt?: string): Promise<GetCommentsResponse> {
         return this.wrapForApiTimeouts(this.innerClient.getComments({
             auth: jwt,
             post_id: postId,
-            parent_id: optional?.parentCommentId,
+            parent_id: parentCommentId,
             limit: 50,
             sort: 'Hot',
             // Calculation of "Load more" counts depends on comments not being omitted for exceeding a depth limit

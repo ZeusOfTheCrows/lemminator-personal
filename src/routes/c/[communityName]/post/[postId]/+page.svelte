@@ -9,17 +9,13 @@
 	import { getCommentTree, expandCommentsForId } from '$lib/js/comments';
 	import type { CommentView } from 'lemmy-js-client';
 	import { getClient } from '$lib/js/client';
+	import { session } from '$lib/js/globals';
 
 	export let data: PageData;
 	let commentViews: CommentView[] = data.commentsResponse.comments;
 
 	async function loadCommentsForId(comment_id: number) {
-		console.log('Load comments', comment_id);
-		const newComments = await getClient().getComments({
-			parent_id: comment_id,
-			// Calculation of "Load more" counts depends on comments not being omitted for exceeding a depth limit
-			max_depth: 999
-		});
+		const newComments = await getClient().getComments(undefined, comment_id, $session.jwt);
 		commentViews = expandCommentsForId(comment_id, commentViews, newComments.comments);
 	}
 </script>
