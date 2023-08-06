@@ -44,7 +44,7 @@
 			<button class="loginPopup__close" on:click={() => dispatch('dismiss')}>X</button>
 		</div>
 		<div class="loginPopup__content">
-			<form>
+			<div class="loginPopup__form">
 				<label for="usernameOrEmail">Username or e-mail</label>
 				<input
 					type="text"
@@ -61,7 +61,7 @@
 					{/if}
 					<ThemedButton appearance="filled" on:click={() => tryLogin()}>Log in</ThemedButton>
 				</div>
-			</form>
+			</div>
 		</div>
 	</div>
 </ModalPopup>
@@ -119,7 +119,7 @@
 			font-weight: bold;
 		}
 
-		form {
+		.loginPopup__form {
 			display: grid;
 			grid-template-columns: min-content 1fr;
 			gap: 0.8rem 1rem;

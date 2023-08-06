@@ -52,6 +52,7 @@
 		border-radius: 10px;
 		gap: 0.5rem;
 		padding: 0.5rem;
+		align-items: center;
 
 		@include colors.themify() {
 			&.themedButton--dimmed {

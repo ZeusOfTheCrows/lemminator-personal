@@ -11,6 +11,7 @@
 	import Cookies from 'js-cookie';
 	import { onMount } from 'svelte';
 	import LoginPopup from '$lib/components/LoginPopup.svelte';
+	import EntityIcon from '$lib/components/EntityIcon.svelte';
 
 	let root: HTMLElement;
 	let navigating = false;
@@ -73,11 +74,20 @@
 					icon="dark_mode"
 					on:click={() => ($theme = $theme === 'light' ? 'dark' : 'light')}
 				/>
-				{#if $session.state === 'authenticated'}
-					<ThemedButton icon="person">Logged in</ThemedButton>
-				{:else}
-					<ThemedButton icon="person" on:click={() => ($session.state = 'authenticating')} />
-				{/if}
+				{#await $cachedCalls.siteResponse then siteResponse}
+					{#if $session.state === 'authenticated' && siteResponse.my_user}
+						<ThemedButton appearance="filled">
+							{siteResponse.my_user.local_user_view.person.name}
+							{#if siteResponse.my_user.local_user_view.person.avatar}
+								<EntityIcon src={siteResponse.my_user.local_user_view.person.avatar} alt="Avatar" />
+							{:else}
+								<span class="material-icons">people</span>
+							{/if}
+						</ThemedButton>
+					{:else}
+						<ThemedButton icon="person" on:click={() => ($session.state = 'authenticating')} />
+					{/if}
+				{/await}
 			</div>
 		</header>
 		<div class="page">

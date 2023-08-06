@@ -1,5 +1,5 @@
 import type { GetSiteResponse } from "lemmy-js-client";
-import { readable, writable, type Readable, type Writable } from "svelte/store";
+import { writable, type Readable, type Writable, derived } from "svelte/store";
 import { getClient } from "./client";
 import Cookies from 'js-cookie';
 
@@ -10,12 +10,6 @@ export const keynav: Writable<{
 });
 
 const client = getClient();
-
-export const cachedCalls: Readable<{
-    siteResponse: Promise<GetSiteResponse>,
-}> = readable({
-    siteResponse: client.getSite(),
-});
 
 export type Theme = 'dark' | 'light';
 function getThemePreference(): Theme {
@@ -56,3 +50,13 @@ session.subscribe((newValue) => {
         Cookies.remove('jwt');
     }
 })
+
+export const cachedCalls: Readable<{
+    siteResponse: Promise<GetSiteResponse>,
+}> = derived(session, ($session) => {
+    return {
+        siteResponse: client.getSite({
+            auth: ($session.state === 'authenticated') ? $session.jwt : undefined,
+        }),
+    };
+});
