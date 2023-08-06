@@ -167,7 +167,7 @@
 		opacity: 0;
 		transition: opacity 0.1s ease-in;
 		z-index: 2;
-		background: #e1a1ff;
+		background: rgb(210, 158, 223);
 
 		&.loader--navigating {
 			opacity: 1;
