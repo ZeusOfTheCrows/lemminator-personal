@@ -5,7 +5,7 @@
 	import LoadingSpinner from './LoadingSpinner.svelte';
 	import { formatApproxInteger } from '$lib/js/format';
 	import { getClient } from '$lib/js/client';
-	import { cachedCalls } from '$lib/js/globals';
+	import { cachedCalls, session } from '$lib/js/globals';
 
 	let client = getClient();
 	let communityResponse: Promise<GetCommunityResponse> = new Promise(() => {});
@@ -15,9 +15,7 @@
 
 	$: {
 		if (communityName) {
-			communityResponse = client.getCommunity({
-				name: communityName
-			});
+			communityResponse = client.getCommunity(communityName, $session.jwt);
 		}
 	}
 </script>

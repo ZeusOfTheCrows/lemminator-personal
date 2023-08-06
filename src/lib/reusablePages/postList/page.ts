@@ -1,4 +1,4 @@
-import { POST_PAGE_SIZE as POST_PAGE_LIMIT, getClient, wrapForApiTimeouts } from "$lib/js/client";
+import { getClient } from "$lib/js/client";
 import { error } from "@sveltejs/kit";
 import type { CommunityResponse, GetPostsResponse } from "lemmy-js-client";
 
@@ -8,7 +8,7 @@ export interface LoadCommunityData {
     communityResponse?: Promise<CommunityResponse>,
 }
 
-export const loadCommunityPage = (communityName: string | undefined, pageId: string): LoadCommunityData => {
+export const loadPostListPage = (communityName: string | undefined, pageId: string, jwt?: string): LoadCommunityData => {
     const client = getClient();
 
     const pageIdNum = parseInt(pageId);
@@ -16,24 +16,18 @@ export const loadCommunityPage = (communityName: string | undefined, pageId: str
 
     const result: LoadCommunityData = {
         pageId: pageIdNum,
-        postsResponse: wrapForApiTimeouts(client.getPosts({
-            community_name: communityName,
-            page: pageIdNum,
-            limit: POST_PAGE_LIMIT,
-        }).catch(e => {
+        postsResponse: client.getPosts(communityName, pageIdNum, jwt).catch(e => {
             if (e.type === 'invalid-json') {
                 // We don't always get a clean exception from the Lemmy API library
                 // when the post doesn't exist
                 throw error(502, 'Invalid upstream response');
             }
             throw e;
-        })),
+        }),
     }
 
     if (communityName) {
-        result.communityResponse = wrapForApiTimeouts(client.getCommunity({
-            name: communityName,
-        }));
+        result.communityResponse = client.getCommunity(communityName, jwt);
     }
 
     return result;

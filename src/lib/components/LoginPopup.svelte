@@ -3,7 +3,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import ModalPopup from './ModalPopup.svelte';
 	import ThemedButton from './ThemedButton.svelte';
-	import { startSession } from '$lib/js/client';
+	import { getClient } from '$lib/js/client';
 
 	const dispatch = createEventDispatcher();
 	let usernameOrEmail: string = '';
@@ -12,7 +12,8 @@
 
 	async function tryLogin() {
 		try {
-			const jwt = await startSession(usernameOrEmail, password);
+			const client = getClient();
+			const jwt = await client.acquireJwt(usernameOrEmail, password);
 			$session = {
 				state: 'authenticated',
 				jwt

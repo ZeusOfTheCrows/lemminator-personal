@@ -9,7 +9,6 @@ export const keynav: Writable<{
     mode: 'normal',
 });
 
-const client = getClient();
 
 export type Theme = 'dark' | 'light';
 function getThemePreference(): Theme {
@@ -24,9 +23,11 @@ theme.subscribe((newValue) => {
 // Only layouts may transition out of authenticating. Every other transition is fair game.
 export type Unauthenticated = {
     state: 'unauthenticated',
+    jwt: undefined,
 }
 export type Authenticating = {
     state: 'authenticating',
+    jwt: undefined,
     callback?: Promise<void>,
 }
 export type Authenticated = {
@@ -54,9 +55,8 @@ session.subscribe((newValue) => {
 export const cachedCalls: Readable<{
     siteResponse: Promise<GetSiteResponse>,
 }> = derived(session, ($session) => {
+    const client = getClient();
     return {
-        siteResponse: client.getSite({
-            auth: ($session.state === 'authenticated') ? $session.jwt : undefined,
-        }),
+        siteResponse: client.getSite($session.jwt),
     };
 });

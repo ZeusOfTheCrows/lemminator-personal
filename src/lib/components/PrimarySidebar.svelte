@@ -7,10 +7,7 @@
 	const dispatch = createEventDispatcher();
 	const client = getClient();
 	let communitiesResponse = client
-		.listCommunities({
-			type_: 'Local',
-			sort: 'TopDay'
-		})
+		.listTopCommunities()
 		.then((response) => {
 			dispatch('communitiesResponseLoaded');
 			return response;

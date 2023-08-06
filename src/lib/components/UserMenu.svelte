@@ -3,12 +3,14 @@
 	import { createEventDispatcher } from 'svelte';
 	import Dismissable from './Dismissable.svelte';
 	import UnthemedButton from './UnthemedButton.svelte';
+	import { invalidateAll } from '$app/navigation';
 
 	const dispatch = createEventDispatcher();
 
 	async function logOut() {
-		$session = { state: 'unauthenticated' };
+		$session = { state: 'unauthenticated', jwt: undefined };
 		dispatch('dismiss');
+		invalidateAll();
 	}
 </script>
 

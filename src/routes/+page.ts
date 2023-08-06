@@ -1,6 +1,7 @@
 import type { PageLoad } from "./$types";
-import { loadCommunityPage as loadPostListPage } from "$lib/reusablePages/postList/page";
+import { loadPostListPage } from "$lib/reusablePages/postList/page";
 
-export const load = (({ }) => {
-    return loadPostListPage(undefined, '1');
+export const load = (async ({ parent }) => {
+    const { jwt } = await parent();
+    return loadPostListPage(undefined, '1', jwt);
 }) satisfies PageLoad;
