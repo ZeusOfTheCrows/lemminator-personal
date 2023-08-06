@@ -12,6 +12,10 @@
 	import { onMount } from 'svelte';
 	import LoginPopup from '$lib/components/LoginPopup.svelte';
 	import EntityIcon from '$lib/components/EntityIcon.svelte';
+	import UserMenu from '$lib/components/UserMenu.svelte';
+	import { offset, flip, shift } from 'svelte-floating-ui/dom';
+	import { createFloatingActions } from 'svelte-floating-ui';
+	import Dismissable from '$lib/components/Dismissable.svelte';
 
 	let root: HTMLElement;
 	let navigating = false;
@@ -34,7 +38,14 @@
 		}
 	});
 
+	const [userMenuRef, userMenuContent] = createFloatingActions({
+		strategy: 'absolute',
+		placement: 'bottom-end',
+		middleware: [offset(5), flip(), shift()]
+	});
+
 	let primarySidebarModal: HTMLDialogElement;
+	let userMenuOpen = false;
 </script>
 
 <svelte:head>
@@ -75,20 +86,32 @@
 					on:click={() => ($theme = $theme === 'light' ? 'dark' : 'light')}
 				/>
 				{#await $cachedCalls.siteResponse then siteResponse}
-					{#if $session.state === 'authenticated' && siteResponse.my_user}
-						<ThemedButton appearance="filled">
-							<span class="header__loggedInUser">
-								{siteResponse.my_user.local_user_view.person.name}
-							</span>
-							{#if siteResponse.my_user.local_user_view.person.avatar}
-								<EntityIcon src={siteResponse.my_user.local_user_view.person.avatar} alt="Avatar" />
-							{:else}
-								<span class="material-icons">people</span>
+					<div class="header__user">
+						{#if $session.state === 'authenticated' && siteResponse.my_user}
+							<div use:userMenuRef>
+								<ThemedButton appearance="filled" on:click={() => (userMenuOpen = true)}>
+									<span class="header__loggedInUser">
+										{siteResponse.my_user.local_user_view.person.name}
+									</span>
+									{#if siteResponse.my_user.local_user_view.person.avatar}
+										<EntityIcon
+											src={siteResponse.my_user.local_user_view.person.avatar}
+											alt="Avatar"
+										/>
+									{:else}
+										<span class="material-icons">person</span>
+									{/if}
+								</ThemedButton>
+							</div>
+							{#if userMenuOpen}
+								<div use:userMenuContent>
+									<UserMenu on:dismiss={() => (userMenuOpen = false)} />
+								</div>
 							{/if}
-						</ThemedButton>
-					{:else}
-						<ThemedButton icon="person" on:click={() => ($session.state = 'authenticating')} />
-					{/if}
+						{:else}
+							<ThemedButton icon="person" on:click={() => ($session.state = 'authenticating')} />
+						{/if}
+					</div>
 				{/await}
 			</div>
 		</header>
@@ -227,6 +250,12 @@
 			gap: 0.5rem;
 			align-items: center;
 			justify-content: center;
+		}
+
+		.header__user {
+			display: flex;
+			flex-direction: column;
+			align-items: start;
 		}
 
 		.header__loggedInUser {
