@@ -77,7 +77,9 @@
 				{#await $cachedCalls.siteResponse then siteResponse}
 					{#if $session.state === 'authenticated' && siteResponse.my_user}
 						<ThemedButton appearance="filled">
-							{siteResponse.my_user.local_user_view.person.name}
+							<span class="header__loggedInUser">
+								{siteResponse.my_user.local_user_view.person.name}
+							</span>
 							{#if siteResponse.my_user.local_user_view.person.avatar}
 								<EntityIcon src={siteResponse.my_user.local_user_view.person.avatar} alt="Avatar" />
 							{:else}
@@ -225,6 +227,14 @@
 			gap: 0.5rem;
 			align-items: center;
 			justify-content: center;
+		}
+
+		.header__loggedInUser {
+			display: none;
+
+			@include breakpoints.mediumAndUp {
+				display: block;
+			}
 		}
 	}
 
