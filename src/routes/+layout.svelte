@@ -263,6 +263,7 @@
 
 		.header__loggedInUser {
 			display: none;
+			font-size: 0.85rem;
 
 			@include breakpoints.mediumAndUp {
 				display: block;
