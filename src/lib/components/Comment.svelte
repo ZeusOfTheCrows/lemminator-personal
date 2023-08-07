@@ -5,8 +5,9 @@
 	import type { CommentTreeNode } from '$lib/js/comments';
 	import CommentList from './CommentList.svelte';
 	import type { CommentView } from 'lemmy-js-client';
-	import { formatRelativeTime } from '$lib/js/client';
+	import { formatRelativeTime, getClient } from '$lib/js/client';
 	import { createEventDispatcher } from 'svelte';
+	import { session } from '$lib/js/globals';
 
 	const dispatch = createEventDispatcher();
 
@@ -27,6 +28,29 @@
 	$: {
 		if (focusedCommentId === node.leaf.comment.id) {
 			commentElement.scrollIntoView();
+		}
+	}
+	async function sendToggledVote(valueToToggle: 1 | -1) {
+		if (!$session.jwt) throw 'Token should have been present';
+		const client = getClient();
+		const commentResponse = await client.voteOnComment(
+			node.leaf.comment.id,
+			node.leaf.my_vote === valueToToggle ? 0 : valueToToggle,
+			$session.jwt
+		);
+
+		node.leaf = commentResponse.comment_view;
+	}
+
+	async function toggleVote(vote: 1 | -1) {
+		if ($session.state === 'unauthenticated') {
+			$session = {
+				state: 'authenticating',
+				jwt: undefined,
+				callback: () => sendToggledVote(vote)
+			};
+		} else if ($session.state === 'authenticated') {
+			await sendToggledVote(vote);
 		}
 	}
 </script>
@@ -52,14 +76,23 @@
 		{@html renderEnhancedMarkdown(node.leaf.comment.content)}
 	</div>
 	<div class="comment__actionLine">
-		<ThemedButton appearance="dimmed" icon="keyboard_arrow_up" title="Upvote" fontSize="0.875rem">
+		<ThemedButton
+			appearance={node.leaf.my_vote == 1 ? 'default' : 'dimmed'}
+			icon="keyboard_arrow_up"
+			title="Upvote"
+			fontSize="0.875rem"
+			toggled={!!$session.jwt && node.leaf.my_vote == 1}
+			on:click={() => toggleVote(1)}
+		>
 			{node.leaf.counts.upvotes}
 		</ThemedButton>
 		<ThemedButton
-			appearance="dimmed"
+			appearance={node.leaf.my_vote == -1 ? 'default' : 'dimmed'}
 			icon="keyboard_arrow_down"
 			title="Downvote"
 			fontSize="0.875rem"
+			toggled={!!$session.jwt && node.leaf.my_vote == -1}
+			on:click={() => toggleVote(-1)}
 		>
 			{node.leaf.counts.downvotes}
 		</ThemedButton>
