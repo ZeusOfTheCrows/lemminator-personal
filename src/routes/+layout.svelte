@@ -92,7 +92,7 @@
 					<div class="header__user">
 						<div use:userMenuRef>
 							{#if $session.state === 'authenticated' && siteResponse.my_user}
-								<ThemedButton appearance="filled" on:click={() => (userMenuOpen = true)}>
+								<ThemedButton on:click={() => (userMenuOpen = true)}>
 									<span class="header__loggedInUser">
 										{siteResponse.my_user.local_user_view.person.name}
 									</span>
@@ -106,11 +106,7 @@
 									{/if}
 								</ThemedButton>
 							{:else}
-								<ThemedButton
-									appearance="filled"
-									icon="person"
-									on:click={() => (userMenuOpen = true)}
-								/>
+								<ThemedButton icon="person" on:click={() => (userMenuOpen = true)} />
 							{/if}
 							{#if userMenuOpen}
 								<div use:userMenuContent>
