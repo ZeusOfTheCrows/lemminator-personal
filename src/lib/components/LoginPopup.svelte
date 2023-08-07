@@ -28,7 +28,7 @@
 	}
 </script>
 
-<ModalPopup minWidth="300px" width="500px">
+<ModalPopup minWidth="300px" width="500px" on:dismiss>
 	<div class="loginPopup">
 		<div class="loginPopup__top">
 			<h3 class="loginPopup__title">
