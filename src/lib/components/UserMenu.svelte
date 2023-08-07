@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { session } from '$lib/js/globals';
+	import { session, theme } from '$lib/js/globals';
 	import { createEventDispatcher } from 'svelte';
 	import Dismissable from './Dismissable.svelte';
-	import UnthemedButton from './UnthemedButton.svelte';
+	import MenuOption from './MenuOption.svelte';
 	import { invalidateAll } from '$app/navigation';
 
 	const dispatch = createEventDispatcher();
@@ -16,9 +16,43 @@
 
 <Dismissable on:dismiss>
 	<ul class="menu">
+		{#if $session.state === 'unauthenticated'}
+			<li>
+				<MenuOption
+					padding="1rem"
+					on:click={() => {
+						$session.state = 'authenticating';
+						dispatch('dismiss');
+					}}
+				>
+					Log in
+				</MenuOption>
+			</li>
+		{/if}
 		<li>
-			<UnthemedButton padding="1rem" on:click={logOut}>Log out</UnthemedButton>
+			<MenuOption
+				padding="1rem"
+				on:click={() => {
+					$theme = $theme === 'light' ? 'dark' : 'light';
+					dispatch('dismiss');
+				}}
+			>
+				Toggle dark mode
+			</MenuOption>
 		</li>
+		{#if $session.state == 'authenticated'}
+			<li>
+				<MenuOption
+					padding="1rem"
+					on:click={() => {
+						logOut();
+						dispatch('dismiss');
+					}}
+				>
+					Log out
+				</MenuOption>
+			</li>
+		{/if}
 	</ul>
 </Dismissable>
 
@@ -30,6 +64,11 @@
 			background: colors.themed('maxContrastTheme');
 			border: solid 1px colors.themed('subtleBorder');
 			box-shadow: 1px 1px 5px rgba(colors.themed('themedShadow'), 0.05);
+		}
+
+		li {
+			display: grid;
+			grid-template-columns: 1fr;
 		}
 	}
 </style>

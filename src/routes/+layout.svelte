@@ -88,15 +88,10 @@
 				</div>
 			</div>
 			<div class="header__menu">
-				<ThemedButton
-					title="Toggle dark mode"
-					icon="dark_mode"
-					on:click={() => ($theme = $theme === 'light' ? 'dark' : 'light')}
-				/>
 				{#await $cachedCalls.siteResponse then siteResponse}
 					<div class="header__user">
-						{#if $session.state === 'authenticated' && siteResponse.my_user}
-							<div use:userMenuRef>
+						<div use:userMenuRef>
+							{#if $session.state === 'authenticated' && siteResponse.my_user}
 								<ThemedButton appearance="filled" on:click={() => (userMenuOpen = true)}>
 									<span class="header__loggedInUser">
 										{siteResponse.my_user.local_user_view.person.name}
@@ -110,15 +105,19 @@
 										<span class="material-icons">person</span>
 									{/if}
 								</ThemedButton>
-							</div>
+							{:else}
+								<ThemedButton
+									appearance="filled"
+									icon="person"
+									on:click={() => (userMenuOpen = true)}
+								/>
+							{/if}
 							{#if userMenuOpen}
 								<div use:userMenuContent>
 									<UserMenu on:dismiss={() => (userMenuOpen = false)} />
 								</div>
 							{/if}
-						{:else}
-							<ThemedButton icon="person" on:click={() => ($session.state = 'authenticating')} />
-						{/if}
+						</div>
 					</div>
 				{/await}
 			</div>
