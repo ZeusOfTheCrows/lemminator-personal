@@ -3,6 +3,10 @@
 	import PageHolder from '$lib/components/PageHolder.svelte';
 </script>
 
+<svelte:head>
+	<title>Oh snap</title>
+</svelte:head>
+
 <PageHolder>
 	<svelte:fragment slot="main">
 		<div class="error">
