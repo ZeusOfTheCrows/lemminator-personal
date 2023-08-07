@@ -51,7 +51,7 @@
 		animation: dim 0.05s ease-in forwards, fade 0.05s ease-in forwards;
 
 		@include colors.themify() {
-			border: solid 1px colors.themed('subtleBorder');
+			border: solid 1px #fff;
 		}
 
 		@include colors.defineModalDim;

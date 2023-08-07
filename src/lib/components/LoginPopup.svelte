@@ -4,21 +4,27 @@
 	import ModalPopup from './ModalPopup.svelte';
 	import ThemedButton from './ThemedButton.svelte';
 	import { getClient } from '$lib/js/client';
+	import LoadingSpinner from './LoadingSpinner.svelte';
+	import { fade } from 'svelte/transition';
 
 	const dispatch = createEventDispatcher();
 	let usernameOrEmail: string = '';
 	let password: string = '';
 	let error: string | undefined = undefined;
+	let loading = false;
 
 	async function tryLogin() {
 		try {
 			const client = getClient();
+			loading = true;
 			const jwt = await client.acquireJwt(usernameOrEmail, password);
+			loading = false;
 			$session = {
 				state: 'authenticated',
 				jwt
 			};
 		} catch (e) {
+			loading = false;
 			if (e === 'incorrect_login') {
 				error = 'That login/password combination is not correct.';
 			} else {
@@ -28,39 +34,51 @@
 	}
 </script>
 
-<ModalPopup minWidth="300px" width="500px" on:dismiss>
+<ModalPopup minWidth="300px" width="450px" on:dismiss>
 	<div class="loginPopup">
-		<div class="loginPopup__top">
-			<h3 class="loginPopup__title">
-				{#await $cachedCalls.siteResponse then siteResponse}
-					<span class="material-icons">lock</span>
-					<span>
-						Log in to
-						<span class="loginPopup__instanceName">
-							{siteResponse.site_view.site.name}
-						</span>
-					</span>
-				{/await}
-			</h3>
-			<button class="loginPopup__close" on:click={() => dispatch('dismiss')}>X</button>
+		<div class="loginPopup__side">
+			<span class="material-icons">lock</span>
 		</div>
 		<div class="loginPopup__content">
+			<div class="loginPopup__contentTop">
+				<h3 class="loginPopup__title">
+					{#await $cachedCalls.siteResponse then siteResponse}
+						<span>
+							Log in to
+							<span class="loginPopup__instanceName">
+								{siteResponse.site_view.site.name}
+							</span>
+						</span>
+					{/await}
+				</h3>
+				<button class="loginPopup__close" on:click={() => dispatch('dismiss')}>
+					<span class="material-icons">close</span>
+				</button>
+			</div>
 			<div class="loginPopup__form">
-				<label for="usernameOrEmail">Username or e-mail</label>
-				<input
-					type="text"
-					id="usernameOrEmail"
-					name="usernameOrEmail"
-					bind:value={usernameOrEmail}
-					placeholder="linus@example.com"
-				/>
-				<label for="password">Password</label>
-				<input type="password" id="password" name="password" bind:value={password} />
+				<div class="loginPopup__formItem">
+					<label for="usernameOrEmail">Username or e-mail</label>
+					<input
+						type="text"
+						id="usernameOrEmail"
+						name="usernameOrEmail"
+						bind:value={usernameOrEmail}
+						placeholder="linus@example.com"
+					/>
+				</div>
+				<div class="loginPopup__formItem">
+					<label for="password">Password</label>
+					<input type="password" id="password" name="password" bind:value={password} />
+				</div>
+				{#if error}
+					<div class="loginPopup__error">{error}</div>
+				{/if}
 				<div class="loginPopup__submit">
-					{#if error}
-						<div class="loginPopup__error">{error}</div>
+					{#if loading}
+						<LoadingSpinner minHeight="1rem" />
+					{:else}
+						<ThemedButton appearance="filled" on:click={() => tryLogin()}>Log in</ThemedButton>
 					{/if}
-					<ThemedButton appearance="filled" on:click={() => tryLogin()}>Log in</ThemedButton>
 				</div>
 			</div>
 		</div>
@@ -73,25 +91,21 @@
 
 	.loginPopup {
 		display: grid;
-		grid-template-rows: 60px 1fr;
+		grid-template-columns: minmax(10%, 80px) 1fr;
 
-		.loginPopup__top {
+		.loginPopup__side {
 			background-color: #170115;
 			background-image: url('$lib/img/fills/fill2.svg');
 			background-size: cover;
 			display: flex;
 			flex-direction: row;
-			align-items: center;
-			padding: 0 1rem;
-			justify-content: space-between;
+			align-items: start;
+			padding: 1rem;
+			justify-content: center;
+			color: white;
 
-			.loginPopup__close {
-				background: white;
-				font-size: 1.2rem;
-				aspect-ratio: 1/1;
-				width: 1.75rem;
-				border-radius: 100%;
-				cursor: pointer;
+			.material-icons {
+				font-size: 2rem;
 			}
 		}
 
@@ -105,15 +119,29 @@
 				background: colors.themed('maxContrastTheme');
 				color: colors.themed('themedMainText');
 			}
-		}
 
-		.loginPopup__title {
-			font-size: 1.2rem;
-			color: #fff;
-			display: flex;
-			flex-direction: row;
-			align-items: center;
-			gap: 0.5rem;
+			.loginPopup__contentTop {
+				display: flex;
+				justify-content: space-between;
+				gap: 0.5rem;
+				align-items: center;
+				height: 2rem;
+				margin-bottom: 0.5rem;
+			}
+
+			.loginPopup__close {
+				background: none;
+				border: none;
+				cursor: pointer;
+			}
+
+			.loginPopup__title {
+				font-size: 1.2rem;
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				gap: 0.5rem;
+			}
 		}
 
 		.loginPopup__instanceName {
@@ -121,31 +149,41 @@
 		}
 
 		.loginPopup__form {
-			display: grid;
-			grid-template-columns: min-content 1fr;
-			gap: 0.8rem 1rem;
-			align-items: center;
+			display: flex;
+			flex-direction: column;
+			align-items: start;
+			gap: 1rem;
+
+			.loginPopup__formItem {
+				display: flex;
+				flex-direction: column;
+				align-items: start;
+				gap: 0.5rem;
+			}
 
 			label {
-				grid-column: 1;
 				text-align: right;
-				font-size: 0.9rem;
+				font-size: 0.8rem;
 			}
 
 			input {
-				grid-column: 2;
 				padding: 0.8rem 0.75rem;
 				border-radius: 5px;
-				font-size: 1rem;
+				font-size: 0.9rem;
+				margin-left: 1px; // Offset outline
 
 				@include colors.themify() {
 					border: solid 1px rgba(colors.themed('themedShadow'), 0.3);
 					outline: solid 2px colors.themed('color1');
 
 					&:focus-within {
-						outline: solid 1px colors.themed('themedMainText');
+						border: solid 1px rgba(colors.themed('themedShadow'), 0.4);
 					}
 				}
+			}
+
+			.loginPopup__error {
+				font-size: 0.8rem;
 			}
 
 			.loginPopup__submit {
@@ -154,10 +192,6 @@
 				flex-direction: column;
 				gap: 0.75rem;
 				align-items: start;
-
-				.loginPopup__error {
-					font-size: 0.8rem;
-				}
 			}
 		}
 	}
