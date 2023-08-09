@@ -60,6 +60,6 @@
     margin: 0;
 }
 
-:global(pre) {
-    word-wrap: normal;
+:global(code) {
+    white-space: break-spaces;
 }
