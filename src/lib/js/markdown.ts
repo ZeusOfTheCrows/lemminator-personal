@@ -1,4 +1,4 @@
-import DOMPurify from 'dompurify';
+import { sanitize } from 'isomorphic-dompurify';
 import MarkdownIt from 'markdown-it';
 import markdown_it_link_attributes from 'markdown-it-link-attributes';
 import markdown_it_footnote from 'markdown-it-footnote';
@@ -17,7 +17,7 @@ export function renderEnhancedMarkdown(input: string) {
 
             if (tokens[idx].nesting === 1) {
                 // opening tag
-                return `<details><summary> ${DOMPurify.sanitize(m[1])} </summary>\n`;
+                return `<details><summary> ${sanitize(m[1])} </summary>\n`;
             } else {
                 // closing tag
                 return '</details>\n';
