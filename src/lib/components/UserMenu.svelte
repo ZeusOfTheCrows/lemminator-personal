@@ -60,6 +60,8 @@
 	@use '$lib/css/colors';
 
 	.menu {
+		font-size: 0.8rem;
+
 		@include colors.themify() {
 			background: colors.themed('maxContrastTheme');
 			border: solid 1px colors.themed('subtleBorder');
