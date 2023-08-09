@@ -3,7 +3,6 @@
 	import type { CommentView } from 'lemmy-js-client';
 	import Comment from './Comment.svelte';
 	import { createEventDispatcher } from 'svelte';
-	import LoadingSpinner from './LoadingSpinner.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -23,20 +22,20 @@
 	<div class="commentList">
 		<Comment {node} {flattenedTree} {focusedCommentId} on:subtreeExpansionRequested />
 		{#if node.unloadedChildren}
-			{#if loading}
-				<LoadingSpinner minHeight="4rem" />
-			{:else}
-				<div class="commentList__loadMore">
-					<button
-						on:click={() => {
-							dispatch('subtreeExpansionRequested', node.leaf.comment.id);
-							loading = true;
-						}}
-					>
+			<div class="commentList__loadMore">
+				<button
+					on:click={() => {
+						dispatch('subtreeExpansionRequested', node.leaf.comment.id);
+						loading = true;
+					}}
+				>
+					{#if loading}
+						Loading...
+					{:else}
 						Load {node.unloadedChildren} more
-					</button>
-				</div>
-			{/if}
+					{/if}
+				</button>
+			</div>
 		{/if}
 	</div>
 {/each}
