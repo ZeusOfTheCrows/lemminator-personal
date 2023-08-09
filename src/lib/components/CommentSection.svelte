@@ -80,11 +80,6 @@
 
 <svelte:window on:keyup={handleKeyUp} />
 
-<p class="commentSectionGlitchWarning">
-	The "Load more comments" buttons aren't entirely stable yet. Bear with us while we figure this
-	out!
-</p>
-
 <ElevatedBox stacking="vertical">
 	<div class="commentSection">
 		{#if tree.flattenedTree.length == 0}
@@ -111,11 +106,5 @@
 			text-align: center;
 			opacity: 0.5;
 		}
-	}
-
-	.commentSectionGlitchWarning {
-		padding: 0.5rem 0;
-		opacity: 0.5;
-		font-size: 0.85rem;
 	}
 </style>

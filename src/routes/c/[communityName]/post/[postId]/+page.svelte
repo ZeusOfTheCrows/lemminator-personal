@@ -6,17 +6,57 @@
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
 	import PostOverviewCard from '$lib/components/PostOverviewCard.svelte';
 	import CommentSection from '$lib/components/CommentSection.svelte';
-	import { getCommentTree, expandCommentsForId } from '$lib/js/comments';
+	import {
+		getCommentTree,
+		expandCommentsForId,
+		type CommentTree,
+		expandTopLevelComments
+	} from '$lib/js/comments';
 	import type { CommentView } from 'lemmy-js-client';
 	import { getClient } from '$lib/js/client';
 	import { session } from '$lib/js/globals';
+	import ThemedButton from '$lib/components/ThemedButton.svelte';
 
 	export let data: PageData;
 	let commentViews: CommentView[] = data.commentsResponse.comments;
+	let commentTree: CommentTree;
+	$: {
+		commentTree = getCommentTree(commentViews);
+	}
+
+	let nextCommentPageToLoad = 2;
+	let moreCommentsAvailable = true;
+	let loadingMore = false;
+	$: {
+		const cumulativeChildCounts = commentTree.topNodes.reduce(
+			(acc, cur) => acc + cur.leaf.counts.child_count,
+			0
+		);
+		if (moreCommentsAvailable) {
+			moreCommentsAvailable = cumulativeChildCounts < data.postResponse.post_view.counts.comments;
+		}
+	}
 
 	async function loadCommentsForId(comment_id: number) {
 		const newComments = await getClient().getComments(undefined, comment_id, $session.jwt);
 		commentViews = expandCommentsForId(comment_id, commentViews, newComments.comments);
+	}
+
+	async function loadMoreComments() {
+		const client = getClient();
+		loadingMore = true;
+		const commentResponse = await client.getComments(
+			data.postResponse.post_view.post.id,
+			undefined,
+			$session.jwt,
+			nextCommentPageToLoad
+		);
+		if (commentResponse.comments.length == 0) {
+			moreCommentsAvailable = false;
+		}
+		loadingMore = false;
+		nextCommentPageToLoad += 1;
+		commentViews = expandTopLevelComments(commentViews, commentResponse.comments);
 	}
 </script>
 
@@ -34,9 +74,20 @@
 			<div class="postDetailLayouter">
 				<PostOverviewCard postView={postResponse.post_view} active={null} variant="detail" />
 				<CommentSection
-					tree={getCommentTree(commentViews)}
+					tree={commentTree}
 					on:subtreeExpansionRequested={(item) => loadCommentsForId(item.detail)}
 				/>
+				{#if moreCommentsAvailable}
+					<div class="postDetailLayouter__loadMore">
+						{#if loadingMore}
+							<LoadingSpinner minHeight="1rem" />
+						{:else}
+							<ThemedButton icon="keyboard_double_arrow_down" on:click={loadMoreComments}>
+								Load more
+							</ThemedButton>
+						{/if}
+					</div>
+				{/if}
 			</div>
 		{/await}
 	</svelte:fragment>
@@ -50,5 +101,10 @@
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
+
+		.postDetailLayouter__loadMore {
+			display: flex;
+			justify-content: center;
+		}
 	}
 </style>

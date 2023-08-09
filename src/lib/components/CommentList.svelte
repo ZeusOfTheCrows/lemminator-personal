@@ -21,7 +21,7 @@
 {#each nodes as node, i}
 	<div class="commentList">
 		<Comment {node} {flattenedTree} {focusedCommentId} on:subtreeExpansionRequested />
-		{#if node.unloadedChildren}
+		{#if node.children.length == 0 && node.leaf.counts.child_count > 0}
 			<div class="commentList__loadMore">
 				<button
 					on:click={() => {
@@ -32,7 +32,7 @@
 					{#if loading}
 						Loading...
 					{:else}
-						Load {node.unloadedChildren} more
+						Load {node.leaf.counts.child_count} more
 					{/if}
 				</button>
 			</div>

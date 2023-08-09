@@ -4,7 +4,6 @@ export interface CommentTreeNode {
     leaf: CommentView;
     children: CommentTreeNode[];
     fullPath: number[];
-    unloadedChildren: number;
 }
 
 export interface CommentTree {
@@ -18,7 +17,6 @@ function addLeafToTree(nodes: CommentTreeNode[], commentView: CommentView, fullP
             leaf: commentView,
             children: [],
             fullPath,
-            unloadedChildren: 0,
         });
         return true;
     } else {
@@ -36,23 +34,6 @@ function flattenCommentTree(nodes: CommentTreeNode[]): CommentView[] {
         acc = acc.concat(cur.leaf).concat(flattenCommentTree(cur.children));
         return acc;
     }, []);
-}
-
-function adjustUnloadedCounts(node: CommentTreeNode): { loaded: number, unloaded: number } {
-    let loadedFromChildren = 0;
-    let unloadedWithinChildren = 0;
-
-    for (const child of node.children) {
-        const counts = adjustUnloadedCounts(child);
-        loadedFromChildren += counts.loaded;
-        unloadedWithinChildren += counts.unloaded;
-    }
-
-    node.unloadedChildren = node.leaf.counts.child_count - loadedFromChildren - unloadedWithinChildren - node.children.length;
-    return {
-        loaded: node.children.length + loadedFromChildren,
-        unloaded: node.unloadedChildren + unloadedWithinChildren,
-    }
 }
 
 export function getCommentTree(comments: CommentView[]): CommentTree {
@@ -78,13 +59,35 @@ export function getCommentTree(comments: CommentView[]): CommentTree {
         unprocessedComments = unprocessedComments.filter(uc => !processedComments.find(pc => uc == pc));
     }
 
-    for (const topNode of topNodes) {
-        adjustUnloadedCounts(topNode);
-    }
     return {
         topNodes,
         flattenedTree: flattenCommentTree(topNodes),
     };
+}
+
+export function expandTopLevelComments(existingComments: CommentView[], commentsToMerge: CommentView[]): CommentView[] {
+    // Assumption is that the existing comments tree doesn't contain duplicates
+    const existingIds = existingComments.map((c) => c.comment.id);
+    const newComments = commentsToMerge.filter(c => !existingIds.includes(c.comment.id));
+
+    // When a user clicks 'Load more' in a certain comment thread, we don't want to expand
+    // already displayed descendants of that comment because it's not what the user would
+    // expect. Therefore, filtering is needed.
+    const matcher = /^0\.(\d+)$/;
+    const subtreesToIgnore = existingComments.filter(c => !!c.comment.path.match(matcher))
+        .map(c => {
+            return c.comment.path.match(matcher)![1];
+        });
+    console.log('subtreesToIgnore', subtreesToIgnore);
+
+    const nonIgnoredNewComments = newComments.reduce((acc: CommentView[], c: CommentView) => {
+        const fullPath = c.comment.path.split(".");
+        if (!fullPath.find(pathItem => subtreesToIgnore.includes(pathItem))) {
+            acc.push(c);
+        }
+        return acc;
+    }, []);
+    return existingComments.concat(nonIgnoredNewComments);
 }
 
 export function expandCommentsForId(comment_id: number, existingComments: CommentView[], commentsToMerge: CommentView[]) {

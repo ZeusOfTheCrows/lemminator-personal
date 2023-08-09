@@ -259,11 +259,9 @@ describe('getCommentTree', () => {
                                 leaf: comment_view_1,
                                 children: [],
                                 fullPath: [2123755, 2123787],
-                                unloadedChildren: 0,
                             },
                         ],
                         fullPath: [2123755],
-                        unloadedChildren: 0,
                     },
                 ],
                 flattenedTree: [
@@ -299,16 +297,13 @@ describe('getCommentTree', () => {
                         leaf: comment_123_456,
                         children: [],
                         fullPath: [123, 456],
-                        unloadedChildren: 0,
                     }],
                     fullPath: [123],
-                    unloadedChildren: 1,
                 },
                 {
                     leaf: comment_789,
                     children: [],
                     fullPath: [789],
-                    unloadedChildren: 0,
                 },
             ],
             flattenedTree: [
@@ -348,14 +343,11 @@ describe('getCommentTree', () => {
                                 leaf: comment_1_2_3,
                                 children: [],
                                 fullPath: [1, 2, 3],
-                                unloadedChildren: 1,
                             }
                         ],
                         fullPath: [1, 2],
-                        unloadedChildren: 1,
                     }],
                     fullPath: [1],
-                    unloadedChildren: 1,
                 },
             ],
             flattenedTree: [
@@ -401,21 +393,17 @@ describe('getCommentTree', () => {
                                     leaf: comment_2074795_2076331_2078428,
                                     children: [],
                                     fullPath: [2074795, 2076331, 2078428],
-                                    unloadedChildren: 0,
                                 }
                             ],
                             fullPath: [2074795, 2076331],
-                            unloadedChildren: 0,
                         },
                         {
                             leaf: comment_2074795_2075229,
                             children: [],
                             fullPath: [2074795, 2075229],
-                            unloadedChildren: 0,
                         },
                     ],
                     fullPath: [2074795],
-                    unloadedChildren: 0,
                 },
             ],
             flattenedTree: [
@@ -457,147 +445,18 @@ describe('getCommentTree', () => {
                                     leaf: comment_2074795_2076331_2078428,
                                     children: [],
                                     fullPath: [2074795, 2076331, 2078428],
-                                    unloadedChildren: 0,
                                 },
                             ],
                             fullPath: [2074795, 2076331],
-                            unloadedChildren: 0,
                         },
                     ],
                     fullPath: [2074795],
-                    unloadedChildren: 1,
                 },
             ],
             flattenedTree: [
                 comment_2074795,
                 comment_2074795_2076331,
                 comment_2074795_2076331_2078428,
-            ],
-        })
-    });
-
-    // This is a known problematic case, but we don't have a working solution yet. Ideally,
-    // the Lemmy API would expose a variable indicating the number of omitted direct childs
-    // of a comment.
-    it.skip('parses a third comment tree to help investigate a real-world bug', () => {
-        const comment_2181797 = fabricateCommentView({
-            id: 2181797,
-            path: "0.2181797",
-        }, 11);
-        const comment_2181797_2187385_2200910_2208646_2230147 = fabricateCommentView({
-            id: 2230147,
-            path: "0.2181797.2187385.2200910.2208646.2230147",
-        }, 0);
-        const comment_2181797_2187385 = fabricateCommentView({
-            id: 2187385,
-            path: "0.2181797.2187385",
-        }, 4);
-        const comment_2181797_2187385_2200910_2208646 = fabricateCommentView({
-            id: 2208646,
-            path: "0.2181797.2187385.2200910.2208646",
-        }, 1);
-        const comment_2181797_2187385_2205610 = fabricateCommentView({
-            id: 2205610,
-            path: "0.2181797.2187385.2205610",
-        }, 0);
-        const comment_2181797_2182177 = fabricateCommentView({
-            id: 2182177,
-            path: "0.2181797.2182177",
-        }, 0);
-        const comment_2181797_2187385_2200910 = fabricateCommentView({
-            id: 2200910,
-            path: "0.2181797.2187385.2200910",
-        }, 2);
-        const comment_2181797_2183102 = fabricateCommentView({
-            id: 2183102,
-            path: "0.2181797.2183102",
-        }, 0);
-        // const comment_2181797_2209393_2209965_2213011 = fabricateCommentView({
-        //     id: 2213011,
-        //     path: "0.2181797.2209393.2209965.2213011",
-        // }, 0);
-        // const comment_2181797_2209393_2209965 = fabricateCommentView({
-        //     id: 2209965,
-        //     path: "0.2181797.2209393.2209965",
-        // }, 1);
-
-        expect(getCommentTree([
-            comment_2181797,
-            comment_2181797_2187385_2200910_2208646_2230147,
-            comment_2181797_2187385,
-            comment_2181797_2187385_2200910_2208646,
-            comment_2181797_2187385_2205610,
-            comment_2181797_2182177,
-            comment_2181797_2187385_2200910,
-            comment_2181797_2183102,
-            // comment_2181797_2209393_2209965_2213011,
-            // comment_2181797_2209393_2209965,
-        ])).toEqual({
-            topNodes: [
-                {
-                    leaf: comment_2181797,
-                    children: [
-                        {
-                            leaf: comment_2181797_2187385,
-                            children: [
-                                {
-                                    leaf: comment_2181797_2187385_2205610,
-                                    children: [],
-                                    fullPath: [2181797, 2187385, 2205610],
-                                    unloadedChildren: 0,
-                                },
-                                {
-                                    leaf: comment_2181797_2187385_2200910,
-                                    children: [
-                                        {
-                                            leaf: comment_2181797_2187385_2200910_2208646,
-                                            children: [
-                                                {
-                                                    leaf: comment_2181797_2187385_2200910_2208646_2230147,
-                                                    children: [],
-                                                    fullPath: [2181797, 2187385, 2200910, 2208646, 2230147],
-                                                    unloadedChildren: 0,
-                                                },
-                                            ],
-                                            fullPath: [2181797, 2187385, 2200910, 2208646],
-                                            unloadedChildren: 0,
-                                        },
-                                    ],
-                                    fullPath: [2181797, 2187385, 2200910],
-                                    unloadedChildren: 0,
-                                },
-                            ],
-                            fullPath: [2181797, 2187385],
-                            unloadedChildren: 0,
-                        },
-                        {
-                            leaf: comment_2181797_2182177,
-                            children: [],
-                            fullPath: [2181797, 2182177],
-                            unloadedChildren: 0,
-                        },
-                        {
-                            leaf: comment_2181797_2183102,
-                            children: [],
-                            fullPath: [2181797, 2183102],
-                            unloadedChildren: 0,
-                        },
-                    ],
-                    fullPath: [2181797],
-                    unloadedChildren: 1,
-                },
-            ],
-            flattenedTree: [
-                comment_2181797,
-                comment_2181797_2187385,
-                comment_2181797_2187385_2205610,
-                comment_2181797_2187385_2200910,
-                comment_2181797_2187385_2200910_2208646,
-                comment_2181797_2187385_2200910_2208646_2230147,
-                comment_2181797_2182177,
-                comment_2181797_2183102,
-                // comment_2181797_2209393_2209965_2213011,
-                // comment_2181797_2209393_2209965,
             ],
         })
     });
