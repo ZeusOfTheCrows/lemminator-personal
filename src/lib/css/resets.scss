@@ -59,3 +59,7 @@
     color: inherit;
     margin: 0;
 }
+
+:global(pre) {
+    word-wrap: normal;
+}
