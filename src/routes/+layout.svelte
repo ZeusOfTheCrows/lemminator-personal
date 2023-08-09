@@ -31,7 +31,7 @@
 	onMount(() => {
 		if (Cookies.get('demoDisclaimer') == undefined) {
 			alert(
-				"Hi! Thanks for trying out this early demo of Lemminator. Some caveats:\n\n- Some visible features do not work yet\n- Comment sections are still a little janky sometimes\n- Only SFW posts are shown. A toggle should be implemented eventually.\n\nIf you're cool with that, carry on!"
+				"Hi! Thanks for trying out this early demo of Lemminator. Some caveats:\n\n- Some visible features do not work yet.\n- Only SFW posts are shown. A toggle should be implemented eventually.\n\nIf you're cool with that, carry on!"
 			);
 			Cookies.set('demoDisclaimer', 'shown', { expires: 7 });
 		}
