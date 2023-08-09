@@ -1,4 +1,5 @@
-import { sanitize } from 'isomorphic-dompurify';
+import DOMPurify from 'isomorphic-dompurify';
+const { sanitize } = DOMPurify;
 import MarkdownIt from 'markdown-it';
 import markdown_it_link_attributes from 'markdown-it-link-attributes';
 import markdown_it_footnote from 'markdown-it-footnote';
