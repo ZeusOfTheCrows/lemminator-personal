@@ -7,7 +7,8 @@
 	import type { CommentView } from 'lemmy-js-client';
 	import { formatRelativeTime, getClient } from '$lib/js/client';
 	import { createEventDispatcher } from 'svelte';
-	import { session } from '$lib/js/globals';
+	import { cachedCalls, getLocalPerson, session } from '$lib/js/globals';
+	import LoadingSpinner from './LoadingSpinner.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -53,61 +54,88 @@
 			await sendToggledVote(vote);
 		}
 	}
+
+	let deleteState: 'not_deleted' | 'deleting' | 'deleted' = 'not_deleted';
+	async function deleteComment() {
+		const isConfirmed = confirm('This comment will be deleted.');
+		if (!isConfirmed) return;
+
+		if ($session.state === 'authenticated') {
+			const client = getClient();
+			deleteState = 'deleting';
+			try {
+				await client.deleteComment({ commentId: node.leaf.comment.id, jwt: $session.jwt });
+			} catch (e) {
+				deleteState = 'not_deleted';
+			}
+			deleteState = 'deleted';
+		}
+	}
 </script>
 
-<div
-	class="comment"
-	class:comment--alternate={isAlternate}
-	class:comment--selected={focusedCommentId === node.leaf.comment.id}
-	class:comment--deselected={focusedCommentId !== null && focusedCommentId !== node.leaf.comment.id}
-	bind:this={commentElement}
->
-	<div class="comment__metaLine">
-		{#if node.leaf.creator.avatar}
-			<EntityIcon src={node.leaf.creator.avatar} alt="Avatar" />
-		{/if}
-		{node.leaf.creator.name}
-		<div class="comment__relativeTimePresep">&middot;</div>
-		<div class="comment__relativeTime">
-			{formatRelativeTime(node.leaf.comment.published)}
+{#if deleteState === 'not_deleted'}
+	<div
+		class="comment"
+		class:comment--alternate={isAlternate}
+		class:comment--selected={focusedCommentId === node.leaf.comment.id}
+		class:comment--deselected={focusedCommentId !== null &&
+			focusedCommentId !== node.leaf.comment.id}
+		bind:this={commentElement}
+	>
+		<div class="comment__metaLine">
+			{#if node.leaf.creator.avatar}
+				<EntityIcon src={node.leaf.creator.avatar} alt="Avatar" />
+			{/if}
+			{node.leaf.creator.name}
+			<div class="comment__relativeTimePresep">&middot;</div>
+			<div class="comment__relativeTime">
+				{formatRelativeTime(node.leaf.comment.published)}
+			</div>
+		</div>
+		<div class="comment__content">
+			{@html renderEnhancedMarkdown(node.leaf.comment.content)}
+		</div>
+		<div class="comment__actionLine">
+			<ThemedButton
+				appearance={node.leaf.my_vote == 1 ? 'default' : 'dimmed'}
+				icon="keyboard_arrow_up"
+				title="Upvote"
+				fontSize="0.875rem"
+				toggled={!!$session.jwt && node.leaf.my_vote == 1}
+				on:click={() => toggleVote(1)}
+			>
+				{node.leaf.counts.upvotes}
+			</ThemedButton>
+			<ThemedButton
+				appearance={node.leaf.my_vote == -1 ? 'default' : 'dimmed'}
+				icon="keyboard_arrow_down"
+				title="Downvote"
+				fontSize="0.875rem"
+				toggled={!!$session.jwt && node.leaf.my_vote == -1}
+				on:click={() => toggleVote(-1)}
+			>
+				{node.leaf.counts.downvotes}
+			</ThemedButton>
+			{#await $cachedCalls.siteResponse then siteResponse}
+				{#if getLocalPerson(siteResponse)?.id === node.leaf.creator.id}
+					<ThemedButton icon="delete" title="Delete" on:click={deleteComment} />
+				{/if}
+			{/await}
 		</div>
 	</div>
-	<div class="comment__content">
-		{@html renderEnhancedMarkdown(node.leaf.comment.content)}
-	</div>
-	<div class="comment__actionLine">
-		<ThemedButton
-			appearance={node.leaf.my_vote == 1 ? 'default' : 'dimmed'}
-			icon="keyboard_arrow_up"
-			title="Upvote"
-			fontSize="0.875rem"
-			toggled={!!$session.jwt && node.leaf.my_vote == 1}
-			on:click={() => toggleVote(1)}
-		>
-			{node.leaf.counts.upvotes}
-		</ThemedButton>
-		<ThemedButton
-			appearance={node.leaf.my_vote == -1 ? 'default' : 'dimmed'}
-			icon="keyboard_arrow_down"
-			title="Downvote"
-			fontSize="0.875rem"
-			toggled={!!$session.jwt && node.leaf.my_vote == -1}
-			on:click={() => toggleVote(-1)}
-		>
-			{node.leaf.counts.downvotes}
-		</ThemedButton>
-	</div>
-</div>
-{#if node.children.length}
-	<div class="commentDescendants">
-		<!-- Event forwarding doesn't work here. We have to redispatch it. -->
-		<CommentList
-			nodes={node.children}
-			{flattenedTree}
-			{focusedCommentId}
-			on:subtreeExpansionRequested={(item) => dispatch('subtreeExpansionRequested', item.detail)}
-		/>
-	</div>
+	{#if node.children.length}
+		<div class="commentDescendants">
+			<!-- Event forwarding doesn't work here. We have to redispatch it. -->
+			<CommentList
+				nodes={node.children}
+				{flattenedTree}
+				{focusedCommentId}
+				on:subtreeExpansionRequested={(item) => dispatch('subtreeExpansionRequested', item.detail)}
+			/>
+		</div>
+	{/if}
+{:else if deleteState === 'deleting'}
+	<LoadingSpinner minHeight="2rem" />
 {/if}
 
 <style lang="scss">

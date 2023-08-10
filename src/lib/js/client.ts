@@ -99,6 +99,17 @@ class ApiClient {
             auth: params.jwt,
         }));
     }
+
+    deleteComment(params: {
+        commentId: number,
+        jwt: string,
+    }): Promise<CommentResponse> {
+        return this.wrapForApiTimeouts(this.innerClient.deleteComment({
+            comment_id: params.commentId,
+            deleted: true,
+            auth: params.jwt,
+        }));
+    }
 }
 
 export function getClient(): ApiClient {

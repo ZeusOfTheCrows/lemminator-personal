@@ -1,4 +1,4 @@
-import type { GetSiteResponse } from "lemmy-js-client";
+import type { GetSiteResponse, Person } from "lemmy-js-client";
 import { writable, type Readable, type Writable, derived } from "svelte/store";
 import { getClient } from "./client";
 import Cookies from 'js-cookie';
@@ -60,3 +60,7 @@ export const cachedCalls: Readable<{
         siteResponse: client.getSite($session.jwt),
     };
 });
+
+export function getLocalPerson(siteResponse: GetSiteResponse): Person | null {
+    return siteResponse.my_user?.local_user_view.person ?? null;
+}
