@@ -30,7 +30,7 @@
 	$: {
 		const cumulativeChildCounts = commentTree.topNodes.reduce(
 			(acc, cur) => acc + cur.leaf.counts.child_count,
-			0
+			commentTree.topNodes.length
 		);
 		if (moreCommentsAvailable) {
 			moreCommentsAvailable = cumulativeChildCounts < data.postResponse.post_view.counts.comments;
