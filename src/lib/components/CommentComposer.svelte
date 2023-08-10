@@ -43,28 +43,28 @@
 <div class="commentComposer">
 	<div class="commentComposer__editor">
 		<textarea bind:value={comment} on:click={ensureAuthenticated} />
-		<div>
-			{#if loading}
-				<LoadingSpinner minHeight="1rem" />
-			{:else}
-				<ThemedButton
-					icon="add_comment"
-					appearance="filled"
-					on:click={() => submit()}
-					disabled={comment === ''}
-					title={comment === '' ? 'Write your comment first.' : null}
-					fontSize="0.85rem"
-				>
-					Submit
-				</ThemedButton>
-			{/if}
-		</div>
+		{#if comment}
+			<div class="commentComposer__preview">
+				{@html renderEnhancedMarkdown(comment)}
+			</div>
+		{/if}
 	</div>
-	{#if comment}
-		<div class="commentComposer__preview">
-			{@html renderEnhancedMarkdown(comment)}
-		</div>
-	{/if}
+	<div>
+		{#if loading}
+			<LoadingSpinner minHeight="1rem" />
+		{:else}
+			<ThemedButton
+				icon="add_comment"
+				appearance="filled"
+				on:click={() => submit()}
+				disabled={comment === ''}
+				title={comment === '' ? 'Write your comment first.' : null}
+				fontSize="0.85rem"
+			>
+				Submit
+			</ThemedButton>
+		{/if}
+	</div>
 </div>
 
 <style lang="scss">
@@ -74,21 +74,22 @@
 
 	.commentComposer {
 		display: flex;
-		flex-direction: row;
-		gap: 1rem;
+		flex-direction: column;
+		gap: 0.5rem;
 
 		.commentComposer__editor {
 			display: flex;
-			flex-direction: column;
-			flex-basis: 0;
+			flex-direction: row;
 			flex-grow: 1;
-			gap: 0.5rem;
+			gap: 1rem;
 
 			textarea {
 				font-family: 'Roboto';
 				border-radius: 5px;
-				margin-left: 2px; // Offset the outline
+				font-size: 0.85rem;
+				margin: 0 2px; // Offset the outline
 				padding: 0.5rem;
+				flex-basis: 0;
 				flex-grow: 1;
 				min-height: 4rem;
 
@@ -101,22 +102,23 @@
 					}
 				}
 			}
-		}
-		.commentComposer__preview {
-			display: none;
-			padding-top: 0.1rem;
-			padding-bottom: 2.7rem;
-			flex-basis: 0;
-			flex-grow: 1;
-			font-size: 0.9rem;
-			@include colors.themify() {
-				color: rgba(colors.themed('themedMainText'), 0.4);
-			}
 
-			@include markdown.styleExternalContent($allowFontSizeIncreases: false);
+			.commentComposer__preview {
+				display: none;
+				font-size: 0.85rem;
+				flex-basis: 0;
+				flex-grow: 1;
+				padding: 0.2rem 0;
 
-			@include breakpoints.mediumAndUp {
-				display: block;
+				@include colors.themify() {
+					color: rgba(colors.themed('themedMainText'), 0.4);
+				}
+
+				@include markdown.styleExternalContent($allowFontSizeIncreases: false);
+
+				@include breakpoints.mediumAndUp {
+					display: block;
+				}
 			}
 		}
 	}
