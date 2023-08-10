@@ -14,7 +14,7 @@
 				<span class="material-icons">error</span>
 			</div>
 			<div class="error__title">
-				{$page?.error?.message}
+				{$page?.error?.message ?? 'Error occurred'}
 			</div>
 			<div class="error__subtitle">Sorry for the inconvenience.</div>
 		</div>
