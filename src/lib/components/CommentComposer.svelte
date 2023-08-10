@@ -53,6 +53,7 @@
 					on:click={() => submit()}
 					disabled={comment === ''}
 					title={comment === '' ? 'Write your comment first.' : null}
+					fontSize="0.85rem"
 				>
 					Submit
 				</ThemedButton>
