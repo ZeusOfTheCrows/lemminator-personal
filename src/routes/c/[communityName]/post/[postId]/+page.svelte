@@ -16,6 +16,8 @@
 	import { getClient } from '$lib/js/client';
 	import { session } from '$lib/js/globals';
 	import ThemedButton from '$lib/components/ThemedButton.svelte';
+	import CommentComposer from '$lib/components/CommentComposer.svelte';
+	import { invalidate } from '$app/navigation';
 
 	export let data: PageData;
 	let commentViews: CommentView[] = data.commentsResponse.comments;
@@ -73,6 +75,13 @@
 		{:then postResponse}
 			<div class="postDetailLayouter">
 				<PostOverviewCard postView={postResponse.post_view} active={null} variant="detail" />
+				<CommentComposer
+					postId={postResponse.post_view.post.id}
+					parentCommentId={null}
+					on:commentSubmit={(event) => {
+						commentViews = [event.detail].concat(commentViews);
+					}}
+				/>
 				<CommentSection
 					tree={commentTree}
 					on:subtreeExpansionRequested={(item) => loadCommentsForId(item.detail)}

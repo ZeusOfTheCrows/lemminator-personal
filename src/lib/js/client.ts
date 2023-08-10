@@ -90,6 +90,15 @@ class ApiClient {
             page,
         }));
     }
+
+    postComment(params: { postId: number, parentId?: number, content: string, jwt: string }): Promise<CommentResponse> {
+        return this.wrapForApiTimeouts(this.innerClient.createComment({
+            post_id: params.postId,
+            parent_id: params.parentId,
+            content: params.content,
+            auth: params.jwt,
+        }));
+    }
 }
 
 export function getClient(): ApiClient {

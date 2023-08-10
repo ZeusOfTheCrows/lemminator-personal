@@ -16,6 +16,10 @@
     vertical-align: baseline;
 }
 
+:global(em) {
+    font-style: italic;
+}
+
 /* HTML5 display-role reset for older browsers */
 :global(article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section) {
     display: block;

@@ -46,7 +46,7 @@
 	let primarySidebarModal: HTMLDialogElement;
 	let userMenuOpen = false;
 
-	let postAuthCallback: (() => {}) | null = null;
+	let postAuthCallback: (() => void) | null = null;
 	$: {
 		if ($session.state === 'authenticating') {
 			postAuthCallback = $session.callback ?? null;
