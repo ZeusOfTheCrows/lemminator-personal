@@ -34,13 +34,12 @@
 
 		.error__image .material-icons {
 			@include colors.themify() {
-				background: colors.themed('color2');
+				border: solid 1rem colors.themed('color2');
 				color: rgba(colors.themed('maxContrastOnTheme'), 0.9);
 			}
 
 			border-radius: 100%;
 			font-size: 5rem;
-			padding: 1rem;
 			margin-bottom: 1rem;
 		}
 
