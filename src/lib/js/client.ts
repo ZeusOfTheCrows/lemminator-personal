@@ -10,6 +10,7 @@ class ApiClient {
     private async wrapForApiTimeouts<T>(promise: Promise<T>): Promise<T> {
         return timeout(promise, 8000).catch((err) => {
             if (err instanceof TimeoutError) {
+                console.trace();
                 throw error(504, 'The servers are too slow right now.')
             } else {
                 throw err;
