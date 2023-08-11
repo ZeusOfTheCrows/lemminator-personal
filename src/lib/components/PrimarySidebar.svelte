@@ -1,17 +1,16 @@
 <script lang="ts">
 	import { getClient } from '$lib/js/client';
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import LoadingSpinner from './LoadingSpinner.svelte';
 	import { page } from '$app/stores';
 	import type { ListCommunitiesResponse } from 'lemmy-js-client';
-	import { beforeNavigate } from '$app/navigation';
 	import { error } from '@sveltejs/kit';
 
 	const dispatch = createEventDispatcher();
 	const client = getClient();
 	let communitiesResponse: Promise<ListCommunitiesResponse>;
 
-	beforeNavigate(() => {
+	onMount(() => {
 		communitiesResponse = client
 			.listTopCommunities()
 			.then((response) => {
