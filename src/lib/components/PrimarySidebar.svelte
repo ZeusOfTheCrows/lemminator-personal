@@ -3,18 +3,25 @@
 	import { createEventDispatcher } from 'svelte';
 	import LoadingSpinner from './LoadingSpinner.svelte';
 	import { page } from '$app/stores';
+	import type { ListCommunitiesResponse } from 'lemmy-js-client';
+	import { beforeNavigate } from '$app/navigation';
+	import { error } from '@sveltejs/kit';
 
 	const dispatch = createEventDispatcher();
 	const client = getClient();
-	let communitiesResponse = client
-		.listTopCommunities()
-		.then((response) => {
-			dispatch('communitiesResponseLoaded');
-			return response;
-		})
-		.catch(() => {
-			console.error('Community sidebar load failed');
-		});
+	let communitiesResponse: Promise<ListCommunitiesResponse>;
+
+	beforeNavigate(() => {
+		communitiesResponse = client
+			.listTopCommunities()
+			.then((response) => {
+				dispatch('communitiesResponseLoaded');
+				return response;
+			})
+			.catch(() => {
+				throw error(502, 'Community sidebar load failed');
+			});
+	});
 </script>
 
 <ul class="mainNavigation">
