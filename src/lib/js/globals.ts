@@ -2,6 +2,8 @@ import type { GetSiteResponse, Person } from "lemmy-js-client";
 import { writable, type Readable, type Writable, derived } from "svelte/store";
 import { getClient } from "./client";
 import Cookies from 'js-cookie';
+import { TimeoutError } from "promise-timeout";
+import { error } from "@sveltejs/kit";
 
 export const keynav: Writable<{
     mode: 'normal';
@@ -52,12 +54,22 @@ session.subscribe((newValue) => {
     }
 })
 
+// @ts-ignore
 export const cachedCalls: Readable<{
     siteResponse: Promise<GetSiteResponse>,
 }> = derived(session, ($session) => {
     const client = getClient();
     return {
-        siteResponse: client.getSite($session.jwt),
+        siteResponse: client.getSite($session.jwt).catch(e => {
+            // TimeoutError should have already redirected to a different page
+            if (!(e instanceof TimeoutError)) {
+                throw error(500, 'Server error');
+            }
+
+            // At this point, the redirect should have happened so the return type
+            // doesn't matter. Just don't cause an unhandled exception cause that
+            // can trip up SSR.
+        }),
     };
 });
 
