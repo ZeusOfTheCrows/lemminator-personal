@@ -92,6 +92,7 @@
 				flex-basis: 0;
 				flex-grow: 1;
 				min-height: 4rem;
+				background: none;
 
 				@include colors.themify() {
 					border: solid 1px rgba(colors.themed('themedShadow'), 0.3);
