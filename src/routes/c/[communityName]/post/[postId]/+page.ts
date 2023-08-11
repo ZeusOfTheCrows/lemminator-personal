@@ -1,6 +1,7 @@
 import { getClient } from "$lib/js/client";
 import { error } from "@sveltejs/kit";
 import type { PageLoad } from "./$types";
+import { getNormalizedCommunityName } from "$lib/js/navigation";
 
 export const load = (async ({ parent, params }) => {
     const { jwt } = await parent();
@@ -12,7 +13,8 @@ export const load = (async ({ parent, params }) => {
     return {
         // The implicit page limit appears to be 50. An explicit limit cannot be set.
         postResponse: client.getPost(postIdNum, jwt).then(response => {
-            if (response.community_view.community.name !== params.communityName) {
+            const unsuffixedCommunityName = params.communityName.split('@')[0];
+            if (params.communityName !== getNormalizedCommunityName(response.community_view.community)) {
                 throw error(404, 'Could not find post');
             }
             return response;

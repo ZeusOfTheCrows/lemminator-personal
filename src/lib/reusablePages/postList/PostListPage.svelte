@@ -24,20 +24,14 @@
 	function onRequestPrevPage() {
 		if (pageId <= 1) return;
 
-		goto(
-			`/c/${communityResponse.community_view.community.name}/page/${pageId - 1}?selectedPostId=last`
-		);
+		goto(`/c/${$page.params.communityName}/page/${pageId - 1}?selectedPostId=last`);
 	}
 
 	function onRequestNextPage() {
 		Promise.all([postsResponse]).then(([postsResponse]) => {
 			if (postsResponse.posts.length < POST_PAGE_SIZE) return;
 
-			goto(
-				`/c/${communityResponse.community_view.community.name}/page/${
-					pageId + 1
-				}?selectedPostId=first`
-			);
+			goto(`/c/${$page.params.communityName}/page/${pageId + 1}?selectedPostId=first`);
 		});
 	}
 </script>
@@ -76,7 +70,7 @@
 					<div class="loadMorePlacer">
 						<ThemedButton
 							icon="keyboard_double_arrow_up"
-							href={`/c/${communityResponse.community_view.community.name}/page/${pageId - 1}`}
+							href={`/c/${$page.params.communityName}/page/${pageId - 1}`}
 						>
 							Load previous
 						</ThemedButton>
@@ -93,7 +87,7 @@
 				<div class="loadMorePlacer">
 					<ThemedButton
 						icon="keyboard_double_arrow_down"
-						href={`/c/${communityResponse.community_view.community.name}/page/${pageId + 1}`}
+						href={`/c/${$page.params.communityName}/page/${pageId + 1}`}
 					>
 						Load next
 					</ThemedButton>

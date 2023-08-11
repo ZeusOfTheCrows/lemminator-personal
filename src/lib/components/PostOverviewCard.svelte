@@ -5,13 +5,17 @@
 	import ThemedButton from './ThemedButton.svelte';
 	import { renderEnhancedMarkdown } from '$lib/js/markdown';
 	import EntityIcon from './EntityIcon.svelte';
-	import { getDetailLinkForPost } from '$lib/js/navigation';
+	import { getDetailLinkForPost, getNormalizedCommunityName } from '$lib/js/navigation';
 	import { session } from '$lib/js/globals';
 	import { invalidate } from '$app/navigation';
 
 	// null = shimmer
 	export let postView: PostView | null;
 	export let showCommunity: boolean = true;
+	let communityName: string | null;
+	$: {
+		communityName;
+	}
 	export let active: boolean | null = null;
 	export let variant: 'list' | 'detail' = 'list';
 
@@ -60,7 +64,7 @@
 					<div class="postOverviewCard__metaLine">
 						{#if showCommunity}
 							<div class="postOverviewCard__community">
-								<a href={`/c/${postView.community.name}`}>
+								<a href={`/c/${getNormalizedCommunityName(postView.community)}`}>
 									{#if postView.community.icon}
 										<EntityIcon src={postView.community.icon} alt={postView.community.title} />
 									{/if}
