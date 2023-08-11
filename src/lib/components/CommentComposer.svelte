@@ -3,7 +3,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import ThemedButton from './ThemedButton.svelte';
 	import { getClient } from '$lib/js/client';
-	import { session } from '$lib/js/globals';
+	import { keynav, session } from '$lib/js/globals';
 	import LoadingSpinner from './LoadingSpinner.svelte';
 
 	const dispatch = createEventDispatcher();
@@ -42,7 +42,12 @@
 
 <div class="commentComposer">
 	<div class="commentComposer__editor">
-		<textarea bind:value={comment} on:click={ensureAuthenticated} />
+		<textarea
+			bind:value={comment}
+			on:click={ensureAuthenticated}
+			on:focus={() => ($keynav.mode = 'typing')}
+			on:blur={() => ($keynav.mode = 'normal')}
+		/>
 		{#if comment}
 			<div class="commentComposer__preview">
 				{@html renderEnhancedMarkdown(comment)}

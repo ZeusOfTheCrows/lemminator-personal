@@ -6,7 +6,7 @@ import { TimeoutError } from "promise-timeout";
 import { error } from "@sveltejs/kit";
 
 export const keynav: Writable<{
-    mode: 'normal';
+    mode: 'normal' | 'typing';
 }> = writable({
     mode: 'normal',
 });
