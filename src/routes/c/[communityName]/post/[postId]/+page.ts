@@ -27,7 +27,6 @@ export const load = (async ({ parent, params }) => {
             }
             throw e;
         }),
-        // Calculation of "Load more" counts depends on comments not being omitted for exceeding a depth limit
         commentsResponse: client.getComments(postIdNum, undefined, jwt).catch((e) => {
             if (e === 'couldnt_get_comments') {
                 throw error(502, "Could not fetch comments");
