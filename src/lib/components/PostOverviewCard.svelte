@@ -83,6 +83,12 @@
 						<div class="postOverviewCard__relativeTime">
 							{formatRelativeTime(postView.post.published)}
 						</div>
+						{#if postView.post.featured_local}
+							&nbsp;
+							<span class="postOverviewCard__pinIndicator material-icons" title="Pinned post"
+								>push_pin</span
+							>
+						{/if}
 					</div>
 					<div class="postOverviewCard__name">
 						<a href={getDetailLinkForPost(postView)}>
@@ -251,6 +257,10 @@
 					@include breakpoints.mediumAndUp {
 						display: block;
 					}
+				}
+
+				.postOverviewCard__pinIndicator {
+					font-size: 0.9rem;
 				}
 			}
 
