@@ -1,4 +1,6 @@
 export function formatApproxInteger(input: number): string {
+    if (input === 0) return '0';
+
     const sign = Math.sign(input) ? '' : '-';
     const absInput = Math.abs(input);
     if (absInput < 1_000) return `${sign}${input.toString()}`;

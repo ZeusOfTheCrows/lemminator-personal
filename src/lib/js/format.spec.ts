@@ -35,4 +35,8 @@ describe('format integer approximately', () => {
         expect(formatApproxInteger(-1_999_999)).toBe('< -1m');
         expect(formatApproxInteger(-999_999_999)).toBe('< -999m');
     })
+
+    it('formats 0', () => {
+        expect(formatApproxInteger(0)).toBe('0');
+    })
 });
