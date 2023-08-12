@@ -71,18 +71,16 @@
 					hostname={new URL(communityResponse.community_view.community.actor_id).hostname}
 				/>
 			{/if}
-			{#await postsResponse then}
-				{#if pageId > 1}
-					<div class="loadMorePlacer">
-						<ThemedButton
-							icon="keyboard_double_arrow_up"
-							href={`/c/${$page.params.communityName}/page/${pageId - 1}`}
-						>
-							Load previous
-						</ThemedButton>
-					</div>
-				{/if}
-			{/await}
+			{#if pageId > 1}
+				<div class="loadMorePlacer">
+					<ThemedButton
+						icon="keyboard_double_arrow_up"
+						href={`/c/${$page.params.communityName}/page/${pageId - 1}`}
+					>
+						Load previous
+					</ThemedButton>
+				</div>
+			{/if}
 			<PostList
 				communityName={$page.params.communityName}
 				{postsResponse}
