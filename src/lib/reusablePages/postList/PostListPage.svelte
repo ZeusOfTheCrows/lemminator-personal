@@ -8,6 +8,7 @@
 	import { goto } from '$app/navigation';
 	import { POST_PAGE_SIZE } from '$lib/js/client';
 	import ThemedButton from '$lib/components/ThemedButton.svelte';
+	import FederationHint from '$lib/components/FederationHint.svelte';
 
 	export let communityResponse: CommunityResponse;
 	export let postsResponse: GetPostsResponse;
@@ -65,6 +66,12 @@
 					</h1>
 				</div>
 			</div>
+			{#if !communityResponse.community_view.community.local}
+				<FederationHint
+					contentType="community"
+					hostname={new URL(communityResponse.community_view.community.actor_id).hostname}
+				/>
+			{/if}
 			{#await postsResponse then}
 				{#if pageId > 1}
 					<div class="loadMorePlacer">

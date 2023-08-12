@@ -18,6 +18,7 @@
 	import ThemedButton from '$lib/components/ThemedButton.svelte';
 	import CommentComposer from '$lib/components/CommentComposer.svelte';
 	import { invalidate } from '$app/navigation';
+	import FederationHint from '$lib/components/FederationHint.svelte';
 
 	export let data: PageData;
 	let commentViews: CommentView[] = data.commentsResponse.comments;
@@ -74,6 +75,12 @@
 			<LoadingSpinner minHeight="10rem" />
 		{:then postResponse}
 			<div class="postDetailLayouter">
+				{#if !data.postResponse.post_view.post.local}
+					<FederationHint
+						contentType="post"
+						hostname={new URL(data.postResponse.post_view.community.actor_id).hostname}
+					/>
+				{/if}
 				<PostOverviewCard postView={postResponse.post_view} active={null} variant="detail" />
 				<CommentComposer
 					postId={postResponse.post_view.post.id}
