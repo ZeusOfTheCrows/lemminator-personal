@@ -75,7 +75,7 @@
 			<LoadingSpinner minHeight="10rem" />
 		{:then postResponse}
 			<div class="postDetailLayouter">
-				{#if !data.postResponse.post_view.post.local}
+				{#if !data.postResponse.community_view.community.local}
 					<FederationHint
 						contentType="post"
 						hostname={new URL(data.postResponse.post_view.community.actor_id).hostname}
