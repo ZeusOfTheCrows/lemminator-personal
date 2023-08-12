@@ -4,7 +4,7 @@
 	import ThemedButton from '$lib/components/ThemedButton.svelte';
 	import logoOnLight from '$lib/img/logoOnLight.png';
 	import logoOnDark from '$lib/img/logoOnDark.png';
-	import logoOnLightSvg from '$lib/img/logoOnLight.svg';
+	import logoLightCircle from '$lib/img/logoLightCircle.png';
 	import logoOnDarkSvg from '$lib/img/logoOnDark.svg';
 	import { session, cachedCalls, theme } from '$lib/js/globals';
 	import Cookies from 'js-cookie';
@@ -59,8 +59,7 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href={logoOnLightSvg} media="(prefers-color-scheme: light)" />
-	<link rel="icon" href={logoOnDarkSvg} media="(prefers-color-scheme: dark)" />
+	<link rel="icon" href={logoLightCircle} />
 </svelte:head>
 
 <div class:lightTheme={$theme === 'light'} class:darkTheme={$theme === 'dark'}>
