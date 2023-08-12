@@ -54,7 +54,7 @@
 			</div>
 		{/if}
 	</div>
-	<div>
+	<div class="commentComposer__actions">
 		{#if loading}
 			<LoadingSpinner minHeight="1rem" />
 		{:else}
@@ -68,6 +68,11 @@
 			>
 				Submit
 			</ThemedButton>
+			{#if parentCommentId}
+				<ThemedButton appearance="filled" on:click={() => dispatch('dismiss')} fontSize="0.85rem">
+					Cancel
+				</ThemedButton>
+			{/if}
 		{/if}
 	</div>
 </div>
@@ -126,6 +131,12 @@
 					display: block;
 				}
 			}
+		}
+
+		.commentComposer__actions {
+			display: flex;
+			flex-direction: row;
+			gap: 0.5rem;
 		}
 	}
 </style>

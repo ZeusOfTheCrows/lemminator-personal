@@ -9,6 +9,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import { cachedCalls, getLocalPerson, session } from '$lib/js/globals';
 	import LoadingSpinner from './LoadingSpinner.svelte';
+	import CommentComposer from './CommentComposer.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -23,6 +24,8 @@
 			isAlternate = index % 2 != 0;
 		}
 	}
+
+	let showReplyWriter = false;
 
 	let commentElement: HTMLElement;
 	export let focusedCommentId: number | null;
@@ -71,6 +74,18 @@
 			deleteState = 'deleted';
 		}
 	}
+
+	function propagateReply(event: { detail: CommentView }) {
+		const emptyChildren: CommentTreeNode[] = [];
+		node.children = [
+			{
+				leaf: event.detail,
+				children: emptyChildren,
+				fullPath: node.fullPath.concat(event.detail.comment.id)
+			}
+		].concat(node.children);
+		showReplyWriter = false;
+	}
 </script>
 
 {#if deleteState === 'not_deleted'}
@@ -116,12 +131,23 @@
 			>
 				{node.leaf.counts.downvotes}
 			</ThemedButton>
+			<ThemedButton icon="add_comment" title="Reply" on:click={() => (showReplyWriter = true)} />
 			{#await $cachedCalls.siteResponse then siteResponse}
 				{#if getLocalPerson(siteResponse)?.id === node.leaf.creator.id}
 					<ThemedButton icon="delete" title="Delete" on:click={deleteComment} />
 				{/if}
 			{/await}
 		</div>
+		{#if showReplyWriter}
+			<div class="comment__addReply">
+				<CommentComposer
+					parentCommentId={node.leaf.comment.id}
+					postId={node.leaf.post.id}
+					on:dismiss={() => (showReplyWriter = false)}
+					on:commentSubmit={propagateReply}
+				/>
+			</div>
+		{/if}
 	</div>
 	{#if node.children.length}
 		<div class="commentDescendants">
@@ -194,6 +220,10 @@
 			flex-direction: row;
 			gap: 1rem;
 			padding: 0 0.5rem;
+		}
+
+		.comment__addReply {
+			padding: 0.5rem 1rem;
 		}
 	}
 
