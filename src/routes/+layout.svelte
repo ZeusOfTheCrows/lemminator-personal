@@ -14,6 +14,7 @@
 	import UserMenu from '$lib/components/UserMenu.svelte';
 	import { offset, flip, shift } from 'svelte-floating-ui/dom';
 	import { createFloatingActions } from 'svelte-floating-ui';
+	import SearchPopup from '$lib/components/SearchPopup.svelte';
 
 	let root: HTMLElement;
 	let navigating = false;
@@ -30,7 +31,7 @@
 	onMount(() => {
 		if (Cookies.get('demoDisclaimer') == undefined) {
 			alert(
-				"Hi! Thanks for trying out this early demo of Lemminator. Some caveats:\n\n- Some visible features do not work yet.\n- Only SFW posts are shown. A toggle should be implemented eventually.\n\nIf you're cool with that, carry on!"
+				"Hi! Thanks for trying out this early demo of Lemminator. Some caveats:\n\n- Search only covers communities\n- Commenting support is still limited\n- Subscriptions are not yet implemented\n- Only SFW posts are shown. A toggle should be implemented eventually.\n\nIf you're cool with that, carry on!"
 			);
 			Cookies.set('demoDisclaimer', 'shown', { expires: 7 });
 		}
@@ -53,6 +54,8 @@
 			postAuthCallback();
 		}
 	}
+
+	let searchPopupOpen = false;
 </script>
 
 <svelte:head>
@@ -82,7 +85,7 @@
 				</a>
 			</div>
 			<div class="header__search">
-				<button class="header__searchBox">
+				<button class="header__searchBox" on:click={() => (searchPopupOpen = true)}>
 					<span class="material-icons">search</span>
 					<span class="header__searchBoxLabel">Search community or post</span>
 				</button>
@@ -141,6 +144,9 @@
 
 	{#if $session.state === 'authenticating'}
 		<LoginPopup on:dismiss={() => ($session.state = 'unauthenticated')} />
+	{/if}
+	{#if searchPopupOpen}
+		<SearchPopup on:dismiss={() => (searchPopupOpen = false)} />
 	{/if}
 </div>
 

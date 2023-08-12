@@ -1,6 +1,6 @@
 import { invalidateAll } from "$app/navigation";
 import { error } from "@sveltejs/kit";
-import { LemmyHttp, type GetSiteResponse, type ListCommunitiesResponse, type GetCommunityResponse, type GetCommentsResponse, type GetPostsResponse, type GetPostResponse, type LoginResponse, type PostResponse, type CommentResponse } from "lemmy-js-client";
+import { LemmyHttp, type GetSiteResponse, type ListCommunitiesResponse, type GetCommunityResponse, type GetCommentsResponse, type GetPostsResponse, type GetPostResponse, type LoginResponse, type PostResponse, type CommentResponse, type SearchResponse } from "lemmy-js-client";
 import moment from "moment";
 import { TimeoutError, timeout } from 'promise-timeout';
 
@@ -109,6 +109,13 @@ class ApiClient {
         return this.wrapForApiTimeouts('deleteComment', this.innerClient.deleteComment({
             comment_id: params.commentId,
             deleted: true,
+            auth: params.jwt,
+        }));
+    }
+
+    search(params: { query: string, jwt?: string }): Promise<SearchResponse> {
+        return this.wrapForApiTimeouts('searchCommunities', this.innerClient.search({
+            q: params.query,
             auth: params.jwt,
         }));
     }
