@@ -25,13 +25,15 @@
 		{#await communityResponse}
 			<LoadingSpinner minHeight="4rem" />
 		{:then communityResponse}
-			<ElevatedBox title="About community" stacking="vertical">
-				<div class="secondaryNavigation__runningText">
-					{@html renderEnhancedMarkdown(
-						communityResponse.community_view.community.description ?? ''
-					)}
-				</div>
-			</ElevatedBox>
+			{#if communityResponse.community_view.community.description}
+				<ElevatedBox title="About community" stacking="vertical">
+					<div class="secondaryNavigation__runningText">
+						{@html renderEnhancedMarkdown(
+							communityResponse.community_view.community.description ?? ''
+						)}
+					</div>
+				</ElevatedBox>
+			{/if}
 			<ElevatedBox title="Activity" stacking="vertical">
 				<div class="secondaryNavigation__statList">
 					<div class="statistic">
