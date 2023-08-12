@@ -12,10 +12,6 @@
 	// null = shimmer
 	export let postView: PostView | null;
 	export let showCommunity: boolean = true;
-	let communityName: string | null;
-	$: {
-		communityName;
-	}
 	export let active: boolean | null = null;
 	export let variant: 'list' | 'detail' = 'list';
 
@@ -83,11 +79,11 @@
 						<div class="postOverviewCard__relativeTime">
 							{formatRelativeTime(postView.post.published)}
 						</div>
-						{#if postView.post.featured_local}
+						{#if postView.post.featured_local || postView.post.featured_community}
 							&nbsp;
-							<span class="postOverviewCard__pinIndicator material-icons" title="Pinned post"
-								>push_pin</span
-							>
+							<span class="postOverviewCard__pinIndicator material-icons" title="Pinned post">
+								push_pin
+							</span>
 						{/if}
 					</div>
 					<div class="postOverviewCard__name">
