@@ -1659,6 +1659,11 @@ optionator@^0.9.3:
     prelude-ls "^1.2.1"
     type-check "^0.4.0"
 
+p-lazy@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/p-lazy/-/p-lazy-4.0.0.tgz#744f02310f3eab92b465873a841f39384d8a0458"
+  integrity sha512-8lIogVWwqBkiBy4FpylVHLalB9dZ25B2zBdY4OGGknDPWB7ehf2jyxmbh8z3MZsfbERLNU266h9Yx3cxHn3lFg==
+
 p-limit@^3.0.2:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/p-limit/-/p-limit-3.1.0.tgz#e1daccbe78d0d1388ca18c64fea38e3e57e3706b"
