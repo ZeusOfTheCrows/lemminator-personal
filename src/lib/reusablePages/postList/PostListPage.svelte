@@ -68,7 +68,6 @@
 			</div>
 			{#if !communityResponse.community_view.community.local}
 				<FederationHint
-					contentType="community"
 					hostname={new URL(communityResponse.community_view.community.actor_id).hostname}
 				/>
 			{/if}
