@@ -131,7 +131,7 @@
 			>
 				{node.leaf.counts.downvotes}
 			</ThemedButton>
-			<ThemedButton icon="add_comment" title="Reply" on:click={() => (showReplyWriter = true)} />
+			<ThemedButton icon="reply" title="Reply" on:click={() => (showReplyWriter = true)} />
 			{#await $cachedCalls.siteResponse then siteResponse}
 				{#if getLocalPerson(siteResponse)?.id === node.leaf.creator.id}
 					<ThemedButton icon="delete" title="Delete" on:click={deleteComment} />
