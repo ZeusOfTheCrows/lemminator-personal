@@ -9,6 +9,7 @@
 	import { POST_PAGE_SIZE } from '$lib/js/client';
 	import ThemedButton from '$lib/components/ThemedButton.svelte';
 	import FederationHint from '$lib/components/FederationHint.svelte';
+	import TitledGraphic from '$lib/components/TitledGraphic.svelte';
 
 	export let communityResponse: CommunityResponse;
 	export let postsResponse: GetPostsResponse;
@@ -87,6 +88,13 @@
 				on:requestNextPage={onRequestNextPage}
 				on:requestPrevPage={onRequestPrevPage}
 			/>
+			{#if pageId == 1 && postsResponse.posts.length == 0}
+				<TitledGraphic
+					icon="add_circle"
+					title="No posts yet"
+					subtitle="Will you write the first?"
+				/>
+			{/if}
 			{#if postsResponse.posts.length >= POST_PAGE_SIZE}
 				<div class="loadMorePlacer">
 					<ThemedButton
