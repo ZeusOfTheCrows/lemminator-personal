@@ -104,6 +104,7 @@
 		.commentSection__isEmpty {
 			padding: 2rem 0;
 			text-align: center;
+			font-size: 0.9rem;
 			opacity: 0.5;
 		}
 	}
