@@ -88,6 +88,7 @@ class ApiClient {
             parent_id: parentCommentId,
             limit: 50,
             sort: 'Hot',
+            type_: 'All',
             page,
         }));
     }
