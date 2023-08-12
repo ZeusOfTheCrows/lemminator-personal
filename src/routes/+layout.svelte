@@ -6,7 +6,6 @@
 	import logoOnDark from '$lib/img/logoOnDark.png';
 	import logoOnLightSvg from '$lib/img/logoOnLight.svg';
 	import logoOnDarkSvg from '$lib/img/logoOnDark.svg';
-	import SearchBox from '$lib/components/SearchBox.svelte';
 	import { session, cachedCalls, theme } from '$lib/js/globals';
 	import Cookies from 'js-cookie';
 	import { onMount } from 'svelte';
@@ -83,9 +82,10 @@
 				</a>
 			</div>
 			<div class="header__search">
-				<div class="header__searchBox">
-					<SearchBox />
-				</div>
+				<button class="header__searchBox">
+					<span class="material-icons">search</span>
+					<span class="header__searchBoxLabel">Search community or post</span>
+				</button>
 			</div>
 			<div class="header__menu">
 				{#await $cachedCalls.siteResponse then siteResponse}
@@ -238,11 +238,36 @@
 			display: none;
 
 			@include breakpoints.largeAndUp {
-				display: block;
+				display: flex;
 				flex-grow: 1;
 
 				.header__searchBox {
+					display: flex;
+					align-items: center;
+					flex-grow: 1;
+					gap: 0.5rem;
+					text-align: left;
 					max-width: 20rem;
+					border-radius: 10px;
+					font-size: 0.85rem;
+					margin: 0 2px; // Compensate outline
+					padding: 0.5rem 1.5rem 0.5rem 0.8rem;
+					cursor: pointer;
+
+					@include colors.themify() {
+						border: solid 1px rgba(colors.themed('themedShadow'), 0.3);
+						outline: solid 2px colors.themed('color1');
+						background: colors.themed('maxContrastTheme');
+						color: rgba(colors.themed('maxContrastOnTheme'), 0.5);
+
+						&:hover {
+							background: rgba(colors.themed('color2'), 0.3);
+						}
+					}
+
+					.header__searchBoxLabel {
+						white-space: nowrap;
+					}
 				}
 			}
 		}
