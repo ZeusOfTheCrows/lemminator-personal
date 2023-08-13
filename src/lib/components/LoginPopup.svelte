@@ -101,7 +101,7 @@
 				display: flex;
 				flex-basis: 150px;
 				flex-grow: 0;
-				flex-shrink: 6;
+				flex-shrink: 1;
 				flex-direction: row;
 				align-items: start;
 				padding: 1rem;
@@ -118,11 +118,12 @@
 
 		.loginPopup__content {
 			flex-grow: 1;
-			flex-shrink: 1;
+			flex-shrink: 0;
 			display: flex;
 			flex-direction: column;
 			gap: 1rem;
 			padding: 1rem;
+			min-width: 20rem;
 
 			@include colors.themify() {
 				background: colors.themed('maxContrastTheme');
