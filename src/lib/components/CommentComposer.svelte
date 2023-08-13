@@ -136,6 +136,7 @@
 				flex-basis: 0;
 				flex-grow: 1;
 				padding: 0.2rem 0;
+				line-height: 1.1rem;
 
 				@include colors.themify() {
 					color: rgba(colors.themed('themedMainText'), 0.4);
