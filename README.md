@@ -22,6 +22,8 @@ Lemminator is a generic web frontend meant to be hosted by the owner of your fav
 
 While Lemminator generally caters to regular end users, its keyboard navigation is a fun gimmick for power users. The information below ought to be integrated into the UI at some point.
 
+![Demo](docs/video/keynav.mp4)
+
 #### Navigate between posts
 
 - `j` moves to the next post
