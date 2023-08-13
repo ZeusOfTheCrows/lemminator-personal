@@ -170,7 +170,7 @@
 				padding: 0.8rem 0.75rem;
 				border-radius: 5px;
 				font-size: 0.9rem;
-				margin-left: 1px; // Offset outline
+				margin: 0 2px; // Offset outline
 
 				@include colors.themify() {
 					border: solid 1px rgba(colors.themed('themedShadow'), 0.3);
