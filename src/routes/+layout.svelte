@@ -5,7 +5,6 @@
 	import logoOnLight from '$lib/img/logoOnLight.png';
 	import logoOnDark from '$lib/img/logoOnDark.png';
 	import logoLightCircle from '$lib/img/logoLightCircle.png';
-	import logoOnDarkSvg from '$lib/img/logoOnDark.svg';
 	import { session, cachedCalls, theme } from '$lib/js/globals';
 	import Cookies from 'js-cookie';
 	import { onMount } from 'svelte';
@@ -139,6 +138,20 @@
 			</dialog>
 			<slot />
 		</div>
+
+		<footer>
+			<div>
+				{#await $cachedCalls.siteResponse}
+					Powered by <a href="https://join-lemmy.org/" target="_blank">Lemmy</a> and
+					<a href="https://gitlab.com/FrostySpectacles/lemminator" target="_blank">Lemminator</a>.
+				{:then siteResponse}
+					Powered by <a href="https://join-lemmy.org/" target="_blank">Lemmy</a>
+					({siteResponse.version}) and
+					<a href="https://gitlab.com/FrostySpectacles/lemminator" target="_blank">Lemminator</a>
+					({import.meta.env.VITE_APP_COMMIT_HASH}).
+				{/await}
+			</div>
+		</footer>
 	</div>
 
 	{#if $session.state === 'authenticating'}
@@ -307,6 +320,7 @@
 		display: flex;
 		flex-direction: row;
 		align-items: start;
+
 		@include colors.themify() {
 			background: linear-gradient(
 					to bottom,
@@ -386,6 +400,18 @@
 				overflow: scroll;
 				padding-bottom: 0.5rem;
 			}
+		}
+	}
+
+	footer {
+		display: flex;
+		justify-content: center;
+		padding: 1.5rem 0;
+		font-size: 0.8rem;
+
+		@include colors.themify() {
+			border-top: solid 1px colors.themed('subtleBorder');
+			color: rgba(colors.themed('maxContrastOnTheme'), 0.4);
 		}
 	}
 </style>

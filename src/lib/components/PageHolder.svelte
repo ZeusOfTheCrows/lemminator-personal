@@ -1,5 +1,4 @@
 <script lang="ts">
-	import PrimarySidebar from '$lib/components/PrimarySidebar.svelte';
 </script>
 
 <main class="main">
