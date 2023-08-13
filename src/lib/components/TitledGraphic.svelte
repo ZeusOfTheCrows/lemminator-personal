@@ -2,10 +2,11 @@
 	export let title: string;
 	export let subtitle: string | null = null;
 	export let icon: string;
+	export let iconStyle: 'prerounded' | 'round' = 'prerounded';
 </script>
 
 <div class="iconWithText">
-	<div class="iconWithText__image">
+	<div class="iconWithText__image" class:iconWithText__image--round={iconStyle === 'round'}>
 		<span class="material-icons">{icon}</span>
 	</div>
 	<div class="iconWithText__title">
@@ -14,6 +15,7 @@
 	{#if subtitle}
 		<div class="iconWithText__subtitle">{subtitle}</div>
 	{/if}
+	<slot name="additionalActions" />
 </div>
 
 <style lang="scss">
@@ -27,15 +29,27 @@
 		margin-top: 2rem;
 		gap: 0.5rem;
 
-		.iconWithText__image .material-icons {
-			@include colors.themify() {
-				border: solid 1rem colors.themed('color2');
-				color: rgba(colors.themed('maxContrastOnTheme'), 0.9);
+		.iconWithText__image {
+			.material-icons {
+				@include colors.themify() {
+					border: solid 1rem colors.themed('color2');
+					color: rgba(colors.themed('maxContrastOnTheme'), 0.9);
+				}
+
+				border-radius: 100%;
+				font-size: 5rem;
+				margin-bottom: 1rem;
 			}
 
-			border-radius: 100%;
-			font-size: 5rem;
-			margin-bottom: 1rem;
+			&.iconWithText__image--round .material-icons {
+				@include colors.themify() {
+					background: rgba(colors.themed('maxContrastOnTheme'), 0.9);
+					color: colors.themed('maxContrastTheme');
+				}
+
+				font-size: 3.75rem;
+				padding: 0.5rem;
+			}
 		}
 
 		.iconWithText__title {

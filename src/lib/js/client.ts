@@ -119,6 +119,14 @@ class ApiClient {
             auth: params.jwt,
         }));
     }
+
+    getSubscribedPosts(params: { pageId: number, jwt: string }) {
+        return this.wrapForApiTimeouts('getSubscribedPosts', this.innerClient.getPosts({
+            page: params.pageId,
+            auth: params.jwt,
+            type_: 'Subscribed',
+        }));
+    }
 }
 
 export function getClient(): ApiClient {
