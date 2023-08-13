@@ -42,7 +42,19 @@ While Lemminator generally caters to regular end users, its keyboard navigation 
 The codebase is a standard SvelteKit/Vite website. Run `yarn` to get your dependencies, then `yarn run dev` to get a development server up and running.
 
 ### Deploying
-Lemminator should be able to deploy to Netlify out of the box with no configuration. For other deployment scenarios, refer to [SvelteKit's documentation](https://kit.svelte.dev/docs/adapter-auto).
+
+#### Deploy to Netlify
+We have a `netlify.toml` file, which contains the necessary configuration for the production build. The only thing you still need to configure manually is the hostname of the instance you're building for. Under Site configuration > Environment variables, add a new environment variable titled `VITE_INSTANCE_HOSTNAME` with a value such as `lemmy.ml`.
+
+Usage of Netlify is free for low-traffic websites.
+
+#### Deploy as a Docker image
+This is a good option if you have a VPS or Kubernetes cluster. During the build, the hostname of your instance is baked into the code. Here's an example that builds for lemmy.world and runs the server on port 3000:
+
+```
+docker build -t tmp --build-arg="VITE_INSTANCE_HOSTNAME=lemmy.world" .
+docker run -ti -p 3000:3000 --rm tmp 
+```
 
 ## Contributing
 Thank you for your interest in contributing. As being a maintainer can be quite stressful, I'm trying to focus my limited energy on development. Due to this, I might not respond to feature requests or spontaneous feature patches. Hopefully you understand. Feel free to submit bug fixes and bug reports though.

@@ -2,5 +2,5 @@
 command = "yarn build"
 publish = "build"
 
-[context.production.environment]
-VITE_INSTANCE_HOSTNAME = "lemmy.world"
+[build.environment]
+BUILD_FOR_NETLIFY = "1"
