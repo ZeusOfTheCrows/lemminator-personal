@@ -72,6 +72,10 @@
 			{:catch}
 				<div class="searchPopup__error">Could not load search results.</div>
 			{/await}
+		{:else}
+			<div class="searchPopup__prompt">
+				Post search hasn't been implemented yet. Hopefully soon!
+			</div>
 		{/if}
 	</div>
 </ModalPopup>
@@ -99,7 +103,8 @@
 		}
 
 		.searchPopup__top,
-		.searchPopup__error {
+		.searchPopup__error,
+		.searchPopup__prompt {
 			padding: 0 1rem;
 		}
 
@@ -140,6 +145,11 @@
 				opacity: 0.5;
 				font-size: 0.8rem;
 			}
+		}
+
+		.searchPopup__prompt {
+			font-size: 0.85rem;
+			margin: 0.5rem 0;
 		}
 	}
 </style>
