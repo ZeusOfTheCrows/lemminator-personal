@@ -102,6 +102,14 @@ class ApiClient {
         }));
     }
 
+    editComment(params: { commentId: number, content: string, jwt: string }): Promise<CommentResponse> {
+        return this.wrapForApiTimeouts('editComment', this.innerClient.editComment({
+            comment_id: params.commentId,
+            content: params.content,
+            auth: params.jwt,
+        }))
+    }
+
     deleteComment(params: {
         commentId: number,
         jwt: string,

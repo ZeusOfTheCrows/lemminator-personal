@@ -25,7 +25,8 @@
 		}
 	}
 
-	let showReplyWriter = false;
+	let showEditComment = false;
+	let showAddReply = false;
 
 	let commentElement: HTMLElement;
 	export let focusedCommentId: number | null;
@@ -68,10 +69,10 @@
 			deleteState = 'deleting';
 			try {
 				await client.deleteComment({ commentId: node.leaf.comment.id, jwt: $session.jwt });
+				deleteState = 'deleted';
 			} catch (e) {
 				deleteState = 'not_deleted';
 			}
-			deleteState = 'deleted';
 		}
 	}
 
@@ -84,7 +85,12 @@
 				fullPath: node.fullPath.concat(event.detail.comment.id)
 			}
 		].concat(node.children);
-		showReplyWriter = false;
+		showAddReply = false;
+	}
+
+	function propagateEdit(event: { detail: CommentView }) {
+		node.leaf = event.detail;
+		showEditComment = false;
 	}
 
 	let composerElement: CommentComposer | undefined;
@@ -138,14 +144,43 @@
 			>
 				{node.leaf.counts.downvotes}
 			</ThemedButton>
-			<ThemedButton icon="reply" title="Reply" on:click={() => (showReplyWriter = true)} />
+			<ThemedButton
+				icon="reply"
+				title="Reply"
+				on:click={() => {
+					showAddReply = true;
+					showEditComment = false;
+				}}
+			/>
 			{#await $cachedCalls.siteResponse then siteResponse}
 				{#if getLocalPerson(siteResponse)?.id === node.leaf.creator.id}
+					<ThemedButton
+						icon="edit"
+						title="Edit"
+						on:click={() => {
+							showEditComment = true;
+							showAddReply = false;
+						}}
+					/>
 					<ThemedButton icon="delete" title="Delete" on:click={deleteComment} />
 				{/if}
 			{/await}
 		</div>
-		{#if showReplyWriter}
+		{#if showEditComment}
+			<div class="comment__addReply">
+				<CommentComposer
+					bind:this={composerElement}
+					context={{
+						mode: 'editComment',
+						commentId: node.leaf.comment.id,
+						currentContent: node.leaf.comment.content
+					}}
+					on:dismiss={() => (showEditComment = false)}
+					on:commentEdit={propagateEdit}
+				/>
+			</div>
+		{/if}
+		{#if showAddReply}
 			<div class="comment__addReply">
 				<CommentComposer
 					bind:this={composerElement}
@@ -154,7 +189,7 @@
 						postId: node.leaf.post.id,
 						parentCommentId: node.leaf.comment.id
 					}}
-					on:dismiss={() => (showReplyWriter = false)}
+					on:dismiss={() => (showAddReply = false)}
 					on:commentSubmit={propagateReply}
 				/>
 			</div>

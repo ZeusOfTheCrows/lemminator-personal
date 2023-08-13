@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { renderEnhancedMarkdown } from '$lib/js/markdown';
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import ThemedButton from './ThemedButton.svelte';
 	import { getClient } from '$lib/js/client';
 	import { keynav, session } from '$lib/js/globals';
@@ -17,9 +17,20 @@
 				mode: 'addCommentReply';
 				postId: number;
 				parentCommentId: number;
+		  }
+		| {
+				mode: 'editComment';
+				commentId: number;
+				currentContent: string;
 		  };
 	let comment = '';
 	let loading = false;
+
+	onMount(() => {
+		if (context.mode === 'editComment') {
+			comment = context.currentContent;
+		}
+	});
 
 	function ensureAuthenticated() {
 		if ($session.state === 'unauthenticated') {
@@ -37,24 +48,37 @@
 		textAreaElement.focus();
 	}
 
-	async function submitNew() {
+	async function save() {
 		if ($session.state === 'authenticated') {
 			const client = getClient();
 			loading = true;
-			const commentsResponse = await client.postComment({
-				postId: context.postId,
-				parentId: context.mode === 'addCommentReply' ? context.parentCommentId : undefined,
-				content: comment,
-				jwt: $session.jwt
-			});
-			dispatch('commentSubmit', commentsResponse.comment_view);
+
+			if (context.mode === 'editComment') {
+				const commentsResponse = await client.editComment({
+					commentId: context.commentId,
+					content: comment,
+					jwt: $session.jwt
+				});
+				dispatch('commentEdit', commentsResponse.comment_view);
+			} else {
+				const commentsResponse = await client.postComment({
+					postId: context.postId,
+					parentId: context.mode === 'addCommentReply' ? context.parentCommentId : undefined,
+					content: comment,
+					jwt: $session.jwt
+				});
+				dispatch('commentSubmit', commentsResponse.comment_view);
+			}
 			loading = false;
 			comment = '';
 		}
 	}
 
 	function cancelSafely() {
-		if (comment) {
+		if (
+			(context.mode !== 'editComment' && comment) ||
+			(context.mode === 'editComment' && comment !== context.currentContent)
+		) {
 			const confirmation = confirm("You'll lose the comment you were writing. Are you sure?");
 			if (!confirmation) return;
 		}
@@ -83,16 +107,20 @@
 			<LoadingSpinner minHeight="1rem" />
 		{:else}
 			<ThemedButton
-				icon="add_comment"
+				icon={context.mode !== 'editComment' ? 'add_comment' : 'edit'}
 				appearance="filled"
-				on:click={() => submitNew()}
+				on:click={() => save()}
 				disabled={comment === ''}
 				title={comment === '' ? 'Write your comment first.' : null}
 				fontSize="0.85rem"
 			>
-				Submit
+				{#if context.mode === 'editComment'}
+					Update
+				{:else}
+					Send
+				{/if}
 			</ThemedButton>
-			{#if context.mode === 'addCommentReply'}
+			{#if context.mode !== 'addPostReply'}
 				<ThemedButton appearance="filled" on:click={cancelSafely} fontSize="0.85rem">
 					Cancel
 				</ThemedButton>
