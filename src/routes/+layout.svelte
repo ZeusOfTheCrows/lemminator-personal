@@ -27,15 +27,6 @@
 		primarySidebarModal.close();
 	});
 
-	onMount(() => {
-		if (Cookies.get('demoDisclaimer') == undefined) {
-			alert(
-				"Hi! Thanks for trying out this early demo of Lemminator. Some features may be incomplete.\n\nIf you're cool with that, carry on!"
-			);
-			Cookies.set('demoDisclaimer', 'shown', { expires: 7 });
-		}
-	});
-
 	const [userMenuRef, userMenuContent] = createFloatingActions({
 		strategy: 'absolute',
 		placement: 'bottom-end',

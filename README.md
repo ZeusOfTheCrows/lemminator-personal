@@ -13,7 +13,7 @@ Lemminator will not offer every possible feature or setting. While it may endles
 
 ## Using Lemminator
 
-Right now, Lemminator isn't ready to be a daily driver. There is a demo server up at https://lemminator.netlify.app/ if you'd like to follow the progress.
+Currently Lemminator covers most essential functionality, but is lacking some advanced features. There is a demo server up at https://lemminator.netlify.app/ if you'd like to follow the development progress.
 
 Lemminator is a generic web frontend meant to be hosted by the owner of your favorite instance. This prevents brand confusion that can arise when the website lives on a different domain name than the instance. You can run Lemminator independently if you want to, but keep in mind that instances may limit your in-browser API access via CORS.
 
@@ -59,4 +59,14 @@ docker run -ti -p 3000:3000 --rm tmp
 ## Contributing
 Thank you for your interest in contributing. As being a maintainer can be quite stressful, I'm trying to focus my limited energy on development. Due to this, I might not respond to feature requests or spontaneous feature patches. Hopefully you understand. Feel free to submit bug fixes and bug reports though.
 
-I've licensed the code under AGPL v3.0 so that you can fork the repo if my judgements aren't in the best interest of the community or if I lack time to continue the project.
+I've licensed the code under AGPL v3.0. You can fork the repo if my judgements aren't in the best interest of the community or if I lack time to continue the project.
+
+## Known limitations
+- Currently only SFW posts are being shown. While users should be able to turn off the safety filter, we also want to make sure people don't see it when they're not expecting it.
+- Post search hasn't been integrated yet
+- Editing comments is not yet possible, but deleting is
+- Better handling of edge cases like locked posts or expired auth tokens
+- Registration and 2FA are currently not supported
+
+## Out of scope
+- Moderation tools. The primary focus is building a pleasant experience for the majority of users.
