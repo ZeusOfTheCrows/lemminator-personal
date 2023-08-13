@@ -34,6 +34,7 @@
 				@include colors.themify() {
 					border: solid 1rem colors.themed('color2');
 					color: rgba(colors.themed('maxContrastOnTheme'), 0.9);
+					background: colors.themed('maxContrastTheme');
 				}
 
 				border-radius: 100%;

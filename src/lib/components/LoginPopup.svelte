@@ -5,7 +5,7 @@
 	import ThemedButton from './ThemedButton.svelte';
 	import { getClient } from '$lib/js/client';
 	import LoadingSpinner from './LoadingSpinner.svelte';
-	import { fade } from 'svelte/transition';
+	import TitledGraphic from './TitledGraphic.svelte';
 
 	const dispatch = createEventDispatcher();
 	let usernameOrEmail: string = '';
@@ -34,10 +34,10 @@
 	}
 </script>
 
-<ModalPopup minWidth="300px" width="450px" on:dismiss>
+<ModalPopup minWidth="300px" width="550px" on:dismiss>
 	<div class="loginPopup">
 		<div class="loginPopup__side">
-			<span class="material-icons">lock</span>
+			<TitledGraphic icon="lock" iconStyle="round" title="" />
 		</div>
 		<div class="loginPopup__content">
 			<div class="loginPopup__contentTop">
@@ -87,29 +87,38 @@
 
 <style lang="scss">
 	@use '$lib/css/colors';
+	@use '$lib/css/breakpoints';
 	@use 'material-icons/iconfont/filled.css';
 
 	.loginPopup {
-		display: grid;
-		grid-template-columns: minmax(10%, 80px) 1fr;
+		display: flex;
 
 		.loginPopup__side {
-			background-color: #170115;
-			background-image: url('$lib/img/fills/fill2.svg');
-			background-size: cover;
-			display: flex;
-			flex-direction: row;
-			align-items: start;
-			padding: 1rem;
-			justify-content: center;
-			color: white;
+			display: none;
 
-			.material-icons {
-				font-size: 2rem;
+			@include breakpoints.mediumAndUp {
+				background-size: cover;
+				display: flex;
+				flex-basis: 150px;
+				flex-grow: 0;
+				flex-shrink: 6;
+				flex-direction: row;
+				align-items: start;
+				padding: 1rem;
+				justify-content: center;
+				color: white;
+				overflow-x: hidden;
+
+				@include colors.themify() {
+					background-color: colors.themed('themedShadow');
+					border-right: solid 1px colors.themed('subtleBorder');
+				}
 			}
 		}
 
 		.loginPopup__content {
+			flex-grow: 1;
+			flex-shrink: 1;
 			display: flex;
 			flex-direction: column;
 			gap: 1rem;
