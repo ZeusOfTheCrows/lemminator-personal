@@ -8,8 +8,16 @@
 
 	const dispatch = createEventDispatcher();
 
-	export let postId: number;
-	export let parentCommentId: number | null;
+	export let context:
+		| {
+				mode: 'addPostReply';
+				postId: number;
+		  }
+		| {
+				mode: 'addCommentReply';
+				postId: number;
+				parentCommentId: number;
+		  };
 	let comment = '';
 	let loading = false;
 
@@ -29,13 +37,13 @@
 		textAreaElement.focus();
 	}
 
-	async function submit() {
+	async function submitNew() {
 		if ($session.state === 'authenticated') {
 			const client = getClient();
 			loading = true;
 			const commentsResponse = await client.postComment({
-				postId,
-				parentId: parentCommentId ?? undefined,
+				postId: context.postId,
+				parentId: context.mode === 'addCommentReply' ? context.parentCommentId : undefined,
 				content: comment,
 				jwt: $session.jwt
 			});
@@ -77,14 +85,14 @@
 			<ThemedButton
 				icon="add_comment"
 				appearance="filled"
-				on:click={() => submit()}
+				on:click={() => submitNew()}
 				disabled={comment === ''}
 				title={comment === '' ? 'Write your comment first.' : null}
 				fontSize="0.85rem"
 			>
 				Submit
 			</ThemedButton>
-			{#if parentCommentId}
+			{#if context.mode === 'addCommentReply'}
 				<ThemedButton appearance="filled" on:click={cancelSafely} fontSize="0.85rem">
 					Cancel
 				</ThemedButton>

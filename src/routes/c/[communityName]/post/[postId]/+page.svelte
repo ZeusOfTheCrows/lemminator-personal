@@ -83,8 +83,7 @@
 				{/if}
 				<PostOverviewCard postView={postResponse.post_view} active={null} variant="detail" />
 				<CommentComposer
-					postId={postResponse.post_view.post.id}
-					parentCommentId={null}
+					context={{ mode: 'addPostReply', postId: postResponse.post_view.post.id }}
 					on:commentSubmit={(event) => {
 						commentViews = [event.detail].concat(commentViews);
 					}}

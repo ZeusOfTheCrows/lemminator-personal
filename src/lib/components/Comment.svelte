@@ -149,8 +149,11 @@
 			<div class="comment__addReply">
 				<CommentComposer
 					bind:this={composerElement}
-					parentCommentId={node.leaf.comment.id}
-					postId={node.leaf.post.id}
+					context={{
+						mode: 'addCommentReply',
+						postId: node.leaf.post.id,
+						parentCommentId: node.leaf.comment.id
+					}}
 					on:dismiss={() => (showReplyWriter = false)}
 					on:commentSubmit={propagateReply}
 				/>
