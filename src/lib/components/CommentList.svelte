@@ -20,12 +20,12 @@
 
 {#each nodes as node, i}
 	<div class="commentList">
-		<Comment {node} {flattenedTree} {focusedCommentId} on:subtreeExpansionRequested />
+		<Comment {node} {flattenedTree} {focusedCommentId} on:subtreeExpansionRequest />
 		{#if node.children.length == 0 && node.leaf.counts.child_count > 0}
 			<div class="commentList__loadMore">
 				<button
 					on:click={() => {
-						dispatch('subtreeExpansionRequested', node.leaf.comment.id);
+						dispatch('subtreeExpansionRequest', node.leaf.comment.id);
 						loading = true;
 					}}
 				>

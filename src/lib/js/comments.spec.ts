@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getCommentTree, expandCommentsForId } from "./comments";
+import { getCommentTree, expandCommentsForId, locateCommentNode } from "./comments";
 import type { Comment, CommentView } from "lemmy-js-client";
 
 function fabricateCommentView(overrides: Partial<Comment>, numDescendants: number): CommentView {
@@ -542,3 +542,89 @@ describe('mergeCommentLists', () => {
         ])
     });
 });
+
+describe('locateCommentNode', () => {
+    it('locates on top level', () => {
+        const comment_2074795_2076331_2078428 = fabricateCommentView({
+            id: 2078428,
+            path: "0.2074795.2076331.2078428",
+        }, 0);
+        const comment_2074795_2076331 = fabricateCommentView({
+            id: 2076331,
+            path: "0.2074795.2076331",
+        }, 1);
+        const comment_2074795 = fabricateCommentView({
+            id: 2074795,
+            path: "0.2074795",
+        }, 3);
+        const comment_2074795_2075229 = fabricateCommentView({
+            id: 2075229,
+            path: "0.2074795.2075229",
+        }, 0);
+
+        const tree = getCommentTree([
+            comment_2074795_2076331_2078428,
+            comment_2074795_2076331,
+            comment_2074795,
+            comment_2074795_2075229,
+        ]);
+
+        expect(locateCommentNode(tree.topNodes, 2074795)!.leaf).toEqual(comment_2074795);
+    });
+
+    it('locates on very deep level', () => {
+        const comment_2074795_2076331_2078428 = fabricateCommentView({
+            id: 2078428,
+            path: "0.2074795.2076331.2078428",
+        }, 0);
+        const comment_2074795_2076331 = fabricateCommentView({
+            id: 2076331,
+            path: "0.2074795.2076331",
+        }, 1);
+        const comment_2074795 = fabricateCommentView({
+            id: 2074795,
+            path: "0.2074795",
+        }, 3);
+        const comment_2074795_2075229 = fabricateCommentView({
+            id: 2075229,
+            path: "0.2074795.2075229",
+        }, 0);
+
+        const tree = getCommentTree([
+            comment_2074795_2076331_2078428,
+            comment_2074795_2076331,
+            comment_2074795,
+            comment_2074795_2075229,
+        ]);
+
+        expect(locateCommentNode(tree.topNodes, 2078428)!.leaf).toEqual(comment_2074795_2076331_2078428);
+    });
+
+    it('does not find the unfindable', () => {
+        const comment_2074795_2076331_2078428 = fabricateCommentView({
+            id: 2078428,
+            path: "0.2074795.2076331.2078428",
+        }, 0);
+        const comment_2074795_2076331 = fabricateCommentView({
+            id: 2076331,
+            path: "0.2074795.2076331",
+        }, 1);
+        const comment_2074795 = fabricateCommentView({
+            id: 2074795,
+            path: "0.2074795",
+        }, 3);
+        const comment_2074795_2075229 = fabricateCommentView({
+            id: 2075229,
+            path: "0.2074795.2075229",
+        }, 0);
+
+        const tree = getCommentTree([
+            comment_2074795_2076331_2078428,
+            comment_2074795_2076331,
+            comment_2074795,
+            comment_2074795_2075229,
+        ]);
+
+        expect(locateCommentNode(tree.topNodes, 5555)).toBeNull();
+    });
+})

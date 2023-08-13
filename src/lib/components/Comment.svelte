@@ -156,7 +156,7 @@
 				nodes={node.children}
 				{flattenedTree}
 				{focusedCommentId}
-				on:subtreeExpansionRequested={(item) => dispatch('subtreeExpansionRequested', item.detail)}
+				on:subtreeExpansionRequest={(item) => dispatch('subtreeExpansionRequest', item.detail)}
 			/>
 		</div>
 	{/if}

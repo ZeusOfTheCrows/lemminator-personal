@@ -1,11 +1,24 @@
 <script lang="ts">
 	import ElevatedBox from './ElevatedBox.svelte';
-	import type { CommentTree, CommentTreeNode } from '$lib/js/comments';
+	import { locateCommentNode, type CommentTree, type CommentTreeNode } from '$lib/js/comments';
 	import CommentList from './CommentList.svelte';
 	import { keynav } from '$lib/js/globals';
+	import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
 
 	export let tree: CommentTree;
 	export let focusedNode: CommentTreeNode | null = null;
+
+	$: {
+		propagateTreeChange(tree);
+	}
+
+	function propagateTreeChange(tree: CommentTree) {
+		if (focusedNode) {
+			focusedNode = locateCommentNode(tree.topNodes, focusedNode.leaf.comment.id);
+		}
+	}
 
 	function navigateBetweenSiblings(positionShift: 1 | -1) {
 		if (focusedNode === null && tree.topNodes.length) {
@@ -15,6 +28,9 @@
 			const newChildIndex = currentChildIndex + positionShift;
 			if (newChildIndex >= 0 && newChildIndex < tree.topNodes.length) {
 				focusedNode = tree.topNodes[newChildIndex];
+				if (newChildIndex == tree.topNodes.length - 1) {
+					dispatch('moreCommentsRequest');
+				}
 			}
 		} else if (focusedNode && focusedNode.fullPath.length > 1) {
 			const parentId = [...focusedNode.fullPath].reverse()[1];
@@ -91,7 +107,7 @@
 			nodes={tree.topNodes}
 			flattenedTree={tree.flattenedTree}
 			focusedCommentId={focusedNode?.leaf.comment.id ?? null}
-			on:subtreeExpansionRequested
+			on:subtreeExpansionRequest
 		/>
 	</div>
 </ElevatedBox>

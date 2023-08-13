@@ -65,6 +65,20 @@ export function getCommentTree(comments: CommentView[]): CommentTree {
     };
 }
 
+export function locateCommentNode(nodes: CommentTreeNode[], commentId: number): CommentTreeNode | null {
+    const locatedNode = nodes.find(n => n.leaf.comment.id == commentId);
+    if (locatedNode) {
+        return locatedNode;
+    }
+
+    for (const node of nodes) {
+        const locatedChildNode = locateCommentNode(node.children, commentId);
+        if (locatedChildNode) return locatedChildNode;
+    }
+
+    return null;
+}
+
 export function expandTopLevelComments(existingComments: CommentView[], commentsToMerge: CommentView[]): CommentView[] {
     // Assumption is that the existing comments tree doesn't contain duplicates
     const existingIds = existingComments.map((c) => c.comment.id);
@@ -78,7 +92,6 @@ export function expandTopLevelComments(existingComments: CommentView[], comments
         .map(c => {
             return c.comment.path.match(matcher)![1];
         });
-    console.log('subtreesToIgnore', subtreesToIgnore);
 
     const nonIgnoredNewComments = newComments.reduce((acc: CommentView[], c: CommentView) => {
         const fullPath = c.comment.path.split(".");

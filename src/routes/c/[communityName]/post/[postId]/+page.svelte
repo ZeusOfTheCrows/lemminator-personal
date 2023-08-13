@@ -17,7 +17,6 @@
 	import { session } from '$lib/js/globals';
 	import ThemedButton from '$lib/components/ThemedButton.svelte';
 	import CommentComposer from '$lib/components/CommentComposer.svelte';
-	import { invalidate } from '$app/navigation';
 	import FederationHint from '$lib/components/FederationHint.svelte';
 
 	export let data: PageData;
@@ -46,6 +45,8 @@
 	}
 
 	async function loadMoreComments() {
+		if (loadingMore) return;
+
 		const client = getClient();
 		loadingMore = true;
 		const commentResponse = await client.getComments(
@@ -90,7 +91,8 @@
 				/>
 				<CommentSection
 					tree={commentTree}
-					on:subtreeExpansionRequested={(item) => loadCommentsForId(item.detail)}
+					on:subtreeExpansionRequest={(item) => loadCommentsForId(item.detail)}
+					on:moreCommentsRequest={loadMoreComments}
 				/>
 				{#if moreCommentsAvailable}
 					<div class="postDetailLayouter__loadMore">
