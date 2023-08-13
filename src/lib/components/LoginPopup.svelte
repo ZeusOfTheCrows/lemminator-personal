@@ -99,7 +99,7 @@
 			@include breakpoints.mediumAndUp {
 				background-size: cover;
 				display: flex;
-				flex-basis: 150px;
+				flex-basis: 140px;
 				flex-grow: 0;
 				flex-shrink: 1;
 				flex-direction: row;
