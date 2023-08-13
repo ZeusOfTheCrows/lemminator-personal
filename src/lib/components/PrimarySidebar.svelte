@@ -27,11 +27,19 @@
 	<li>
 		<a
 			href="/"
-			class:highlightedRoute={$page.route.id == '/' || $page.route.id?.startsWith('/frontpage/')}
+			class:highlightedRoute={$page.route.id === '/' || $page.route.id?.startsWith('/frontpage/')}
 			>Frontpage</a
 		>
 	</li>
-	<li><a href="/subscriptions">Subscriptions</a></li>
+	<li>
+		<a
+			href="/subscriptions"
+			class:highlightedRoute={$page.route.id === '/subscriptions' ||
+				$page.route.id?.startsWith('/subscriptions/')}
+		>
+			Subscriptions
+		</a>
+	</li>
 	{#await communitiesResponse}
 		<LoadingSpinner minHeight="4rem" />
 	{:then communitiesResponse}
