@@ -44,6 +44,15 @@
 			comment = '';
 		}
 	}
+
+	function cancelSafely() {
+		if (comment) {
+			const confirmation = confirm("You'll lose the comment you were writing. Are you sure?");
+			if (!confirmation) return;
+		}
+
+		dispatch('dismiss');
+	}
 </script>
 
 <div class="commentComposer">
@@ -76,7 +85,7 @@
 				Submit
 			</ThemedButton>
 			{#if parentCommentId}
-				<ThemedButton appearance="filled" on:click={() => dispatch('dismiss')} fontSize="0.85rem">
+				<ThemedButton appearance="filled" on:click={cancelSafely} fontSize="0.85rem">
 					Cancel
 				</ThemedButton>
 			{/if}
