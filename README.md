@@ -61,12 +61,17 @@ Thank you for your interest in contributing. As being a maintainer can be quite 
 
 I've licensed the code under AGPL v3.0. You can fork the repo if my judgements aren't in the best interest of the community or if I lack time to continue the project.
 
-## Known limitations
-- Currently only SFW posts are being shown. While users should be able to turn off the safety filter, we also want to make sure people don't see it when they're not expecting it.
-- Post search hasn't been integrated yet
-- Editing comments is not yet possible, but deleting is
-- Better handling of edge cases like locked posts or expired auth tokens
-- Registration and 2FA are currently not supported
+## Not yet supported, but planned
+- Editing comments
+- Inbox
+- Subscribing/unsubscribing
+- Comment permalinks
+- Post search
+- Better handling for various edge cases (e.g. locked posts)
+- A post list layout switcher (big cards vs. dense lists)
+- Registration
+- 2FA support
+- Safety filter settings (currently only SFW content is shown)
 
 ## Out of scope
 - Moderation tools. The primary focus is building a pleasant experience for the majority of users.
