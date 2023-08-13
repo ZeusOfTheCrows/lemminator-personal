@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { formatRelativeTime, getClient } from '$lib/js/client';
+	import { formatRelativeUtcTime, getClient } from '$lib/js/client';
 	import type { PostView } from 'lemmy-js-client';
 	import ElevatedBox from './ElevatedBox.svelte';
 	import ThemedButton from './ThemedButton.svelte';
@@ -77,7 +77,7 @@
 						</div>
 						<div class="postOverviewCard__relativeTimePresep">&middot;</div>
 						<div class="postOverviewCard__relativeTime">
-							{formatRelativeTime(postView.post.published)}
+							{formatRelativeUtcTime(postView.post.published)}
 						</div>
 						{#if postView.post.featured_local || postView.post.featured_community}
 							&nbsp;

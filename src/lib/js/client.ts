@@ -1,7 +1,7 @@
 import { invalidateAll } from "$app/navigation";
 import { error } from "@sveltejs/kit";
 import { LemmyHttp, type GetSiteResponse, type ListCommunitiesResponse, type GetCommunityResponse, type GetCommentsResponse, type GetPostsResponse, type GetPostResponse, type LoginResponse, type PostResponse, type CommentResponse, type SearchResponse } from "lemmy-js-client";
-import moment from "moment";
+import moment from "moment-timezone";
 import { TimeoutError, timeout } from 'promise-timeout';
 
 class ApiClient {
@@ -144,8 +144,8 @@ export function getClient(): ApiClient {
     return new ApiClient(client);
 }
 
-export function formatRelativeTime(raw_timestamp: string): string {
-    return moment(raw_timestamp).fromNow();
+export function formatRelativeUtcTime(raw_timestamp: string): string {
+    return moment.tz(raw_timestamp, "UTC").fromNow();
 }
 
 export const POST_PAGE_SIZE = 10;

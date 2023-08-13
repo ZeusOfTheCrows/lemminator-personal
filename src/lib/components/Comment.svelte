@@ -5,11 +5,12 @@
 	import type { CommentTreeNode } from '$lib/js/comments';
 	import CommentList from './CommentList.svelte';
 	import type { CommentView } from 'lemmy-js-client';
-	import { formatRelativeTime, getClient } from '$lib/js/client';
+	import { formatRelativeUtcTime, getClient } from '$lib/js/client';
 	import { createEventDispatcher } from 'svelte';
 	import { cachedCalls, getLocalPerson, session } from '$lib/js/globals';
 	import LoadingSpinner from './LoadingSpinner.svelte';
 	import CommentComposer from './CommentComposer.svelte';
+	import moment from 'moment-timezone';
 
 	const dispatch = createEventDispatcher();
 
@@ -116,13 +117,13 @@
 			{/if}
 			{node.leaf.creator.name}
 			&middot;
-			<div>
-				{formatRelativeTime(node.leaf.comment.published)}
+			<div title={`Published on ${moment.tz(node.leaf.comment.published, 'UTC').format('LLL')}`}>
+				{formatRelativeUtcTime(node.leaf.comment.published)}
 			</div>
 			{#if node.leaf.comment.updated}
 				<span
 					class="comment__editedIndicator"
-					title={`Edited ${formatRelativeTime(node.leaf.comment.updated)}`}
+					title={`Edited on ${moment.tz(node.leaf.comment.updated, 'UTC').format('LLL')}`}
 				>
 					(edited)
 				</span>
