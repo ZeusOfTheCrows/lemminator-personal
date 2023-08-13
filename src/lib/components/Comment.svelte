@@ -115,10 +115,18 @@
 				<EntityIcon src={node.leaf.creator.avatar} alt="Avatar" />
 			{/if}
 			{node.leaf.creator.name}
-			<div class="comment__relativeTimePresep">&middot;</div>
-			<div class="comment__relativeTime">
+			&middot;
+			<div>
 				{formatRelativeTime(node.leaf.comment.published)}
 			</div>
+			{#if node.leaf.comment.updated}
+				<span
+					class="comment__editedIndicator"
+					title={`Edited ${formatRelativeTime(node.leaf.comment.updated)}`}
+				>
+					(edited)
+				</span>
+			{/if}
 		</div>
 		<div class="comment__content">
 			{@html renderEnhancedMarkdown(node.leaf.comment.content)}
@@ -253,6 +261,10 @@
 			@include colors.themify() {
 				color: colors.themed('deemphColor');
 			}
+		}
+
+		.comment__editedIndicator {
+			opacity: 0.5;
 		}
 
 		.comment__content {
