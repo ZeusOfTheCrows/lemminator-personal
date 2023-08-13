@@ -15,7 +15,6 @@
 		if (!isEqual(from?.route, to?.route) || !isEqual(from?.params, to?.params)) {
 			// Sometimes PostList gets recycled when navigating from community to community.
 			// Reinitialize keyboard navigation in that case.
-			console.log('Initialize post list navigation');
 			postNavIndex = null;
 			const rawSelectedPostId = $page.url.searchParams.get('selectedPostId');
 
