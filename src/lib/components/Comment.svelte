@@ -86,6 +86,13 @@
 		].concat(node.children);
 		showReplyWriter = false;
 	}
+
+	let composerElement: CommentComposer | undefined;
+	$: {
+		if (composerElement) {
+			composerElement.focusCommentField();
+		}
+	}
 </script>
 
 {#if deleteState === 'not_deleted'}
@@ -141,6 +148,7 @@
 		{#if showReplyWriter}
 			<div class="comment__addReply">
 				<CommentComposer
+					bind:this={composerElement}
 					parentCommentId={node.leaf.comment.id}
 					postId={node.leaf.post.id}
 					on:dismiss={() => (showReplyWriter = false)}

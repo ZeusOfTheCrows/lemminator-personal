@@ -23,6 +23,12 @@
 		}
 	}
 
+	let textAreaElement: HTMLTextAreaElement;
+
+	export function focusCommentField() {
+		textAreaElement.focus();
+	}
+
 	async function submit() {
 		if ($session.state === 'authenticated') {
 			const client = getClient();
@@ -43,6 +49,7 @@
 <div class="commentComposer">
 	<div class="commentComposer__editor">
 		<textarea
+			bind:this={textAreaElement}
 			bind:value={comment}
 			on:click={ensureAuthenticated}
 			on:focus={() => ($keynav.mode = 'typing')}
