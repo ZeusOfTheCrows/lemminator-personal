@@ -45,9 +45,9 @@
 	.modalPopup {
 		position: fixed;
 		border-radius: 10px;
-		overflow: hidden;
 		padding: 0;
 		max-width: 90%;
+		max-height: 90%;
 		animation: dim 0.05s ease-in forwards, fade 0.05s ease-in forwards;
 
 		@include colors.themify() {
