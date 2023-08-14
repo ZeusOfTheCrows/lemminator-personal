@@ -46,6 +46,8 @@ The codebase is a standard SvelteKit/Vite website. Run `yarn` to get your depend
 ### Deploying
 
 #### Deploy to Netlify
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://gitlab.com/FrostySpectacles/lemminator)
+
 We have a `netlify.toml` file, which contains the necessary configuration for the production build. The only thing you still need to configure manually is the hostname of the instance you're building for. Under Site configuration > Environment variables, add a new environment variable titled `VITE_INSTANCE_HOSTNAME` with a value such as `lemmy.ml`.
 
 Usage of Netlify is free for low-traffic websites.
