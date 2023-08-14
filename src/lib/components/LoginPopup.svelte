@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { session, cachedCalls } from '$lib/js/globals';
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import ModalPopup from './ModalPopup.svelte';
 	import ThemedButton from './ThemedButton.svelte';
 	import { getClient } from '$lib/js/client';
@@ -12,6 +12,12 @@
 	let password: string = '';
 	let error: string | undefined = undefined;
 	let loading = false;
+
+	let usernameField: HTMLInputElement;
+
+	onMount(() => {
+		usernameField.focus();
+	});
 
 	async function tryLogin() {
 		try {
@@ -63,6 +69,7 @@
 						id="usernameOrEmail"
 						name="usernameOrEmail"
 						bind:value={usernameOrEmail}
+						bind:this={usernameField}
 						placeholder="linus@example.com"
 					/>
 				</div>
