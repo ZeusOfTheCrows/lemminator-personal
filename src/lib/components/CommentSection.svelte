@@ -118,7 +118,7 @@
 
 	.commentSection {
 		.commentSection__isEmpty {
-			padding: 2rem 0;
+			padding: 2rem;
 			text-align: center;
 			font-size: 0.9rem;
 			opacity: 0.5;
