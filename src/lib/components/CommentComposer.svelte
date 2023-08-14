@@ -159,6 +159,7 @@
 				@include colors.themify() {
 					border: solid 1px rgba(colors.themed('themedShadow'), 0.3);
 					outline: solid 2px colors.themed('color1');
+					color: colors.themed('themedMainText');
 
 					&:focus-within {
 						border: solid 1px rgba(colors.themed('themedShadow'), 0.4);
