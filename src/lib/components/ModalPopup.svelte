@@ -51,7 +51,9 @@
 		animation: dim 0.05s ease-in forwards, fade 0.05s ease-in forwards;
 
 		@include colors.themify() {
-			border: solid 1px #fff;
+			border: solid 1px rgba(colors.themed('themedShadow'), 0.15);
+			background: colors.themed('maxContrastTheme');
+			color: colors.themed('themedMainText');
 		}
 
 		@include colors.defineModalDim;

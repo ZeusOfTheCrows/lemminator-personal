@@ -120,7 +120,11 @@
 				overflow-x: hidden;
 
 				@include colors.themify() {
-					background-color: colors.themed('themedShadow');
+					background: linear-gradient(
+						to bottom,
+						rgba(colors.themed('color1'), 0.5),
+						rgba(colors.themed('color2'), 0.5)
+					);
 					border-right: solid 1px colors.themed('subtleBorder');
 				}
 			}
