@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { session, cachedCalls } from '$lib/js/globals';
+	import { session, cachedCalls, keynav } from '$lib/js/globals';
 	import { createEventDispatcher, onMount } from 'svelte';
 	import ModalPopup from './ModalPopup.svelte';
 	import ThemedButton from './ThemedButton.svelte';
@@ -39,7 +39,15 @@
 			}
 		}
 	}
+
+	function handleKeyUp(event: KeyboardEvent) {
+		if ($keynav.mode === 'typing' && event.key === 'Enter') {
+			tryLogin();
+		}
+	}
 </script>
+
+<svelte:body on:keyup={handleKeyUp} />
 
 <ModalPopup minWidth="300px" width="550px" on:dismiss>
 	<div class="loginPopup">
