@@ -6,6 +6,7 @@
 	import { getClient } from '$lib/js/client';
 	import LoadingSpinner from './LoadingSpinner.svelte';
 	import TitledGraphic from './TitledGraphic.svelte';
+	import InputField from './InputField.svelte';
 
 	const dispatch = createEventDispatcher();
 	let usernameOrEmail: string = '';
@@ -13,7 +14,7 @@
 	let error: string | undefined = undefined;
 	let loading = false;
 
-	let usernameField: HTMLInputElement;
+	let usernameField: InputField;
 
 	onMount(() => {
 		usernameField.focus();
@@ -62,21 +63,15 @@
 				</button>
 			</div>
 			<div class="loginPopup__form">
-				<div class="loginPopup__formItem">
-					<label for="usernameOrEmail">Username or e-mail</label>
-					<input
-						type="text"
-						id="usernameOrEmail"
-						name="usernameOrEmail"
-						bind:value={usernameOrEmail}
-						bind:this={usernameField}
-						placeholder="linus@example.com"
-					/>
-				</div>
-				<div class="loginPopup__formItem">
-					<label for="password">Password</label>
-					<input type="password" id="password" name="password" bind:value={password} />
-				</div>
+				<InputField
+					uniqueId="usernameOrEmail"
+					type="text"
+					label="Username or e-mail"
+					bind:value={usernameOrEmail}
+					bind:this={usernameField}
+					placeholder="linus@example.com"
+				/>
+				<InputField uniqueId="password" type="password" label="Password" bind:value={password} />
 				{#if error}
 					<div class="loginPopup__error">{error}</div>
 				{/if}
@@ -170,34 +165,6 @@
 			flex-direction: column;
 			align-items: start;
 			gap: 1rem;
-
-			.loginPopup__formItem {
-				display: flex;
-				flex-direction: column;
-				align-items: start;
-				gap: 0.5rem;
-			}
-
-			label {
-				text-align: right;
-				font-size: 0.8rem;
-			}
-
-			input {
-				padding: 0.8rem 0.75rem;
-				border-radius: 5px;
-				font-size: 0.9rem;
-				margin: 0 2px; // Offset outline
-
-				@include colors.themify() {
-					border: solid 1px rgba(colors.themed('themedShadow'), 0.3);
-					outline: solid 2px colors.themed('color1');
-
-					&:focus-within {
-						border: solid 1px rgba(colors.themed('themedShadow'), 0.4);
-					}
-				}
-			}
 
 			.loginPopup__error {
 				font-size: 0.8rem;
