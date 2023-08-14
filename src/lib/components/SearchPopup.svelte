@@ -124,6 +124,7 @@
 				align-items: center;
 				gap: 0.5rem;
 				padding: 0.7rem calc(1rem + 2px);
+				font-size: 0.9rem;
 				text-decoration: none;
 
 				&:hover {
