@@ -10,6 +10,7 @@
 	import ThemedButton from '$lib/components/ThemedButton.svelte';
 	import FederationHint from '$lib/components/FederationHint.svelte';
 	import TitledGraphic from '$lib/components/TitledGraphic.svelte';
+	import SubscribeButton from '$lib/components/SubscribeButton.svelte';
 
 	export let communityResponse: CommunityResponse;
 	export let postsResponse: GetPostsResponse;
@@ -54,7 +55,7 @@
 				class:communityBanner--hasImage={!!communityResponse.community_view.community.banner}
 				style:--bannerImage={makeBannerImageVar(communityResponse.community_view.community.banner)}
 			>
-				<div class="communityBanner__info">
+				<div class="communityBanner__overlay">
 					{#if communityResponse.community_view.community.icon}
 						<img
 							class="communityBanner__icon"
@@ -65,6 +66,7 @@
 					<h1 class="communityBanner__title">
 						{communityResponse.community_view.community.title}
 					</h1>
+					<SubscribeButton {communityResponse} />
 				</div>
 			</div>
 			{#if !communityResponse.community_view.community.local}
@@ -128,8 +130,7 @@
 			display: flex;
 			align-content: end;
 			align-items: end;
-			padding-left: 1rem;
-			padding-bottom: 1rem;
+			padding: 1rem;
 
 			$gradient: linear-gradient(to top, rgb(22, 2, 27), rgba(22, 2, 27, 0));
 			background: $gradient, url('$lib/img/fills/fill1.svg'), #0e0035;
@@ -138,10 +139,12 @@
 				background: $gradient, var(--bannerImage);
 			}
 
-			.communityBanner__info {
+			.communityBanner__overlay {
+				flex-grow: 1;
 				display: flex;
 				flex-direction: row;
 				align-items: center;
+				justify-content: stretch;
 				gap: 1rem;
 
 				.communityBanner__icon {
@@ -154,6 +157,7 @@
 				}
 
 				.communityBanner__title {
+					flex-grow: 1;
 					color: white;
 					text-shadow: 0 0 20px rgb(22, 2, 27), 0 0 10px rgb(22, 2, 27);
 					font-size: 1.25rem;

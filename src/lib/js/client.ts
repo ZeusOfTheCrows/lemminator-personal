@@ -135,6 +135,14 @@ class ApiClient {
             type_: 'Subscribed',
         }));
     }
+
+    setSubscriptionStatus(params: { communityId: number, status: boolean, jwt: string }) {
+        return this.wrapForApiTimeouts('updateSubscriptionStatus', this.innerClient.followCommunity({
+            community_id: params.communityId,
+            follow: params.status,
+            auth: params.jwt,
+        }));
+    }
 }
 
 export function getClient(): ApiClient {
