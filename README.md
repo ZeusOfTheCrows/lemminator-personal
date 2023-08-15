@@ -1,8 +1,14 @@
 # Lemminator
-A web UI for Lemmy
+A Lemmy web UI for the rest of us
+
+### Desktop view
+![Desktop view](docs/img/desktop.png)
+
+### Mobile view
+![Mobile view](docs/img/mobile.png)
 
 ## Goal
-Lemminator wants to make Lemmy a place where even your friends who aren't into tech will feel at home. By creating a welcoming experience for people from all walks of life, Lemminator hopes to help a wide variety of communities come to fruition.
+Lemminator wants to make Lemmy a place where even your friends who aren't into tech can feel at home. By creating a welcoming experience for people from all walks of life, Lemminator hopes to help a wide variety of communities come to fruition.
 
 Lemminator aims to:
 - Make using Lemmy simple and easy
