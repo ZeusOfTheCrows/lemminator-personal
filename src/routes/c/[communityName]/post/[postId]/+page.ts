@@ -21,8 +21,7 @@ export const load = (async ({ parent, params }) => {
                 throw error(404, 'Could not find post');
             } else if (e.type === 'invalid-json') {
                 // We don't always get a clean exception from the Lemmy API library
-                // when the post doesn't exist
-                throw error(502, 'Invalid upstream response');
+                throw error(502, 'Unexpected server response');
             }
             throw e;
         }),

@@ -19,8 +19,7 @@ export const loadPostListPage = (communityName: string | undefined, pageId: stri
         postsResponse: client.getPosts(communityName, pageIdNum, jwt).catch(e => {
             if (e.type === 'invalid-json') {
                 // We don't always get a clean exception from the Lemmy API library
-                // when the post doesn't exist
-                throw error(502, 'Invalid upstream response');
+                throw error(502, 'Unexpected server response');
             }
             throw e;
         }),
