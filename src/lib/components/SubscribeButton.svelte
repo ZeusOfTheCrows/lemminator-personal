@@ -58,10 +58,11 @@
 	.subscribeButton {
 		display: flex;
 		align-items: center;
+		gap: 0.5rem;
 		padding: 0.5rem;
 		border-radius: 10px;
 		cursor: pointer;
-		background: #eadbf7;
+		background: #f6eeff;
 		color: rgb(11, 9, 12);
 
 		&:hover:not(&.subscribeButton--loading) {
@@ -73,9 +74,6 @@
 
 			@include breakpoints.largeAndUp {
 				display: block;
-				padding-left: 0.3rem;
-				border-left: solid 1px #88888833;
-				margin-left: 0.5rem;
 			}
 		}
 
