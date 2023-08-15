@@ -80,6 +80,19 @@
 		}
 	}
 
+	function openReply() {
+		if ($session.state === 'unauthenticated') {
+			$session = {
+				state: 'authenticating',
+				jwt: $session.jwt,
+				callback: openReply
+			};
+		} else {
+			showAddReply = true;
+			showEditComment = false;
+		}
+	}
+
 	function propagateReply(event: { detail: CommentView }) {
 		const emptyChildren: CommentTreeNode[] = [];
 		node.children = [
@@ -156,14 +169,7 @@
 			>
 				{node.leaf.counts.downvotes}
 			</ThemedButton>
-			<ThemedButton
-				icon="reply"
-				title="Reply"
-				on:click={() => {
-					showAddReply = true;
-					showEditComment = false;
-				}}
-			/>
+			<ThemedButton icon="reply" title="Reply" on:click={openReply} />
 			{#await $cachedCalls.siteResponse then siteResponse}
 				{#if getLocalPerson(siteResponse)?.id === node.leaf.creator.id}
 					<ThemedButton
