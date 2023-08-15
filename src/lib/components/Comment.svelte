@@ -5,7 +5,7 @@
 	import CommentList from './CommentList.svelte';
 	import type { CommentView } from 'lemmy-js-client';
 	import { formatRelativeUtcTime, getClient } from '$lib/js/client';
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import { cachedCalls, getLocalPerson, session } from '$lib/js/globals';
 	import LoadingSpinner from './LoadingSpinner.svelte';
 	import CommentComposer from './CommentComposer.svelte';
@@ -50,6 +50,12 @@
 
 		node.leaf = commentResponse.comment_view;
 	}
+
+	let enableDownvotes = true;
+	onMount(async () => {
+		const siteResponse = await $cachedCalls.siteResponse;
+		enableDownvotes = siteResponse.site_view.local_site.enable_downvotes;
+	});
 
 	async function toggleVote(vote: 1 | -1) {
 		if ($session.state === 'unauthenticated') {
@@ -159,16 +165,18 @@
 			>
 				{node.leaf.counts.upvotes}
 			</ThemedButton>
-			<ThemedButton
-				appearance={node.leaf.my_vote == -1 ? 'default' : 'dimmed'}
-				icon="keyboard_arrow_down"
-				title="Downvote"
-				fontSize="0.875rem"
-				toggled={!!$session.jwt && node.leaf.my_vote == -1}
-				on:click={() => toggleVote(-1)}
-			>
-				{node.leaf.counts.downvotes}
-			</ThemedButton>
+			{#if enableDownvotes}
+				<ThemedButton
+					appearance={node.leaf.my_vote == -1 ? 'default' : 'dimmed'}
+					icon="keyboard_arrow_down"
+					title="Downvote"
+					fontSize="0.875rem"
+					toggled={!!$session.jwt && node.leaf.my_vote == -1}
+					on:click={() => toggleVote(-1)}
+				>
+					{node.leaf.counts.downvotes}
+				</ThemedButton>
+			{/if}
 			<ThemedButton icon="reply" title="Reply" on:click={openReply} />
 			{#await $cachedCalls.siteResponse then siteResponse}
 				{#if getLocalPerson(siteResponse)?.id === node.leaf.creator.id}

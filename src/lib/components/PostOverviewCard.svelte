@@ -6,15 +6,22 @@
 	import { renderEnhancedMarkdown } from '$lib/js/markdown';
 	import EntityIcon from './EntityIcon.svelte';
 	import { getPostDetailLinkFromPostView, getNormalizedCommunityName } from '$lib/js/navigation';
-	import { session } from '$lib/js/globals';
+	import { cachedCalls, session } from '$lib/js/globals';
 	import { invalidate } from '$app/navigation';
 	import UserTag from './UserTag.svelte';
+	import { onMount } from 'svelte';
 
 	// null = shimmer
 	export let postView: PostView | null;
 	export let showCommunity: boolean = true;
 	export let active: boolean | null = null;
 	export let variant: 'list' | 'detail' = 'list';
+
+	let enableDownvotes = true;
+	onMount(async () => {
+		const siteResponse = await $cachedCalls.siteResponse;
+		enableDownvotes = siteResponse.site_view.local_site.enable_downvotes;
+	});
 
 	function isImageLink(link: string | undefined): boolean {
 		if (!link) return false;
@@ -132,16 +139,18 @@
 					>
 						{postView.counts.upvotes}
 					</ThemedButton>
-					<ThemedButton
-						appearance="dimmed"
-						icon="keyboard_arrow_down"
-						title="Downvote"
-						fontSize="0.875rem"
-						toggled={postView.my_vote == -1}
-						on:click={() => toggleVote(-1)}
-					>
-						{postView.counts.downvotes}
-					</ThemedButton>
+					{#if enableDownvotes}
+						<ThemedButton
+							appearance="dimmed"
+							icon="keyboard_arrow_down"
+							title="Downvote"
+							fontSize="0.875rem"
+							toggled={postView.my_vote == -1}
+							on:click={() => toggleVote(-1)}
+						>
+							{postView.counts.downvotes}
+						</ThemedButton>
+					{/if}
 					<ThemedButton
 						href={getPostDetailLinkFromPostView(postView)}
 						appearance="dimmed"
