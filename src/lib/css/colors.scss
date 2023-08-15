@@ -64,6 +64,23 @@ $themes: (
     $theme-map: null !global;
 }
 
+@mixin themifyMonochromeImage {
+
+    @each $theme,
+    $map in $themes {
+        $theme-map: $map !global;
+
+        @if $theme =='darkTheme' {
+            :global(.#{$theme}) & {
+                filter: invert(1);
+                @content;
+            }
+        }
+    }
+
+    $theme-map: null !global;
+}
+
 @function themed($key) {
     @return map-get($theme-map, $key);
 }

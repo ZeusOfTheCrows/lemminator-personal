@@ -2,13 +2,10 @@
 	import { afterNavigate, beforeNavigate } from '$app/navigation';
 	import PrimarySidebar from '$lib/components/PrimarySidebar.svelte';
 	import ThemedButton from '$lib/components/ThemedButton.svelte';
-	import logoOnLight from '$lib/img/logoOnLight.png';
-	import logoOnDark from '$lib/img/logoOnDark.png';
-	import logoLightCircle from '$lib/img/logoLightCircle.png';
-	import { session, cachedCalls, theme } from '$lib/js/globals';
-	import Cookies from 'js-cookie';
-	import { onMount } from 'svelte';
 	import LoginPopup from '$lib/components/LoginPopup.svelte';
+	import logoLightCircle from '$lib/img/logoLightCircle.png';
+	import logoMonochromeOnLight from '$lib/img/logoMonochromeOnLight.svg';
+	import { session, cachedCalls, theme } from '$lib/js/globals';
 	import EntityIcon from '$lib/components/EntityIcon.svelte';
 	import UserMenu from '$lib/components/UserMenu.svelte';
 	import { offset, flip, shift } from 'svelte-floating-ui/dom';
@@ -49,7 +46,9 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href={logoLightCircle} />
+	{#await $cachedCalls.siteResponse then siteResponse}
+		<link rel="icon" href={siteResponse.site_view.site.icon} />
+	{/await}
 </svelte:head>
 
 <div class:lightTheme={$theme === 'light'} class:darkTheme={$theme === 'dark'}>
@@ -63,13 +62,13 @@
 					</ThemedButton>
 				</div>
 				<a href="/">
-					{#if $theme === 'light'}
-						<img src={logoOnLight} alt="Lemminator logo" class="header__logo" />
-					{:else if $theme === 'dark'}
-						<img src={logoOnDark} alt="Lemminator logo" class="header__logo" />
-					{/if}
-					{#await $cachedCalls.siteResponse then siteResponse}
-						{siteResponse.site_view.site.name}
+					{#await $cachedCalls.siteResponse}
+						<div class="header__siteName header__siteName--loading">&nbsp;</div>
+					{:then siteResponse}
+						<img src={siteResponse.site_view.site.icon} alt="Logo" class="header__logo" />
+						<div class="header__siteName">
+							{siteResponse.site_view.site.name}
+						</div>
 					{/await}
 				</a>
 			</div>
@@ -130,7 +129,10 @@
 			<slot />
 		</div>
 
-		<footer>
+		<footer class="footer">
+			<div>
+				<img class="footer__logo" src={logoMonochromeOnLight} alt="Lemminator logo" />
+			</div>
 			<div>
 				{#await $cachedCalls.siteResponse}
 					Powered by <a href="https://join-lemmy.org/" target="_blank">Lemmy</a> and
@@ -236,6 +238,31 @@
 				gap: 0.5rem;
 				font-size: 1.1rem;
 				font-weight: bold;
+			}
+
+			.header__siteName {
+				&.header__siteName--loading {
+					width: 10rem;
+					height: 2rem;
+
+					@include colors.themify() {
+						animation: shimmer 1.25s infinite;
+						--animationColor1: #{colors.themed('color2')};
+						--animationColor2: #{colors.themed('maxContrastTheme')};
+
+						@keyframes shimmer {
+							0% {
+								background: var(--animationColor1);
+							}
+							40% {
+								background: var(--animationColor2);
+							}
+							100% {
+								background: var(--animationColor1);
+							}
+						}
+					}
+				}
 			}
 		}
 
@@ -394,15 +421,24 @@
 		}
 	}
 
-	footer {
+	.footer {
 		display: flex;
+		flex-direction: row;
 		justify-content: center;
+		align-items: center;
 		padding: 1.5rem 0;
 		font-size: 0.8rem;
+		gap: 0.5rem;
 
 		@include colors.themify() {
 			border-top: solid 1px colors.themed('subtleBorder');
 			color: rgba(colors.themed('maxContrastOnTheme'), 0.4);
+		}
+		.footer__logo {
+			opacity: 0.4;
+			width: 2rem;
+
+			@include colors.themifyMonochromeImage;
 		}
 	}
 </style>
