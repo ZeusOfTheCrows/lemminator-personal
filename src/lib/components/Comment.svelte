@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { renderEnhancedMarkdown } from '$lib/js/markdown';
-	import EntityIcon from './EntityIcon.svelte';
 	import ThemedButton from './ThemedButton.svelte';
 	import type { CommentTreeNode } from '$lib/js/comments';
 	import CommentList from './CommentList.svelte';
@@ -27,6 +26,8 @@
 			isAlternate = index % 2 != 0;
 		}
 	}
+
+	export let appearance: 'thread' | 'standalone';
 
 	let showEditComment = false;
 	let showAddReply = false;
@@ -111,6 +112,7 @@
 		class:comment--selected={focusedCommentId === node.leaf.comment.id}
 		class:comment--deselected={focusedCommentId !== null &&
 			focusedCommentId !== node.leaf.comment.id}
+		class:comment--thread={appearance === 'thread'}
 		bind:this={commentElement}
 	>
 		<div class="comment__metaLine">
@@ -233,8 +235,6 @@
 		scroll-margin: calc(measurements.$headerVSize + 1rem);
 
 		@include colors.themify() {
-			border-bottom: solid 1px colors.themed('subtleBorder');
-
 			&.comment--alternate {
 				background: rgba(colors.themed('elevatedBoxAccent'), 0.25);
 			}
@@ -245,6 +245,10 @@
 
 			&.comment--deselected {
 				opacity: 0.4;
+			}
+
+			&.comment--thread {
+				border-bottom: solid 1px colors.themed('subtleBorder');
 			}
 		}
 

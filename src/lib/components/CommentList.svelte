@@ -20,7 +20,13 @@
 
 {#each nodes as node, i}
 	<div class="commentList">
-		<Comment {node} {flattenedTree} {focusedCommentId} on:subtreeExpansionRequest />
+		<Comment
+			{node}
+			{flattenedTree}
+			{focusedCommentId}
+			appearance="thread"
+			on:subtreeExpansionRequest
+		/>
 		{#if node.children.length == 0 && node.leaf.counts.child_count > 0}
 			<div class="commentList__loadMore">
 				<button
