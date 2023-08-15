@@ -426,7 +426,7 @@
 		flex-direction: row;
 		justify-content: center;
 		align-items: center;
-		padding: 1.5rem 0;
+		padding: 1.5rem;
 		font-size: 0.8rem;
 		gap: 0.5rem;
 

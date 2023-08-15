@@ -75,7 +75,7 @@
 							{/if}
 							{postView.creator.name}
 						</div>
-						<div class="postOverviewCard__relativeTimePresep">&middot;</div>
+						&middot;
 						<div class="postOverviewCard__relativeTime">
 							{formatRelativeUtcTime(postView.post.published)}
 						</div>
@@ -227,6 +227,11 @@
 				display: flex;
 				flex-direction: row;
 				align-items: center;
+				// A little hack to handle tiny screens. The subtraction is a
+				// heuristic to avoid having to take all padding/border/margin sizes
+				// of parents into account
+				max-width: calc(100vw - 6rem);
+				overflow: hidden;
 				gap: 0.2rem;
 
 				.postOverviewCard__community,
@@ -246,13 +251,16 @@
 					}
 				}
 
-				.postOverviewCard__relativeTimePresep,
+				.postOverviewCard__community,
+				.postOverviewCard__user,
 				.postOverviewCard__relativeTime {
-					display: none;
-
-					@include breakpoints.mediumAndUp {
-						display: block;
-					}
+					flex-basis: 80px;
+					flex-grow: 1;
+					flex-shrink: 1;
+					max-width: min-content;
+					text-overflow: ellipsis;
+					overflow: hidden;
+					white-space: nowrap;
 				}
 
 				.postOverviewCard__pinIndicator {
