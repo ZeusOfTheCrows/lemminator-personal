@@ -5,7 +5,7 @@
 	import ThemedButton from './ThemedButton.svelte';
 	import { renderEnhancedMarkdown } from '$lib/js/markdown';
 	import EntityIcon from './EntityIcon.svelte';
-	import { getDetailLinkForPost, getNormalizedCommunityName } from '$lib/js/navigation';
+	import { getPostDetailLinkFromPostView, getNormalizedCommunityName } from '$lib/js/navigation';
 	import { session } from '$lib/js/globals';
 	import { invalidate } from '$app/navigation';
 	import UserTag from './UserTag.svelte';
@@ -85,7 +85,7 @@
 						{/if}
 					</div>
 					<div class="postOverviewCard__name">
-						<a href={getDetailLinkForPost(postView)}>
+						<a href={getPostDetailLinkFromPostView(postView)}>
 							{postView.post.name}
 						</a>
 					</div>
@@ -111,7 +111,7 @@
 					{/if}
 				</div>
 				{#if isImageLink(postView.post.url)}
-					<a class="postOverviewCard__imageLink" href={getDetailLinkForPost(postView)}>
+					<a class="postOverviewCard__imageLink" href={getPostDetailLinkFromPostView(postView)}>
 						<img
 							class="postOverviewCard__image"
 							class:postOverviewCard__image--list={variant === 'list'}
@@ -143,7 +143,7 @@
 						{postView.counts.downvotes}
 					</ThemedButton>
 					<ThemedButton
-						href={getDetailLinkForPost(postView)}
+						href={getPostDetailLinkFromPostView(postView)}
 						appearance="dimmed"
 						icon="comment"
 						title="View comments"

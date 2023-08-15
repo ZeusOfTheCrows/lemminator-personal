@@ -12,6 +12,7 @@
 	import CommentComposer from './CommentComposer.svelte';
 	import moment from 'moment-timezone';
 	import UserTag from './UserTag.svelte';
+	import { getDetailLinkForComment } from '$lib/js/navigation';
 
 	const dispatch = createEventDispatcher();
 
@@ -116,7 +117,9 @@
 			<UserTag person={node.leaf.creator} showAvatar={true} />
 			&middot;
 			<div title={`Published on ${moment.tz(node.leaf.comment.published, 'UTC').format('LLL')}`}>
-				{formatRelativeUtcTime(node.leaf.comment.published)}
+				<a href={getDetailLinkForComment(node.leaf)}>
+					{formatRelativeUtcTime(node.leaf.comment.published)}
+				</a>
 			</div>
 			{#if node.leaf.comment.updated}
 				<span
@@ -256,6 +259,14 @@
 			align-items: center;
 			gap: 0.2rem;
 			font-size: 0.75rem;
+
+			a {
+				text-decoration: none;
+
+				&:hover {
+					text-decoration: underline;
+				}
+			}
 
 			@include colors.themify() {
 				color: colors.themed('deemphColor');

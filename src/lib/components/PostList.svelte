@@ -2,7 +2,7 @@
 	import { afterNavigate, goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { keynav } from '$lib/js/globals';
-	import { getDetailLinkForPost } from '$lib/js/navigation';
+	import { getPostDetailLinkFromPostView } from '$lib/js/navigation';
 	import type { GetPostsResponse } from 'lemmy-js-client';
 	import PostOverviewCard from './PostOverviewCard.svelte';
 	import isEqual from 'lodash.isequal';
@@ -92,7 +92,7 @@
 			case 'o':
 				if (postNavIndex !== null) {
 					const selectedPostView = postViews[postNavIndex];
-					goto(getDetailLinkForPost(selectedPostView));
+					goto(getPostDetailLinkFromPostView(selectedPostView));
 				}
 				break;
 		}

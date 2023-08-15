@@ -11,7 +11,6 @@ export const load = (async ({ parent, params }) => {
     if (isNaN(postIdNum)) throw error(400, 'Invalid ID');
 
     return {
-        // The implicit page limit appears to be 50. An explicit limit cannot be set.
         postResponse: client.getPost(postIdNum, jwt).then(response => {
             if (params.communityName !== getNormalizedCommunityName(response.community_view.community)) {
                 throw error(404, 'Could not find post');

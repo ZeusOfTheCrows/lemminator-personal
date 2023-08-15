@@ -81,6 +81,13 @@ class ApiClient {
         }));
     }
 
+    getComment(params: { commentId: number, jwt?: string }): Promise<CommentResponse> {
+        return this.wrapForApiTimeouts('getComment', this.innerClient.getComment({
+            id: params.commentId,
+            auth: params.jwt,
+        }));
+    }
+
     getComments(postId?: number, parentCommentId?: number, jwt?: string, page?: number): Promise<GetCommentsResponse> {
         return this.wrapForApiTimeouts('getComments', this.innerClient.getComments({
             auth: jwt,

@@ -37,15 +37,38 @@ function flattenCommentTree(nodes: CommentTreeNode[]): CommentView[] {
 }
 
 export function getCommentTree(comments: CommentView[]): CommentTree {
+    if (!comments.length) {
+        return {
+            topNodes: [],
+            flattenedTree: [],
+        };
+    }
+
     const topNodes: CommentTreeNode[] = [];
     let unprocessedComments: CommentView[] = [...comments];
     const maxLevelToProcess = unprocessedComments
         .reduce((acc, cur) => Math.max(acc, (cur.comment.path.match(/\./g) || []).length), 0);
 
+    const largestCommonPathPrefix = unprocessedComments.reduce((prefix, cur) => {
+        const curPath = cur.comment.path;
+        let commonPrefix = '';
+        for (let i = 0; i < Math.min(prefix.length, curPath.length); i++) {
+            if (prefix[i] === curPath[i]) {
+                commonPrefix += prefix[i];
+            } else {
+                break;
+            }
+        }
+        return commonPrefix;
+    }, unprocessedComments[0].comment.path);
+    const listifiedLargestCommonPathPrefix = largestCommonPathPrefix.split('.');
+    const prefixToTrim = `${listifiedLargestCommonPathPrefix.slice(0, listifiedLargestCommonPathPrefix.length - 1).join('.')}.`;
+    const trimRegex = new RegExp(`^${prefixToTrim.replace('.', '\\.')}`);
+
     for (let levelToProcess = 1; levelToProcess <= maxLevelToProcess; levelToProcess++) {
         const processedComments: CommentView[] = [];
         for (const commentView of unprocessedComments) {
-            const processedPath = commentView.comment.path.replace(/^0\./, '')
+            const processedPath = commentView.comment.path.replace(trimRegex, '')
                 .split('.')
                 .map(item => parseInt(item));
 

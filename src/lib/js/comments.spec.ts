@@ -88,6 +88,13 @@ function fabricateCommentView(overrides: Partial<Comment>, numDescendants: numbe
 }
 
 describe('getCommentTree', () => {
+    it('handles empty trees', () => {
+        expect(getCommentTree([
+        ])).toEqual({
+            topNodes: [],
+            flattenedTree: [],
+        })
+    });
     it('gets a simple comment tree', async () => {
         const comment_view_1 = {
             comment: {
@@ -455,6 +462,41 @@ describe('getCommentTree', () => {
             ],
             flattenedTree: [
                 comment_2074795,
+                comment_2074795_2076331,
+                comment_2074795_2076331_2078428,
+            ],
+        })
+    });
+
+    it('handles subsections of trees', () => {
+        const comment_2074795_2076331_2078428 = fabricateCommentView({
+            id: 2078428,
+            path: "0.2074795.2076331.2078428",
+        }, 0);
+        const comment_2074795_2076331 = fabricateCommentView({
+            id: 2076331,
+            path: "0.2074795.2076331",
+        }, 1);
+
+        expect(getCommentTree([
+            comment_2074795_2076331_2078428,
+            comment_2074795_2076331,
+        ])).toEqual({
+            topNodes: [
+                {
+                    leaf: comment_2074795_2076331,
+                    children: [
+                        {
+                            leaf: comment_2074795_2076331_2078428,
+                            children: [
+                            ],
+                            fullPath: [2076331, 2078428],
+                        },
+                    ],
+                    fullPath: [2076331],
+                },
+            ],
+            flattenedTree: [
                 comment_2074795_2076331,
                 comment_2074795_2076331_2078428,
             ],
