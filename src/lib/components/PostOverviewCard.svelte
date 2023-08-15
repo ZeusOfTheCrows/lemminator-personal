@@ -8,6 +8,7 @@
 	import { getDetailLinkForPost, getNormalizedCommunityName } from '$lib/js/navigation';
 	import { session } from '$lib/js/globals';
 	import { invalidate } from '$app/navigation';
+	import UserTag from './UserTag.svelte';
 
 	// null = shimmer
 	export let postView: PostView | null;
@@ -70,10 +71,7 @@
 							&middot;
 						{/if}
 						<div class="postOverviewCard__user">
-							{#if !showCommunity && postView.creator.avatar}
-								<EntityIcon src={postView.creator.avatar} alt="Avatar" />
-							{/if}
-							{postView.creator.name}
+							<UserTag person={postView.creator} showAvatar={!showCommunity} />
 						</div>
 						&middot;
 						<div class="postOverviewCard__relativeTime">

@@ -11,6 +11,7 @@
 	import LoadingSpinner from './LoadingSpinner.svelte';
 	import CommentComposer from './CommentComposer.svelte';
 	import moment from 'moment-timezone';
+	import UserTag from './UserTag.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -112,10 +113,7 @@
 		bind:this={commentElement}
 	>
 		<div class="comment__metaLine">
-			{#if node.leaf.creator.avatar}
-				<EntityIcon src={node.leaf.creator.avatar} alt="Avatar" />
-			{/if}
-			{node.leaf.creator.name}
+			<UserTag person={node.leaf.creator} showAvatar={true} />
 			&middot;
 			<div title={`Published on ${moment.tz(node.leaf.comment.published, 'UTC').format('LLL')}`}>
 				{formatRelativeUtcTime(node.leaf.comment.published)}
