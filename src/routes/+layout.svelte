@@ -12,7 +12,7 @@
 	import SearchPopup from '$lib/components/SearchPopup.svelte';
 	import BadgedIcon from '$lib/components/BadgedIcon.svelte';
 	import { getClient } from '$lib/js/client';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 
 	let root: HTMLElement;
 	let navigating = false;
@@ -47,6 +47,7 @@
 	let searchPopupOpen = false;
 
 	let numUnreadMessages: number | null = null;
+	let unreadReloadTimer: NodeJS.Timer | null = null;
 	async function refreshUnreadCount() {
 		if ($session.state === 'authenticated') {
 			const client = getClient();
@@ -61,7 +62,14 @@
 	}
 	onMount(() => {
 		refreshUnreadCount();
-		setInterval(refreshUnreadCount, 1000 * 30);
+		unreadReloadTimer = setInterval(refreshUnreadCount, 1000 * 30);
+	});
+	onDestroy(() => {
+		// Prevent hot reload from going berserk
+		if (unreadReloadTimer) {
+			console.log('Clearing unread timer');
+			clearInterval(unreadReloadTimer);
+		}
 	});
 </script>
 
