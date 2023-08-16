@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 $lightColor1: hsl(259, 50%, 94%);
 $lightColor2: hsl(273, 60%, 97%);
 $lightColor3: rgb(244, 238, 250);
@@ -22,6 +24,7 @@ $themes: (
 
         boxShadow: rgba(15, 0, 17, 0.03),
         subtleBorder: rgba(0, 0, 0, 0.03),
+        loadBar: rgb(210, 158, 223),
     ),
     darkTheme: (color1: $darkColor1,
         color2: $darkColor2,
@@ -39,6 +42,7 @@ $themes: (
 
         boxShadow: rgba(0, 0, 0, 0.1),
         subtleBorder: rgba(255, 255, 255, 0.03),
+        loadBar: rgb(210, 158, 223),
     ),
 );
 
@@ -82,6 +86,7 @@ $themes: (
 }
 
 @function themed($key) {
+    // To customize theme, do a hue shift like @return color.adjust(map-get($theme-map, $key), $hue: 200deg);
     @return map-get($theme-map, $key);
 }
 

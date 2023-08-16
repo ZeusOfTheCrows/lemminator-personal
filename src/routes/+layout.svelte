@@ -215,7 +215,10 @@
 		opacity: 0;
 		transition: opacity 0.1s ease-in;
 		z-index: 2;
-		background: rgb(210, 158, 223);
+
+		@include colors.themify() {
+			background: colors.themed('loadBar');
+		}
 
 		&.loader--navigating {
 			opacity: 1;
