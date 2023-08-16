@@ -12,6 +12,7 @@
 	import SearchPopup from '$lib/components/SearchPopup.svelte';
 	import BadgedIcon from '$lib/components/BadgedIcon.svelte';
 	import { getClient } from '$lib/js/client';
+	import { onMount } from 'svelte';
 
 	let root: HTMLElement;
 	let navigating = false;
@@ -46,20 +47,22 @@
 	let searchPopupOpen = false;
 
 	let numUnreadMessages: number | null = null;
-	$: {
+	async function refreshUnreadCount() {
 		if ($session.state === 'authenticated') {
-			(async () => {
-				const client = getClient();
-				const unreadCountResponse = await client.getUnreadCount({ jwt: $session.jwt });
-				numUnreadMessages =
-					unreadCountResponse.mentions +
-					unreadCountResponse.private_messages +
-					unreadCountResponse.replies;
-			})();
+			const client = getClient();
+			const unreadCountResponse = await client.getUnreadCount({ jwt: $session.jwt });
+			numUnreadMessages =
+				unreadCountResponse.mentions +
+				unreadCountResponse.private_messages +
+				unreadCountResponse.replies;
 		} else {
 			numUnreadMessages = null;
 		}
 	}
+	onMount(() => {
+		refreshUnreadCount();
+		setInterval(refreshUnreadCount, 1000 * 30);
+	});
 </script>
 
 <svelte:head>
