@@ -1,3 +1,4 @@
+import { browser } from "$app/environment";
 import { invalidateAll } from "$app/navigation";
 import { error } from "@sveltejs/kit";
 import { LemmyHttp, type GetSiteResponse, type ListCommunitiesResponse, type GetCommunityResponse, type GetCommentsResponse, type GetPostsResponse, type GetPostResponse, type LoginResponse, type PostResponse, type CommentResponse, type SearchResponse } from "lemmy-js-client";
@@ -8,10 +9,14 @@ class ApiClient {
     constructor(private innerClient: LemmyHttp) { }
 
     private async wrapForApiTimeouts<T>(callerDescription: string, promise: Promise<T>): Promise<T> {
-        return timeout(promise, 8000).catch((err) => {
+        // Server-side rendering is on a tight deadline. For client-side rendering we can wait
+        // however long we want as long as it still makes sense.
+        const maxDelay = browser ? 20 * 1000 : 8 * 1000;
+
+        return timeout(promise, maxDelay).catch((err) => {
             console.error(`Error in ${callerDescription}`);
             if (err instanceof TimeoutError) {
-                throw error(504, 'The servers are too slow right now.')
+                throw error(504, 'Server request timed out');
             } else {
                 throw err;
             }
