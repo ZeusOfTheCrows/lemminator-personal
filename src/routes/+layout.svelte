@@ -3,7 +3,6 @@
 	import PrimarySidebar from '$lib/components/PrimarySidebar.svelte';
 	import ThemedButton from '$lib/components/ThemedButton.svelte';
 	import LoginPopup from '$lib/components/LoginPopup.svelte';
-	import logoLightCircle from '$lib/img/logoLightCircle.png';
 	import logoMonochromeOnLight from '$lib/img/logoMonochromeOnLight.svg';
 	import { session, cachedCalls, theme } from '$lib/js/globals';
 	import EntityIcon from '$lib/components/EntityIcon.svelte';
@@ -11,6 +10,8 @@
 	import { offset, flip, shift } from 'svelte-floating-ui/dom';
 	import { createFloatingActions } from 'svelte-floating-ui';
 	import SearchPopup from '$lib/components/SearchPopup.svelte';
+	import BadgedIcon from '$lib/components/BadgedIcon.svelte';
+	import { getClient } from '$lib/js/client';
 
 	let root: HTMLElement;
 	let navigating = false;
@@ -43,6 +44,22 @@
 	}
 
 	let searchPopupOpen = false;
+
+	let numUnreadMessages: number | null = null;
+	$: {
+		if ($session.state === 'authenticated') {
+			(async () => {
+				const client = getClient();
+				const unreadCountResponse = await client.getUnreadCount({ jwt: $session.jwt });
+				numUnreadMessages =
+					unreadCountResponse.mentions +
+					unreadCountResponse.private_messages +
+					unreadCountResponse.replies;
+			})();
+		} else {
+			numUnreadMessages = null;
+		}
+	}
 </script>
 
 <svelte:head>
@@ -80,13 +97,15 @@
 			</div>
 			<div class="header__menu">
 				{#await $cachedCalls.siteResponse then siteResponse}
+					{#if numUnreadMessages !== null}
+						<ThemedButton title="Inbox" on:click={() => alert('Inbox management is coming soon!')}>
+							<BadgedIcon icon="mail" count={numUnreadMessages} />
+						</ThemedButton>
+					{/if}
 					<div class="header__user">
 						<div use:userMenuRef>
 							{#if $session.state === 'authenticated' && siteResponse.my_user}
 								<ThemedButton on:click={() => (userMenuOpen = true)}>
-									<span class="header__loggedInUser">
-										{siteResponse.my_user.local_user_view.person.name}
-									</span>
 									{#if siteResponse.my_user.local_user_view.person.avatar}
 										<EntityIcon
 											src={siteResponse.my_user.local_user_view.person.avatar}
@@ -95,6 +114,9 @@
 									{:else}
 										<span class="material-icons">person</span>
 									{/if}
+									<span class="header__loggedInUser">
+										{siteResponse.my_user.local_user_view.person.name}
+									</span>
 								</ThemedButton>
 							{:else}
 								<ThemedButton icon="person" on:click={() => (userMenuOpen = true)} />
@@ -324,10 +346,11 @@
 
 		.header__loggedInUser {
 			display: none;
-			font-size: 0.85rem;
 
-			@include breakpoints.mediumAndUp {
+			@include breakpoints.desktopAndUp {
+				flex-shrink: 1;
 				display: block;
+				font-size: 0.85rem;
 			}
 		}
 	}

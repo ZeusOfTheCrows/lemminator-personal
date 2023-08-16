@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { session, theme } from '$lib/js/globals';
+	import { cachedCalls, session, theme } from '$lib/js/globals';
 	import { createEventDispatcher } from 'svelte';
 	import Dismissable from './Dismissable.svelte';
 	import MenuOption from './MenuOption.svelte';
@@ -50,6 +50,13 @@
 					}}
 				>
 					Log out
+					<span class="menu__loggedInUserOnSmallScreens">
+						{#await $cachedCalls.siteResponse then siteResponse}
+							{#if $session.state === 'authenticated' && siteResponse.my_user}
+								{siteResponse.my_user.local_user_view.person.name}
+							{/if}
+						{/await}
+					</span>
 				</MenuOption>
 			</li>
 		{/if}
@@ -58,6 +65,7 @@
 
 <style lang="scss">
 	@use '$lib/css/colors';
+	@use '$lib/css/breakpoints';
 
 	.menu {
 		font-size: 0.8rem;
@@ -71,6 +79,12 @@
 		li {
 			display: grid;
 			grid-template-columns: 1fr;
+		}
+
+		.menu__loggedInUserOnSmallScreens {
+			@include breakpoints.desktopAndUp {
+				display: none;
+			}
 		}
 	}
 </style>

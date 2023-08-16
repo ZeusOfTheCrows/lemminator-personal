@@ -150,6 +150,12 @@ class ApiClient {
             auth: params.jwt,
         }));
     }
+
+    getUnreadCount(params: { jwt: string }) {
+        return this.wrapForApiTimeouts('getUnreadCount', this.innerClient.getUnreadCount({
+            auth: params.jwt,
+        }))
+    }
 }
 
 export function getClient(): ApiClient {
