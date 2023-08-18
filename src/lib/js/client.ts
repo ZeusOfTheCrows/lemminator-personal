@@ -161,6 +161,21 @@ class ApiClient {
             auth: params.jwt,
         }))
     }
+
+    getReplies(params: { jwt: string }) {
+        return this.wrapForApiTimeouts('getReplies', this.innerClient.getReplies({
+            unread_only: true,
+            auth: params.jwt,
+        }));
+    }
+
+    setCommentReadStatus(params: { commentReplyId: number, readStatus: boolean, jwt: string }) {
+        return this.wrapForApiTimeouts('setCommentReadStatus', this.innerClient.markCommentReplyAsRead({
+            comment_reply_id: params.commentReplyId,
+            auth: params.jwt,
+            read: params.readStatus,
+        }));
+    }
 }
 
 export function getClient(): ApiClient {

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { renderEnhancedMarkdown } from '$lib/js/markdown';
 	import ThemedButton from './ThemedButton.svelte';
-	import type { CommentTreeNode } from '$lib/js/comments';
+	import { isCommentReplyView, type CommentTreeNode } from '$lib/js/comments';
 	import CommentList from './CommentList.svelte';
 	import type { CommentView } from 'lemmy-js-client';
 	import { formatRelativeUtcTime, getClient } from '$lib/js/client';
@@ -12,6 +12,7 @@
 	import moment from 'moment-timezone';
 	import UserTag from './UserTag.svelte';
 	import { getDetailLinkForComment } from '$lib/js/navigation';
+	import Checkbox from './Checkbox.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -111,6 +112,21 @@
 		showAddReply = false;
 	}
 
+	let commentReadStatusLoading = false;
+	async function propagateReadStateChange(event: { detail: boolean }) {
+		if ($session.state === 'authenticated' && isCommentReplyView(node.leaf)) {
+			const client = getClient();
+			commentReadStatusLoading = true;
+			const response = await client.setCommentReadStatus({
+				commentReplyId: node.leaf.comment_reply.id,
+				readStatus: event.detail,
+				jwt: $session.jwt
+			});
+			commentReadStatusLoading = false;
+			node.leaf = response.comment_reply_view;
+		}
+	}
+
 	function propagateEdit(event: { detail: CommentView }) {
 		node.leaf = event.detail;
 		showEditComment = false;
@@ -155,6 +171,16 @@
 			{@html renderEnhancedMarkdown(node.leaf.comment.content)}
 		</div>
 		<div class="comment__actionLine">
+			{#if isCommentReplyView(node.leaf)}
+				<Checkbox
+					checked={node.leaf.comment_reply.read}
+					loading={commentReadStatusLoading}
+					title={node.leaf.comment_reply.read ? 'Mark as unread' : 'Mark as read'}
+					on:change={propagateReadStateChange}
+				>
+					Read
+				</Checkbox>
+			{/if}
 			<ThemedButton
 				appearance={node.leaf.my_vote == 1 ? 'default' : 'dimmed'}
 				icon="keyboard_arrow_up"

@@ -1,7 +1,7 @@
-import type { CommentView } from "lemmy-js-client";
+import type { CommentReplyView, CommentView } from "lemmy-js-client";
 
 export interface CommentTreeNode {
-    leaf: CommentView;
+    leaf: CommentView | CommentReplyView;
     children: CommentTreeNode[];
     fullPath: number[];
 }
@@ -9,6 +9,10 @@ export interface CommentTreeNode {
 export interface CommentTree {
     topNodes: CommentTreeNode[];
     flattenedTree: CommentView[];
+}
+
+export function isCommentReplyView(item: CommentView | CommentReplyView): item is CommentReplyView {
+    return !!((item as any).comment_reply);
 }
 
 function addLeafToTree(nodes: CommentTreeNode[], commentView: CommentView, fullPath: number[], partialPath: number[]): boolean {
