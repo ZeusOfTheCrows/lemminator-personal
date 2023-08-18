@@ -152,7 +152,7 @@
 						</ThemedButton>
 					{/if}
 					<ThemedButton
-						href={getPostDetailLinkFromPostView(postView)}
+						href={`${getPostDetailLinkFromPostView(postView)}#comments`}
 						appearance="dimmed"
 						icon="comment"
 						title="View comments"

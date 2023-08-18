@@ -97,7 +97,7 @@
 <svelte:window on:keyup={handleKeyUp} />
 
 <ElevatedBox stacking="vertical">
-	<div class="commentSection">
+	<div class="commentSection" id="comments">
 		{#if tree.flattenedTree.length == 0}
 			<div class="commentSection__isEmpty">
 				There are no comments yet. Early bird gets the worm!
