@@ -4,7 +4,7 @@
 	import ThemedButton from '$lib/components/ThemedButton.svelte';
 	import LoginPopup from '$lib/components/LoginPopup.svelte';
 	import logoMonochromeOnLight from '$lib/img/logoMonochromeOnLight.svg';
-	import { session, cachedCalls, theme } from '$lib/js/globals';
+	import { session, cachedCalls, theme, numOfUnreads, refreshUnreadCount } from '$lib/js/globals';
 	import EntityIcon from '$lib/components/EntityIcon.svelte';
 	import UserMenu from '$lib/components/UserMenu.svelte';
 	import { offset, flip, shift } from 'svelte-floating-ui/dom';
@@ -46,23 +46,10 @@
 
 	let searchPopupOpen = false;
 
-	let numUnreadMessages: number | null = null;
 	let unreadReloadTimer: NodeJS.Timer | null = null;
-	async function refreshUnreadCount() {
-		if ($session.state === 'authenticated') {
-			const client = getClient();
-			const unreadCountResponse = await client.getUnreadCount({ jwt: $session.jwt });
-			numUnreadMessages =
-				unreadCountResponse.mentions +
-				unreadCountResponse.private_messages +
-				unreadCountResponse.replies;
-		} else {
-			numUnreadMessages = null;
-		}
-	}
 	onMount(() => {
-		refreshUnreadCount();
-		unreadReloadTimer = setInterval(refreshUnreadCount, 1000 * 30);
+		refreshUnreadCount($session);
+		unreadReloadTimer = setInterval(() => refreshUnreadCount($session), 1000 * 30);
 	});
 	onDestroy(() => {
 		// Prevent hot reload from going berserk
@@ -108,9 +95,9 @@
 			</div>
 			<div class="header__menu">
 				{#await $cachedCalls.siteResponse then siteResponse}
-					{#if numUnreadMessages !== null}
+					{#if $numOfUnreads !== null}
 						<ThemedButton title="Inbox" on:click={() => alert('Inbox management is coming soon!')}>
-							<BadgedIcon icon="mail" count={numUnreadMessages} />
+							<BadgedIcon icon="mail" count={$numOfUnreads} />
 						</ThemedButton>
 					{/if}
 					<div class="header__user">

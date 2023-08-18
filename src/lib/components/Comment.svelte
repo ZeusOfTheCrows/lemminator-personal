@@ -6,7 +6,7 @@
 	import type { CommentView } from 'lemmy-js-client';
 	import { formatRelativeUtcTime, getClient } from '$lib/js/client';
 	import { createEventDispatcher, onMount } from 'svelte';
-	import { cachedCalls, getLocalPerson, session } from '$lib/js/globals';
+	import { cachedCalls, getLocalPerson, numOfUnreads, session } from '$lib/js/globals';
 	import LoadingSpinner from './LoadingSpinner.svelte';
 	import CommentComposer from './CommentComposer.svelte';
 	import moment from 'moment-timezone';
@@ -124,6 +124,7 @@
 			});
 			commentReadStatusLoading = false;
 			node.leaf = response.comment_reply_view;
+			dispatch('readStateChange');
 		}
 	}
 

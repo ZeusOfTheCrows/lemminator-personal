@@ -65,3 +65,18 @@ export const cachedCalls: Readable<{
 export function getLocalPerson(siteResponse: GetSiteResponse): Person | null {
     return siteResponse.my_user?.local_user_view.person ?? null;
 }
+
+export const numOfUnreads: Writable<number | null> = writable(null);
+
+export async function refreshUnreadCount(session: AuthenticationState) {
+    if (session.state === 'authenticated') {
+        const client = getClient();
+        const unreadCountResponse = await client.getUnreadCount({ jwt: session.jwt });
+        numOfUnreads.set(
+            unreadCountResponse.mentions +
+            unreadCountResponse.private_messages +
+            unreadCountResponse.replies);
+    } else {
+        numOfUnreads.set(null);
+    }
+}

@@ -4,7 +4,7 @@
 	import SecondarySidebar from '$lib/components/SecondarySidebar.svelte';
 	import ThemedButton from '$lib/components/ThemedButton.svelte';
 	import TitledGraphic from '$lib/components/TitledGraphic.svelte';
-	import { cachedCalls, session } from '$lib/js/globals';
+	import { cachedCalls, numOfUnreads, refreshUnreadCount, session } from '$lib/js/globals';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
@@ -29,6 +29,7 @@
 									appearance="standalone"
 									focusedCommentId={null}
 									flattenedTree={[reply]}
+									on:readStateChange={() => refreshUnreadCount($session)}
 								/>
 							</div>
 						{/each}
