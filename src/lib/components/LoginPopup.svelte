@@ -77,7 +77,7 @@
 					label="Username or e-mail"
 					bind:value={usernameOrEmail}
 					bind:this={usernameField}
-					placeholder="linus@example.com"
+					placeholder="shannon@example.com"
 				/>
 				<InputField uniqueId="password" type="password" label="Password" bind:value={password} />
 				{#if error}
