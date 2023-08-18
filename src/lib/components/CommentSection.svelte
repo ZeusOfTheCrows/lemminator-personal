@@ -115,8 +115,11 @@
 <style lang="scss">
 	@use '$lib/css/colors';
 	@use '$lib/css/markdown';
+	@use '$lib/css/measurements';
 
 	.commentSection {
+		scroll-margin: calc(measurements.$headerVSize + 1rem);
+
 		.commentSection__isEmpty {
 			padding: 2rem;
 			text-align: center;
