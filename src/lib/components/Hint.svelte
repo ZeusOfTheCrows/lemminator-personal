@@ -1,12 +1,17 @@
 <script lang="ts">
+	export let icon: string | null = null;
 </script>
 
 <div class="hint">
+	{#if icon}
+		<div class="material-icons">{icon}</div>
+	{/if}
 	<slot />
 </div>
 
 <style lang="scss">
 	@use '$lib/css/colors';
+	@use 'material-icons/iconfont/filled.css';
 
 	.hint {
 		display: flex;

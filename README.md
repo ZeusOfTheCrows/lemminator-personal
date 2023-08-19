@@ -73,7 +73,6 @@ I've licensed the code under AGPL v3.0. You can fork the repo if my judgements a
 
 ## Not yet supported, but planned
 - Post search
-- Better handling for various edge cases (e.g. locked posts)
 - A post list layout switcher (big cards vs. dense lists)
 - Registration
 - 2FA support

@@ -18,6 +18,7 @@
 	import ThemedButton from '$lib/components/ThemedButton.svelte';
 	import CommentComposer from '$lib/components/CommentComposer.svelte';
 	import FederationHint from '$lib/components/FederationHint.svelte';
+	import Hint from '$lib/components/Hint.svelte';
 
 	export let data: PageData;
 	let commentViews: CommentView[] = data.commentsResponse.comments;
@@ -82,27 +83,33 @@
 					/>
 				{/if}
 				<PostOverviewCard postView={postResponse.post_view} active={null} variant="detail" />
-				<CommentComposer
-					context={{ mode: 'addPostReply', postId: postResponse.post_view.post.id }}
-					on:commentSubmit={(event) => {
-						commentViews = [event.detail].concat(commentViews);
-					}}
-				/>
-				<CommentSection
-					tree={commentTree}
-					on:subtreeExpansionRequest={(item) => loadCommentsForId(item.detail)}
-					on:moreCommentsRequest={loadMoreComments}
-				/>
-				{#if moreCommentsAvailable}
-					<div class="postDetailLayouter__loadMore">
-						{#if loadingMore}
-							<LoadingSpinner minHeight="1rem" />
-						{:else}
-							<ThemedButton icon="keyboard_double_arrow_down" on:click={loadMoreComments}>
-								Load more
-							</ThemedButton>
-						{/if}
+				{#if data.postResponse.post_view.post.locked}
+					<div id="comments">
+						<Hint icon="lock">The comment section has been locked.</Hint>
 					</div>
+				{:else}
+					<CommentComposer
+						context={{ mode: 'addPostReply', postId: postResponse.post_view.post.id }}
+						on:commentSubmit={(event) => {
+							commentViews = [event.detail].concat(commentViews);
+						}}
+					/>
+					<CommentSection
+						tree={commentTree}
+						on:subtreeExpansionRequest={(item) => loadCommentsForId(item.detail)}
+						on:moreCommentsRequest={loadMoreComments}
+					/>
+					{#if moreCommentsAvailable}
+						<div class="postDetailLayouter__loadMore">
+							{#if loadingMore}
+								<LoadingSpinner minHeight="1rem" />
+							{:else}
+								<ThemedButton icon="keyboard_double_arrow_down" on:click={loadMoreComments}>
+									Load more
+								</ThemedButton>
+							{/if}
+						</div>
+					{/if}
 				{/if}
 			</div>
 		{/await}

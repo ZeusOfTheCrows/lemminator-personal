@@ -5,8 +5,7 @@
 </script>
 
 <div class="federationHint">
-	<Hint>
-		<span class="material-icons">link</span>
+	<Hint icon="link">
 		<div>
 			External community from
 			<strong class="federationHint__hostname">{hostname}</strong>
@@ -16,7 +15,6 @@
 
 <style lang="scss">
 	@use '$lib/css/colors';
-	@use 'material-icons/iconfont/filled.css';
 
 	.federationHint {
 		.federationHint__hostname {
