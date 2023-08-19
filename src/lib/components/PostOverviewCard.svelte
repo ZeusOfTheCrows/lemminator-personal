@@ -154,11 +154,13 @@
 					<ThemedButton
 						href={`${getPostDetailLinkFromPostView(postView)}#comments`}
 						appearance="dimmed"
-						icon="comment"
-						title="View comments"
+						icon={postView.post.locked ? 'lock' : 'comment'}
+						title={postView.post.locked ? 'Comment section locked' : 'View comments'}
 						fontSize="0.875rem"
 					>
-						{postView.counts.comments}
+						{#if !postView.post.locked}
+							{postView.counts.comments}
+						{/if}
 					</ThemedButton>
 				</div>
 			</div>
