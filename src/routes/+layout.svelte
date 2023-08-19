@@ -11,7 +11,6 @@
 	import { createFloatingActions } from 'svelte-floating-ui';
 	import SearchPopup from '$lib/components/SearchPopup.svelte';
 	import BadgedIcon from '$lib/components/BadgedIcon.svelte';
-	import { getClient } from '$lib/js/client';
 	import { onDestroy, onMount } from 'svelte';
 
 	let root: HTMLElement;
@@ -96,7 +95,7 @@
 			<div class="header__menu">
 				{#await $cachedCalls.siteResponse then siteResponse}
 					{#if $numOfUnreads !== null}
-						<ThemedButton title="Inbox" on:click={() => alert('Inbox management is coming soon!')}>
+						<ThemedButton title="Inbox" href="/inbox">
 							<BadgedIcon icon="mail" count={$numOfUnreads} />
 						</ThemedButton>
 					{/if}
