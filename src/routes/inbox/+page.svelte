@@ -6,9 +6,7 @@
 	import TitledGraphic from '$lib/components/TitledGraphic.svelte';
 	import { getClient } from '$lib/js/client';
 	import { cachedCalls, refreshUnreadCount, session } from '$lib/js/globals';
-	import type { GetRepliesResponse } from 'lemmy-js-client';
 	import type { PageData } from './$types';
-	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
 
 	export let data: PageData;
 	export let activeView: 'listOfUnreads' | 'archive' = 'listOfUnreads';
