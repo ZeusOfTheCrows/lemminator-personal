@@ -1,10 +1,11 @@
 <script lang="ts">
 	import Comment from '$lib/components/Comment.svelte';
 	import PageHolder from '$lib/components/PageHolder.svelte';
+	import ReplyList from '$lib/components/ReplyList.svelte';
 	import SecondarySidebar from '$lib/components/SecondarySidebar.svelte';
 	import ThemedButton from '$lib/components/ThemedButton.svelte';
 	import TitledGraphic from '$lib/components/TitledGraphic.svelte';
-	import { cachedCalls, refreshUnreadCount, session } from '$lib/js/globals';
+	import { cachedCalls, session } from '$lib/js/globals';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
@@ -20,28 +21,7 @@
 	<svelte:fragment slot="main">
 		<div class="inboxPage">
 			{#if data.repliesResponse}
-				{#if data.repliesResponse.replies.length}
-					<div class="replyList">
-						{#each data.repliesResponse.replies as reply}
-							<div class="reply">
-								<Comment
-									node={{ leaf: reply, children: [], fullPath: [] }}
-									appearance="standalone"
-									focusedCommentId={null}
-									flattenedTree={[reply]}
-									on:readStateChange={() => refreshUnreadCount($session)}
-								/>
-							</div>
-						{/each}
-					</div>
-				{:else}
-					<TitledGraphic
-						icon="circle_notifications"
-						title="Stay on top of the conversation"
-						subtitle="Replies to your posts will appear here."
-						iconStyle="prerounded"
-					/>
-				{/if}
+				<ReplyList replies={data.repliesResponse.replies.filter((r) => !r.comment_reply.read)} />
 			{:else}
 				<TitledGraphic
 					icon="circle_notifications"
@@ -68,10 +48,4 @@
 </PageHolder>
 
 <style lang="scss">
-	.inboxPage {
-		.replyList {
-			display: flex;
-			flex-direction: column;
-		}
-	}
 </style>

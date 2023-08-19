@@ -164,7 +164,7 @@ class ApiClient {
 
     getReplies(params: { jwt: string }) {
         return this.wrapForApiTimeouts('getReplies', this.innerClient.getReplies({
-            unread_only: true,
+            unread_only: false,
             auth: params.jwt,
         }));
     }
