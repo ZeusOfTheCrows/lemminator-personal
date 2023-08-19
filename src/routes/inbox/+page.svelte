@@ -6,32 +6,30 @@
 	import TitledGraphic from '$lib/components/TitledGraphic.svelte';
 	import { getClient } from '$lib/js/client';
 	import { cachedCalls, refreshUnreadCount, session } from '$lib/js/globals';
-	import type { CommentReplyView } from 'lemmy-js-client';
+	import type { GetRepliesResponse } from 'lemmy-js-client';
 	import type { PageData } from './$types';
+	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
 
 	export let data: PageData;
 	export let activeView: 'listOfUnreads' | 'archive' = 'listOfUnreads';
 
-	let repliesResponse = data.repliesResponse;
-	let unreads: CommentReplyView[];
-	$: {
-		if (repliesResponse) {
-			unreads = repliesResponse.replies.filter((r) => !r.comment_reply.read);
-		}
-	}
-	let loading = false;
+	let unreadsResponse = data.unreadsResponse ?? null;
+	let archiveResponse = data.archiveResponse ?? null;
 
 	async function refreshUnreads() {
-		if ($session.state === 'authenticated') {
-			const client = getClient();
-			loading = true;
-			repliesResponse = await client.getReplies({ jwt: $session.jwt });
-			loading = false;
-		}
+		if ($session.state !== 'authenticated') return;
+		const client = getClient();
+		unreadsResponse = await client.getReplies({ unreadOnly: true, jwt: $session.jwt });
+	}
+
+	async function refreshArchive() {
+		if ($session.state !== 'authenticated') return;
+		const client = getClient();
+		archiveResponse = await client.getReplies({ unreadOnly: false, jwt: $session.jwt });
 	}
 
 	async function propagateReadStateChange() {
-		await Promise.all([refreshUnreadCount($session), refreshUnreads()]);
+		await Promise.all([refreshUnreadCount($session), refreshUnreads(), refreshArchive()]);
 	}
 </script>
 
@@ -44,12 +42,13 @@
 <PageHolder>
 	<svelte:fragment slot="main">
 		<div class="inboxPage">
-			{#if repliesResponse}
+			<!-- Implicit login check -->
+			{#if unreadsResponse && archiveResponse}
 				<div class="inboxPage__top">
 					<h3 class="inboxPage__title">
-						{#if activeView === 'listOfUnreads' && unreads.length}
+						{#if activeView === 'listOfUnreads' && unreadsResponse.replies.length}
 							Unread list
-						{:else if activeView === 'archive' && repliesResponse.replies.length}
+						{:else if activeView === 'archive' && archiveResponse.replies.length}
 							Inbox archive
 						{/if}
 					</h3>
@@ -69,12 +68,17 @@
 					</div>
 				</div>
 				{#if activeView === 'listOfUnreads'}
-					<ReplyListOrPlaceholder replies={unreads} on:readStateChange={propagateReadStateChange} />
-				{:else if activeView === 'archive'}
 					<ReplyListOrPlaceholder
-						replies={repliesResponse.replies}
+						replies={unreadsResponse.replies}
 						on:readStateChange={propagateReadStateChange}
 					/>
+				{:else if activeView === 'archive'}
+					{#if archiveResponse}
+						<ReplyListOrPlaceholder
+							replies={archiveResponse.replies}
+							on:readStateChange={propagateReadStateChange}
+						/>
+					{/if}
 				{/if}
 			{:else}
 				<TitledGraphic

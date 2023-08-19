@@ -7,10 +7,12 @@ export const load = (async ({ parent }) => {
 
     const client = getClient();
     const result: {
-        repliesResponse?: Promise<GetRepliesResponse>,
+        unreadsResponse?: Promise<GetRepliesResponse>,
+        archiveResponse?: Promise<GetRepliesResponse>,
     } = {};
     if (jwt) {
-        result.repliesResponse = client.getReplies({ jwt });
+        result.unreadsResponse = client.getReplies({ unreadOnly: true, jwt });
+        result.archiveResponse = client.getReplies({ unreadOnly: false, jwt });
     }
 
     return result;
