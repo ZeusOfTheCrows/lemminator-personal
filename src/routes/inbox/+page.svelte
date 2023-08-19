@@ -5,7 +5,7 @@
 	import ThemedButton from '$lib/components/ThemedButton.svelte';
 	import TitledGraphic from '$lib/components/TitledGraphic.svelte';
 	import { getClient } from '$lib/js/client';
-	import { cachedCalls, refreshUnreadCount, session } from '$lib/js/globals';
+	import { cachedCalls, numOfUnreads, refreshUnreadCount, session } from '$lib/js/globals';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
@@ -13,6 +13,7 @@
 
 	let unreadsResponse = data.unreadsResponse ?? null;
 	let archiveResponse = data.archiveResponse ?? null;
+	let loading = false;
 
 	async function refreshUnreads() {
 		if ($session.state !== 'authenticated') return;
@@ -27,7 +28,9 @@
 	}
 
 	async function propagateReadStateChange() {
+		loading = true;
 		await Promise.all([refreshUnreadCount($session), refreshUnreads(), refreshArchive()]);
+		loading = false;
 	}
 </script>
 
@@ -51,18 +54,29 @@
 						{/if}
 					</h3>
 					<div class="inboxPage__settings">
-						<ThemedButton
-							icon="list"
-							title="Show unread list"
-							toggled={activeView === 'listOfUnreads'}
-							on:click={() => (activeView = 'listOfUnreads')}
-						/>
-						<ThemedButton
-							icon="archive"
-							title="Show inbox archive"
-							toggled={activeView === 'archive'}
-							on:click={() => (activeView = 'archive')}
-						/>
+						{#if $numOfUnreads !== null && unreadsResponse.replies.length !== $numOfUnreads && !loading}
+							<div class="inboxPage__refreshCue">
+								<ThemedButton
+									icon="refresh"
+									title="Refresh data"
+									on:click={propagateReadStateChange}
+								/>
+							</div>
+						{/if}
+						<div class="inboxPage__views">
+							<ThemedButton
+								icon="list"
+								title="Show unread list"
+								toggled={activeView === 'listOfUnreads'}
+								on:click={() => (activeView = 'listOfUnreads')}
+							/>
+							<ThemedButton
+								icon="archive"
+								title="Show inbox archive"
+								toggled={activeView === 'archive'}
+								on:click={() => (activeView = 'archive')}
+							/>
+						</div>
 					</div>
 				</div>
 				{#if activeView === 'listOfUnreads'}
@@ -126,7 +140,19 @@
 				flex-direction: row;
 				align-items: center;
 				justify-content: end;
-				gap: 0.3rem;
+			}
+
+			.inboxPage__refreshCue {
+				padding-right: 1rem;
+				@include colors.themify() {
+					border-right: solid 1px colors.themed('subtleBorder');
+				}
+			}
+
+			.inboxPage__views {
+				display: flex;
+				align-items: center;
+				padding-left: 1rem;
 			}
 		}
 	}
