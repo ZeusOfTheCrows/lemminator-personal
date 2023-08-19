@@ -49,7 +49,7 @@
 					<h3 class="inboxPage__title">
 						{#if activeView === 'listOfUnreads' && unreads.length}
 							Unread list
-						{:else if activeView === 'archive'}
+						{:else if activeView === 'archive' && repliesResponse.replies.length}
 							Inbox archive
 						{/if}
 					</h3>
