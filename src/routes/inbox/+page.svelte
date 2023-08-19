@@ -46,7 +46,7 @@
 				<TitledGraphic
 					icon="circle_notifications"
 					title="Stay on top of the conversation"
-					subtitle="Replies to your posts go to your inbox."
+					subtitle="Replies to your posts will appear here."
 					iconStyle="prerounded"
 				>
 					<svelte:fragment slot="additionalActions">
