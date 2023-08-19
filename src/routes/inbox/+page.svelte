@@ -4,7 +4,7 @@
 	import SecondarySidebar from '$lib/components/SecondarySidebar.svelte';
 	import ThemedButton from '$lib/components/ThemedButton.svelte';
 	import TitledGraphic from '$lib/components/TitledGraphic.svelte';
-	import { cachedCalls, numOfUnreads, refreshUnreadCount, session } from '$lib/js/globals';
+	import { cachedCalls, refreshUnreadCount, session } from '$lib/js/globals';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
@@ -20,7 +20,7 @@
 	<svelte:fragment slot="main">
 		<div class="inboxPage">
 			{#if data.repliesResponse}
-				{#if data.repliesResponse.replies}
+				{#if data.repliesResponse.replies.length}
 					<div class="replyList">
 						{#each data.repliesResponse.replies as reply}
 							<div class="reply">
@@ -38,7 +38,7 @@
 					<TitledGraphic
 						icon="circle_notifications"
 						title="Stay on top of the conversation"
-						subtitle="Replies to your posts go to your inbox."
+						subtitle="Replies to your posts will appear here."
 						iconStyle="prerounded"
 					/>
 				{/if}
