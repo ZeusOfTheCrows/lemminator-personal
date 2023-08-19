@@ -55,6 +55,11 @@
         }
     }
 
+    :global(a) {
+        word-wrap: break-word;
+        hyphens: auto;
+    }
+
     :global(blockquote) {
         @include colors.themify() {
             border-left: solid 5px rgba(colors.themed('maxContrastOnTheme'), 0.1);
