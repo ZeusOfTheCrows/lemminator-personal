@@ -32,7 +32,7 @@
 		.iconWithText__image {
 			.material-icons {
 				@include colors.themify() {
-					border: solid 1rem colors.themed('color2');
+					border: solid 1rem colors.themed('menuAccent');
 					color: rgba(colors.themed('maxContrastOnTheme'), 0.9);
 					background: colors.themed('maxContrastTheme');
 				}
