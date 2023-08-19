@@ -72,7 +72,6 @@ Thank you for your interest in contributing. As being a maintainer can be quite 
 I've licensed the code under AGPL v3.0. You can fork the repo if my judgements aren't in the best interest of the community or if I lack time to continue the project.
 
 ## Not yet supported, but planned
-- Inbox
 - Post search
 - Better handling for various edge cases (e.g. locked posts)
 - A post list layout switcher (big cards vs. dense lists)
