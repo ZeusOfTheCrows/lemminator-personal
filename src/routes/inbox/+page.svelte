@@ -28,10 +28,16 @@
 		archiveResponse = await client.getReplies({ unreadOnly: false, jwt: $session.jwt });
 	}
 
-	async function propagateReadStateChange() {
+	async function refreshAll() {
 		loading = true;
 		await Promise.all([refreshUnreadCount($session), refreshUnreads(), refreshArchive()]);
 		loading = false;
+	}
+
+	$: {
+		if (!unreadsResponse && $session.state === 'authenticated') {
+			refreshAll();
+		}
 	}
 </script>
 
@@ -59,11 +65,7 @@
 					<div class="inboxPage__settings">
 						{#if $numOfUnreads !== null && unreadsResponse.replies.length !== $numOfUnreads && !loading}
 							<div class="inboxPage__refreshCue">
-								<ThemedButton
-									icon="refresh"
-									title="Refresh data"
-									on:click={propagateReadStateChange}
-								/>
+								<ThemedButton icon="refresh" title="Refresh data" on:click={refreshAll} />
 							</div>
 						{/if}
 						<div class="inboxPage__views">
@@ -92,20 +94,17 @@
 					</div>
 				</div>
 				{#if activeView === 'queueOfUnreads'}
-					<InboxQueue
-						replies={unreadsResponse.replies}
-						on:readStateChange={propagateReadStateChange}
-					/>
+					<InboxQueue replies={unreadsResponse.replies} on:readStateChange={refreshAll} />
 				{:else if activeView === 'listOfUnreads'}
 					<ReplyListOrPlaceholder
 						replies={unreadsResponse.replies}
-						on:readStateChange={propagateReadStateChange}
+						on:readStateChange={refreshAll}
 					/>
 				{:else if activeView === 'archive'}
 					{#if archiveResponse}
 						<ReplyListOrPlaceholder
 							replies={archiveResponse.replies}
-							on:readStateChange={propagateReadStateChange}
+							on:readStateChange={refreshAll}
 						/>
 					{/if}
 				{/if}
