@@ -114,7 +114,11 @@
 
 	let commentReadStatusLoading = false;
 	async function propagateReadStateChange(event: { detail: boolean }) {
-		if ($session.state === 'authenticated' && isCommentReplyView(node.leaf)) {
+		if (
+			$session.state === 'authenticated' &&
+			isCommentReplyView(node.leaf) &&
+			node.leaf.comment_reply.read !== event.detail
+		) {
 			const client = getClient();
 			commentReadStatusLoading = true;
 			const response = await client.setCommentReadStatus({

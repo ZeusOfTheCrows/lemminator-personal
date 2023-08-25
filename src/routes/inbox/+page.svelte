@@ -1,4 +1,5 @@
 <script lang="ts">
+	import InboxQueue from '$lib/components/InboxQueue.svelte';
 	import PageHolder from '$lib/components/PageHolder.svelte';
 	import ReplyListOrPlaceholder from '$lib/components/ReplyListOrPlaceholder.svelte';
 	import SecondarySidebar from '$lib/components/SecondarySidebar.svelte';
@@ -9,7 +10,7 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
-	export let activeView: 'listOfUnreads' | 'archive' = 'listOfUnreads';
+	export let activeView: 'queueOfUnreads' | 'listOfUnreads' | 'archive' = 'queueOfUnreads';
 
 	let unreadsResponse = data.unreadsResponse ?? null;
 	let archiveResponse = data.archiveResponse ?? null;
@@ -47,10 +48,12 @@
 			{#if unreadsResponse && archiveResponse}
 				<div class="inboxPage__top">
 					<h3 class="inboxPage__title">
-						{#if activeView === 'listOfUnreads' && unreadsResponse.replies.length}
-							Unread list
+						{#if activeView === 'queueOfUnreads' && unreadsResponse.replies.length}
+							Detailed inbox
+						{:else if activeView === 'listOfUnreads' && unreadsResponse.replies.length}
+							Compact inbox
 						{:else if activeView === 'archive' && archiveResponse.replies.length}
-							Inbox archive
+							Archive
 						{/if}
 					</h3>
 					<div class="inboxPage__settings">
@@ -65,21 +68,35 @@
 						{/if}
 						<div class="inboxPage__views">
 							<ThemedButton
+								icon="zoom_in"
+								title="Show detailed inbox"
+								toggled={activeView === 'queueOfUnreads'}
+								on:click={() => (activeView = 'queueOfUnreads')}
+								fontSize="1.1rem"
+							/>
+							<ThemedButton
 								icon="list"
-								title="Show unread list"
+								title="Show compact inbox"
 								toggled={activeView === 'listOfUnreads'}
 								on:click={() => (activeView = 'listOfUnreads')}
+								fontSize="1.1rem"
 							/>
 							<ThemedButton
 								icon="archive"
-								title="Show inbox archive"
+								title="Show archive"
 								toggled={activeView === 'archive'}
 								on:click={() => (activeView = 'archive')}
+								fontSize="1.1rem"
 							/>
 						</div>
 					</div>
 				</div>
-				{#if activeView === 'listOfUnreads'}
+				{#if activeView === 'queueOfUnreads'}
+					<InboxQueue
+						replies={unreadsResponse.replies}
+						on:readStateChange={propagateReadStateChange}
+					/>
+				{:else if activeView === 'listOfUnreads'}
 					<ReplyListOrPlaceholder
 						replies={unreadsResponse.replies}
 						on:readStateChange={propagateReadStateChange}

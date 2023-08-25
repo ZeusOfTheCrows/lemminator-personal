@@ -10,6 +10,7 @@
 	import CommentSection from '$lib/components/CommentSection.svelte';
 	import Comment from '$lib/components/Comment.svelte';
 	import { getCommentTree, type CommentTree } from '$lib/js/comments';
+	import PostReference from '$lib/components/PostReference.svelte';
 
 	export let data: PageData;
 	let citedCommentView: CommentView;
@@ -42,17 +43,7 @@
 <PageHolder>
 	<svelte:fragment slot="main">
 		<div class="commentDetailPage">
-			<Hint>
-				<ThemedButton icon="arrow_back" href={getPostDetailLinkFromCommentView(citedCommentView)} />
-				<div class="commentDetailPage__originalPost">
-					<div class="commentDetailPage__originalPostPreface">Posted on</div>
-					<div class="commentDetailPage__originalPostTitle">
-						<a href={getPostDetailLinkFromCommentView(citedCommentView)}>
-							{citedCommentView.post.name}
-						</a>
-					</div>
-				</div>
-			</Hint>
+			<PostReference {citedCommentView} />
 			{#if parentTree && parentTree.topNodes.length}
 				{#if showParent}
 					<Comment
@@ -82,29 +73,6 @@
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
-
-		.commentDetailPage__originalPost {
-			display: flex;
-			flex-direction: column;
-			gap: 0.2rem;
-
-			.commentDetailPage__originalPostPreface {
-				font-size: 0.8rem;
-			}
-
-			.commentDetailPage__originalPostTitle {
-				font-weight: bold;
-				font-size: 1rem;
-
-				a {
-					text-decoration: none;
-
-					&:hover {
-						text-decoration: underline;
-					}
-				}
-			}
-		}
 
 		.commentDetailPage__revealParent {
 			display: flex;
