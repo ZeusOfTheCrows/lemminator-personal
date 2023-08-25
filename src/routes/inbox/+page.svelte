@@ -10,7 +10,7 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
-	export let activeView: 'queueOfUnreads' | 'listOfUnreads' | 'archive' = 'queueOfUnreads';
+	export let activeView: 'detailedInbox' | 'compactInbox' | 'archive' = 'detailedInbox';
 
 	let unreadsResponse = data.unreadsResponse ?? null;
 	let archiveResponse = data.archiveResponse ?? null;
@@ -54,9 +54,9 @@
 			{#if unreadsResponse && archiveResponse}
 				<div class="inboxPage__top">
 					<h3 class="inboxPage__title">
-						{#if activeView === 'queueOfUnreads' && unreadsResponse.replies.length}
+						{#if activeView === 'detailedInbox' && unreadsResponse.replies.length}
 							Detailed inbox
-						{:else if activeView === 'listOfUnreads' && unreadsResponse.replies.length}
+						{:else if activeView === 'compactInbox' && unreadsResponse.replies.length}
 							Compact inbox
 						{:else if activeView === 'archive' && archiveResponse.replies.length}
 							Archive
@@ -72,15 +72,15 @@
 							<ThemedButton
 								icon="zoom_in"
 								title="Show detailed inbox"
-								toggled={activeView === 'queueOfUnreads'}
-								on:click={() => (activeView = 'queueOfUnreads')}
+								toggled={activeView === 'detailedInbox'}
+								on:click={() => (activeView = 'detailedInbox')}
 								fontSize="1.1rem"
 							/>
 							<ThemedButton
 								icon="list"
 								title="Show compact inbox"
-								toggled={activeView === 'listOfUnreads'}
-								on:click={() => (activeView = 'listOfUnreads')}
+								toggled={activeView === 'compactInbox'}
+								on:click={() => (activeView = 'compactInbox')}
 								fontSize="1.1rem"
 							/>
 							<ThemedButton
@@ -93,9 +93,9 @@
 						</div>
 					</div>
 				</div>
-				{#if activeView === 'queueOfUnreads'}
+				{#if activeView === 'detailedInbox'}
 					<InboxQueue replies={unreadsResponse.replies} on:readStateChange={refreshAll} />
-				{:else if activeView === 'listOfUnreads'}
+				{:else if activeView === 'compactInbox'}
 					<ReplyListOrPlaceholder
 						replies={unreadsResponse.replies}
 						on:readStateChange={refreshAll}
